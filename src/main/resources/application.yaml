@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: 02_voting_system
+  r2dbc:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
