@@ -4,9 +4,12 @@ import com.yareach._2_voting_system.vote.entity.VoteEntity
 import com.yareach._2_voting_system.vote.entity.VoteRecordEntity
 import com.yareach._2_voting_system.vote.repository.VoteRecordRepository
 import com.yareach._2_voting_system.vote.repository.VoteRepository
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -33,5 +36,16 @@ class TestVoteController(
         @RequestParam("voteId") voteId: String
     ): List<VoteRecordEntity> {
         return repository2.findAllByVoteId(voteId).toList()
+    }
+
+    @PostMapping
+    suspend fun addVote(@RequestParam("voteId") voteId: String): VoteEntity {
+        val ne = VoteEntity(voteId)
+        return repository.save(ne)
+    }
+
+    @DeleteMapping
+    suspend fun deleteVote(@RequestParam("voteId") voteId: String): Unit {
+        return repository.deleteById(voteId)
     }
 }

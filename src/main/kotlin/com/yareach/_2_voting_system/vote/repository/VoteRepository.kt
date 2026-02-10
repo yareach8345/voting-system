@@ -5,6 +5,4 @@ import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface VoteRepository: CoroutineCrudRepository<VoteEntity, String> {
-
-}
+interface VoteRepository: CoroutineCrudRepository<VoteEntity, String> { }
