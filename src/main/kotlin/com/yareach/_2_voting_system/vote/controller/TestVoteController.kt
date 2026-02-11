@@ -39,8 +39,8 @@ class TestVoteController(
     }
 
     @PostMapping
-    suspend fun addVote(@RequestParam("voteId") voteId: String): VoteEntity {
-        val ne = VoteEntity(voteId)
+    suspend fun addVote(): VoteEntity {
+        val ne = VoteEntity.new()
         return repository.save(ne)
     }
 
