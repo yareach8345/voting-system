@@ -43,18 +43,10 @@ class VoteServiceImpl(
     }
 
     override suspend fun openVote(voteId: String) {
-        val vote = voteRepository.findById(voteId) ?: throw NotFoundException()
-
-        vote.open()
-
-        voteRepository.update(vote)
+        voteRepository.modify(voteId) { open() }
     }
 
     override suspend fun closeVote(voteId: String) {
-        val vote = voteRepository.findById(voteId) ?: throw NotFoundException()
-
-        vote.close()
-
-        voteRepository.update(vote)
+        voteRepository.modify(voteId) { close() }
     }
 }

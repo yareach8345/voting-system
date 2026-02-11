@@ -15,6 +15,8 @@ interface VoteRepository {
 
     suspend fun update(vote: Vote)
 
+    suspend fun modify(voteId: String, block: Vote.() -> Unit)
+
     suspend fun deleteById(voteId: String)
 }
 
@@ -39,6 +41,14 @@ class VoteRepositoryJpaImpl(
     override suspend fun update(vote: Vote) {
         val voteEntity = VoteJpaEntity.fromModel(vote)
         voteJpaRepository.save(voteEntity)
+    }
+
+    override suspend fun modify(voteId: String, block: Vote.() -> Unit) {
+        voteJpaRepository.findById(voteId)
+            ?.toModel()
+            ?.apply { block() }
+            ?.let { voteJpaRepository.save(VoteJpaEntity.fromModel(it)) }
+            ?: throw Error("NOT FOUND")
     }
 
     override suspend fun deleteById(voteId: String) {
