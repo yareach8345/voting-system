@@ -1,6 +1,6 @@
 package com.yareach._2_voting_system.vote.repository
 
-import com.yareach._2_voting_system.model.VoteRecord
+import com.yareach._2_voting_system.vote.model.VoteRecord
 import com.yareach._2_voting_system.vote.entity.VoteRecordJpaEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

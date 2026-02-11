@@ -1,4 +1,4 @@
-package com.yareach._2_voting_system.model
+package com.yareach._2_voting_system.vote.model
 
 import java.time.LocalDateTime
 

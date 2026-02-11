@@ -1,6 +1,6 @@
 package com.yareach._2_voting_system.vote.service
 
-import com.yareach._2_voting_system.model.Vote
+import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import kotlinx.coroutines.flow.Flow
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException

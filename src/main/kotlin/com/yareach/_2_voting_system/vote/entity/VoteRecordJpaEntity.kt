@@ -1,6 +1,6 @@
 package com.yareach._2_voting_system.vote.entity
 
-import com.yareach._2_voting_system.model.VoteRecord
+import com.yareach._2_voting_system.vote.model.VoteRecord
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table

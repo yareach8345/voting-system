@@ -1,6 +1,6 @@
 package com.yareach._2_voting_system.vote.controller
 
-import com.yareach._2_voting_system.model.Vote
+import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.service.VoteService
 import kotlinx.coroutines.flow.toList
 import org.springframework.web.bind.annotation.DeleteMapping
