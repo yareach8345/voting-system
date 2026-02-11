@@ -1,15 +1,15 @@
 package com.yareach._2_voting_system.vote.entity
 
+import com.yareach._2_voting_system.model.Vote
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Transient
 import org.springframework.data.domain.Persistable
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
-import java.util.UUID
 
 @Table("vote")
-class VoteEntity(
+class VoteJpaEntity(
     @Id
     private val id: String,
 
@@ -32,7 +32,15 @@ class VoteEntity(
 
     override fun isNew(): Boolean = isNewRecord
 
+    fun toModel() = Vote(id, isOpen, startedAt, endedAt, createdAt)
+
     companion object {
-        fun new() = VoteEntity(UUID.randomUUID().toString()).apply { isNewRecord = true }
+        fun fromModel(voteModel: Vote, isNewRecord: Boolean = false) = VoteJpaEntity(
+            id = voteModel.id,
+            isOpen = voteModel.isOpen,
+            startedAt = voteModel.startedAt,
+            endedAt = voteModel.endedAt,
+            createdAt = voteModel.createdAt,
+        ).apply { this.isNewRecord = isNewRecord }
     }
 }

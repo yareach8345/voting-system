@@ -1,11 +1,7 @@
 package com.yareach._2_voting_system.vote.controller
 
-import com.yareach._2_voting_system.vote.entity.VoteEntity
-import com.yareach._2_voting_system.vote.entity.VoteRecordEntity
-import com.yareach._2_voting_system.vote.repository.VoteRecordRepository
-import com.yareach._2_voting_system.vote.repository.VoteRepository
+import com.yareach._2_voting_system.model.Vote
 import com.yareach._2_voting_system.vote.service.VoteService
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,12 +18,12 @@ class TestVoteController(
     val voteService: VoteService,
 ) {
     @GetMapping
-    suspend fun getVotes(): List<VoteEntity> {
+    suspend fun getVotes(): List<Vote> {
         return voteService.getAllVotes().toList()
     }
 
     @GetMapping("/{voteId}")
-    suspend fun getVote(@PathVariable voteId: String): VoteEntity {
+    suspend fun getVote(@PathVariable voteId: String): Vote {
         return voteService.getVote(voteId)
     }
 

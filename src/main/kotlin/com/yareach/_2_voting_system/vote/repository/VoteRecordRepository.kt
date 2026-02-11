@@ -1,13 +1,46 @@
 package com.yareach._2_voting_system.vote.repository
 
-import com.yareach._2_voting_system.vote.entity.VoteRecordEntity
+import com.yareach._2_voting_system.model.VoteRecord
+import com.yareach._2_voting_system.vote.entity.VoteRecordJpaEntity
 import kotlinx.coroutines.flow.Flow
-import org.springframework.data.repository.kotlin.CoroutineCrudRepository
+import kotlinx.coroutines.flow.map
 import org.springframework.stereotype.Repository
 
-@Repository
-interface VoteRecordRepository: CoroutineCrudRepository<VoteRecordEntity, Int> {
-    suspend fun findAllByVoteId(voteId: String): Flow<VoteRecordEntity>
+interface VoteRecordRepository {
+    suspend fun findAllByVoteId(voteId: String): Flow<VoteRecord>
 
     suspend fun deleteAllByVoteId(voteId: String): Long
+
+    suspend fun deleteByVoteIdAndUserId(voteId: String, userId: String)
+
+    suspend fun insert(record: VoteRecord)
+
+    suspend fun update(record: VoteRecord)
+}
+
+@Repository
+class VoteRecordRepositoryJpaImpl(
+    private val voteRecordJpaRepository: VoteRecordJpaRepository
+): VoteRecordRepository {
+    override suspend fun findAllByVoteId(voteId: String): Flow<VoteRecord> {
+        return voteRecordJpaRepository.findAllByVoteId(voteId).map { it.toModel() }
+    }
+
+    override suspend fun deleteAllByVoteId(voteId: String): Long {
+        return voteRecordJpaRepository.deleteAllByVoteId(voteId)
+    }
+
+    override suspend fun deleteByVoteIdAndUserId(voteId: String, userId: String) {
+        return voteRecordJpaRepository.deleteByVoteIdAndUserId(voteId, userId)
+    }
+
+    override suspend fun insert(record: VoteRecord) {
+        val entity = VoteRecordJpaEntity.fromModel(record)
+        voteRecordJpaRepository.save(entity)
+    }
+
+    override suspend fun update(record: VoteRecord) {
+        val entity = VoteRecordJpaEntity.fromModel(record)
+        voteRecordJpaRepository.save(entity)
+    }
 }

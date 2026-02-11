@@ -1,20 +1,19 @@
 package com.yareach._2_voting_system.vote.service
 
-import com.yareach._2_voting_system.vote.entity.VoteEntity
+import com.yareach._2_voting_system.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import kotlinx.coroutines.flow.Flow
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 interface VoteService {
     suspend fun createNewVote(): String
 
     suspend fun deleteVote(voteId: String)
 
-    suspend fun getAllVotes(): Flow<VoteEntity>
+    suspend fun getAllVotes(): Flow<Vote>
 
-    suspend fun getVote(voteId: String): VoteEntity
+    suspend fun getVote(voteId: String): Vote
 
     suspend fun openVote(voteId: String)
 
@@ -26,38 +25,36 @@ class VoteServiceImpl(
     private val voteRepository: VoteRepository
 ) : VoteService {
     override suspend fun createNewVote(): String {
-        val newVoteEntity = VoteEntity.new()
-        voteRepository.save(newVoteEntity)
-        return newVoteEntity.id
+        val newVote = Vote.new()
+        voteRepository.insert(newVote)
+        return newVote.id
     }
 
     override suspend fun deleteVote(voteId: String) {
         voteRepository.deleteById(voteId)
     }
 
-    override suspend fun getAllVotes(): Flow<VoteEntity> {
+    override suspend fun getAllVotes(): Flow<Vote> {
         return voteRepository.findAll()
     }
 
-    override suspend fun getVote(voteId: String): VoteEntity {
+    override suspend fun getVote(voteId: String): Vote {
         return voteRepository.findById(voteId) ?: throw NotFoundException()
     }
 
     override suspend fun openVote(voteId: String) {
-        val voteEntity = voteRepository.findById(voteId) ?: throw NotFoundException()
+        val vote = voteRepository.findById(voteId) ?: throw NotFoundException()
 
-        voteEntity.isOpen = true
-        voteEntity.startedAt = LocalDateTime.now()
+        vote.open()
 
-        voteRepository.save(voteEntity)
+        voteRepository.update(vote)
     }
 
     override suspend fun closeVote(voteId: String) {
-        val voteEntity = voteRepository.findById(voteId) ?: throw NotFoundException()
+        val vote = voteRepository.findById(voteId) ?: throw NotFoundException()
 
-        voteEntity.isOpen = false
-        voteEntity.endedAt = LocalDateTime.now()
+        vote.close()
 
-        voteRepository.save(voteEntity)
+        voteRepository.update(vote)
     }
 }
