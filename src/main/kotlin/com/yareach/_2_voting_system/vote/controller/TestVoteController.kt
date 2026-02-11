@@ -4,6 +4,7 @@ import com.yareach._2_voting_system.vote.entity.VoteEntity
 import com.yareach._2_voting_system.vote.entity.VoteRecordEntity
 import com.yareach._2_voting_system.vote.repository.VoteRecordRepository
 import com.yareach._2_voting_system.vote.repository.VoteRepository
+import com.yareach._2_voting_system.vote.service.VoteService
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -18,34 +19,25 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/votes")
 class TestVoteController(
-    val repository: VoteRepository,
-    val repository2: VoteRecordRepository
+    val voteService: VoteService,
 ) {
     @GetMapping
     suspend fun getVotes(): List<VoteEntity> {
-        return repository.findAll().toList()
+        return voteService.getAllVotes().toList()
     }
 
     @GetMapping("/{voteId}")
     suspend fun getVote(@PathVariable voteId: String): VoteEntity {
-        return repository.findById(voteId) ?: throw Error("Not Found")
-    }
-
-    @GetMapping("/voting/records")
-    suspend fun getRecords(
-        @RequestParam("voteId") voteId: String
-    ): List<VoteRecordEntity> {
-        return repository2.findAllByVoteId(voteId).toList()
+        return voteService.getVote(voteId)
     }
 
     @PostMapping
-    suspend fun addVote(): VoteEntity {
-        val ne = VoteEntity.new()
-        return repository.save(ne)
+    suspend fun addVote(): String {
+        return voteService.createNewVote()
     }
 
     @DeleteMapping
-    suspend fun deleteVote(@RequestParam("voteId") voteId: String): Unit {
-        return repository.deleteById(voteId)
+    suspend fun deleteVote(@RequestParam("voteId") voteId: String) {
+        voteService.deleteVote(voteId)
     }
 }

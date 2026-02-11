@@ -14,13 +14,13 @@ class VoteEntity(
     private val id: String,
 
     @Column("is_open")
-    val isOpen: Boolean? = false,
+    var isOpen: Boolean = false,
 
     @Column("started_at")
-    val startedAt: LocalDateTime? = null,
+    var startedAt: LocalDateTime? = null,
 
     @Column("ended_at")
-    val endedAt: LocalDateTime? = null,
+    var endedAt: LocalDateTime? = null,
 
     @Column("created_at")
     val createdAt: LocalDateTime = LocalDateTime.now(),
