@@ -106,11 +106,12 @@ class VoteRepositoryTest {
 
             coEvery { voteJpaRepositoryMock.save(capture(slot)) } coAnswers { slot.captured }
 
-            voteRepository.update(Vote(uuid))
+            val updated = voteRepository.update(Vote(uuid))
 
             coVerify(exactly = 1) { voteJpaRepositoryMock.save(slot.captured) }
 
             assertFalse(slot.captured.isNew)
+            assertEquals(updated.id, uuid)
         }
     }
 
@@ -132,7 +133,7 @@ class VoteRepositoryTest {
             coEvery { voteJpaRepositoryMock.findById(capture(idSlot)) } coAnswers { voteEntityMock }
             coEvery { voteJpaRepositoryMock.save(capture(entitySlot)) } coAnswers { entitySlot.captured }
 
-            voteRepository.modify(uuid) { open() }
+            val result = voteRepository.modify(uuid) { open() }
 
             coVerify(exactly = 1) { voteJpaRepositoryMock.findById(uuid) }
             coVerify(exactly = 1) { voteJpaRepositoryMock.save(entitySlot.captured) }
@@ -140,6 +141,10 @@ class VoteRepositoryTest {
 
             assertFalse(entitySlot.captured.isNew)
             assertTrue(entitySlot.captured.isOpen)
+
+            assertEquals(result.id, uuid)
+            assertEquals(result.isOpen, true)
+            assertNotNull(result.startedAt)
         }
     }
 

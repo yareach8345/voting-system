@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 // 테스트를 위해 대충만든 컨트롤러. 개발 후 지울것
 @RestController
-@RequestMapping("/votes")
+@RequestMapping("/votes/test")
 class TestVoteController(
     val voteService: VoteService,
 ) {

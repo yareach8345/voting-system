@@ -15,9 +15,11 @@ interface VoteService {
 
     suspend fun getVote(voteId: String): Vote
 
-    suspend fun openVote(voteId: String)
+    suspend fun openVote(voteId: String): Vote
 
-    suspend fun closeVote(voteId: String)
+    suspend fun closeVote(voteId: String): Vote
+
+    suspend fun changeVoteState(voteId: String, newState: String): Vote
 }
 
 @Service
@@ -42,11 +44,17 @@ class VoteServiceImpl(
         return voteRepository.findById(voteId) ?: throw NotFoundException()
     }
 
-    override suspend fun openVote(voteId: String) {
-        voteRepository.modify(voteId) { open() }
+    override suspend fun openVote(voteId: String): Vote {
+        return voteRepository.modify(voteId) { open() }
     }
 
-    override suspend fun closeVote(voteId: String) {
-        voteRepository.modify(voteId) { close() }
+    override suspend fun closeVote(voteId: String): Vote {
+        return voteRepository.modify(voteId) { close() }
+    }
+
+    override suspend fun changeVoteState(voteId: String, newState: String) = when (newState) {
+        "open" -> openVote(voteId)
+        "close" -> closeVote(voteId)
+        else -> throw Error("State Error")
     }
 }
