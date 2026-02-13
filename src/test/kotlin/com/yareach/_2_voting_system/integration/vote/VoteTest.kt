@@ -63,16 +63,16 @@ class VoteTest {
                     assertEquals(voteId, it.id)
                 }
         }
-//
-//        @Test
-//        @DisplayName("유효하지 않은 id를 사용해 조회")
-//        fun findAVoteTestWithWrongId() = runTest {
-//            val wrongUuid = "uuid-not-exists"
-//            webTestClient.get()
-//                .uri("/votes/$wrongUuid")
-//                .exchange()
-//                .expectStatus().value { println(it) }
-//        }
+
+        @Test
+        @DisplayName("유효하지 않은 id를 사용해 조회")
+        fun findAVoteTestWithWrongId() = runTest {
+            val wrongUuid = "uuid-not-exists"
+            webTestClient.get()
+                .uri("/votes/$wrongUuid")
+                .exchange()
+                .expectStatus().isNotFound
+        }
     }
 
     @Nested
@@ -80,7 +80,7 @@ class VoteTest {
     inner class DeleteVoteTest {
 
         @Test
-        @DisplayName("투표 삭제")
+        @DisplayName("투표 id를 사용하여 투표 삭제")
         fun deleteVoteTest() = runTest {
             val voteId = voteService.createNewVote()
 
@@ -140,6 +140,18 @@ class VoteTest {
                     assert(it.updatedTime.isAfter(timeBeforeSendRequest))
                     assert(it.updatedTime.isBefore(LocalDateTime.now()))
                 }
+        }
+
+        @Test
+        @DisplayName("잘못된 상태 투표상태 변경 시도")
+        fun tryChangeVoteStateWithWrongStateTest() = runTest {
+            val voteId = voteService.createNewVote()
+
+            webTestClient.patch()
+                .uri("/votes/$voteId/state")
+                .bodyValue(VoteStateChangeRequest("wrong state"))
+                .exchange()
+                .expectStatus().isBadRequest
         }
     }
 }

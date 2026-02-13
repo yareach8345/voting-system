@@ -1,5 +1,7 @@
 package com.yareach._2_voting_system.vote.repository
 
+import com.yareach._2_voting_system.core.error.ErrorCode
+import com.yareach._2_voting_system.core.extension.NotFoundException
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.entity.VoteJpaEntity
 import kotlinx.coroutines.flow.Flow
@@ -48,7 +50,7 @@ class VoteRepositoryJpaImpl(
             ?.toModel()
             ?.apply { block() }
             ?.also{ voteJpaRepository.save(VoteJpaEntity.fromModel(it)) }
-            ?: throw Error("NOT FOUND")
+            ?: throw NotFoundException(ErrorCode.VOTE_NOT_FOUND, voteId)
     }
 
     override suspend fun deleteById(voteId: String) {

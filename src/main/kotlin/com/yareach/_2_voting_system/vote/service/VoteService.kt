@@ -1,9 +1,11 @@
 package com.yareach._2_voting_system.vote.service
 
+import com.yareach._2_voting_system.core.error.ErrorCode
+import com.yareach._2_voting_system.core.extension.IllegalStateException
+import com.yareach._2_voting_system.core.extension.NotFoundException
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import kotlinx.coroutines.flow.Flow
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.stereotype.Service
 
 interface VoteService {
@@ -41,7 +43,7 @@ class VoteServiceImpl(
     }
 
     override suspend fun getVote(voteId: String): Vote {
-        return voteRepository.findById(voteId) ?: throw NotFoundException()
+        return voteRepository.findById(voteId) ?: throw NotFoundException(ErrorCode.VOTE_NOT_FOUND, voteId)
     }
 
     override suspend fun openVote(voteId: String): Vote {
@@ -55,6 +57,6 @@ class VoteServiceImpl(
     override suspend fun changeVoteState(voteId: String, newState: String) = when (newState) {
         "open" -> openVote(voteId)
         "close" -> closeVote(voteId)
-        else -> throw Error("State Error")
+        else -> throw IllegalStateException(ErrorCode.ILLEGAL_VOTE_STATE, newState)
     }
 }
