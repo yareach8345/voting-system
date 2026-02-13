@@ -54,7 +54,7 @@ class VoteController(
     }
 
     @PatchMapping("/{voteId}/state")
-    suspend fun openVote(
+    suspend fun changeVoteState(
         @PathVariable voteId: String,
         @RequestBody changeStateRequest: VoteStateChangeRequest
     ): ResponseEntity<VoteStateChangeResponse> {
