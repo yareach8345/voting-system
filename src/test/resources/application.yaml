@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: 02_voting_system
+  r2dbc:
+    url: r2dbc:h2:mem:///test;MODE=MySQL
+    username: sa
+  sql:
+    init:
+      data-locations: classpath:db/data.sql
+      mode: always
+logging:
+  level:
+    org.springframework.r2dbc.core: debug
