@@ -59,9 +59,7 @@ class VoteController(
         @RequestBody changeStateRequest: VoteStateChangeRequest
     ): ResponseEntity<VoteStateChangeResponse> {
         val result = voteService.changeVoteState(voteId, changeStateRequest.newState)
-        val newState = if(result.isOpen) "open" else "close"
-        val updatedTime = if(result.isOpen) result.startedAt else result.endedAt
 
-        return ResponseEntity.ok(VoteStateChangeResponse(voteId, newState, updatedTime ?: throw Error("State Error")))
+        return ResponseEntity.ok(VoteStateChangeResponse.fromNewVoteModel(result))
     }
 }
