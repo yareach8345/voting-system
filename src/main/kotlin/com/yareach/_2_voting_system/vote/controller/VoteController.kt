@@ -41,7 +41,7 @@ class VoteController(
     suspend fun generateVote(): ResponseEntity<VoteGenerateResponse> {
         val voteId = voteService.createNewVote()
         return ResponseEntity
-            .created(URI("/vote/${voteId}"))
+            .created(URI("/votes/${voteId}"))
             .body(VoteGenerateResponse(voteId))
     }
 
