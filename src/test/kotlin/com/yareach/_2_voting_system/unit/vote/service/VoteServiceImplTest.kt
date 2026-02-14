@@ -1,5 +1,7 @@
 package com.yareach._2_voting_system.unit.vote.service
 
+import com.yareach._2_voting_system.core.extension.IllegalStateException
+import com.yareach._2_voting_system.core.extension.NotFoundException
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import com.yareach._2_voting_system.vote.service.VoteService
@@ -16,7 +18,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.assertInstanceOf
 import org.junit.jupiter.api.assertThrows
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -243,9 +244,9 @@ class VoteServiceImplTest {
             fun changeVoteStateWithWrongVoteState() = runTest {
                 val uuid = UUID.randomUUID().toString()
 
-                val exception: Error = assertThrows { voteService.changeVoteState(uuid, "wrong state") }
+                val exception: Exception = assertThrows { voteService.changeVoteState(uuid, "wrong state") }
 
-                assertInstanceOf<Error>(exception)
+                assertInstanceOf<IllegalStateException>(exception)
             }
         }
     }

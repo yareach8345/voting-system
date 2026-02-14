@@ -1,5 +1,5 @@
-drop table if exists "vote";
 drop table if exists "vote_record";
+drop table if exists "vote";
 
 create table if not exists "vote" (
     id varchar(36) default random_uuid() primary key,
@@ -19,5 +19,11 @@ create table if not exists "vote_record" (
     foreign key("vote_id") references "vote"(id) on delete cascade
 );
 
-insert into "vote"(id) values (default);
-insert into "vote"(id) values (default);
+set @uuid1 = random_uuid();
+set @uuid2 = random_uuid();
+
+insert into "vote"(id) values (@uuid1);
+insert into "vote"(id) values (@uuid2);
+
+update "vote" set "is_open" = true, "started_at" = current_timestamp where id = @uuid1;
+update "vote" set "started_at" = current_timestamp, "ended_at" = current_timestamp where id = @uuid2;

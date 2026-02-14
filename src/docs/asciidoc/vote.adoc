@@ -1,0 +1,89 @@
+== 투표 생성
+
+**Request**
+include::{snippets}/create-vote/http-request.adoc[]
+
+**Response**
+include::{snippets}/create-vote/http-response.adoc[]
+
+**Response Body**
+include::{snippets}/create-vote/response-body.adoc[]
+
+include::{snippets}/create-vote/response-fields.adoc[]
+
+**Response Header**
+include::{snippets}/create-vote/response-headers.adoc[]
+
+
+== 투표 조회
+=== 모든 투표 조회
+
+**Request**
+include::{snippets}/get-all-votes/request-body.adoc[]
+
+**Response**
+include::{snippets}/get-all-votes/response-body.adoc[]
+
+include::{snippets}/get-all-votes/response-fields.adoc[]
+
+=== 투표 id로 투표 조회
+
+**Request**
+include::{snippets}/get-a-vote-with-id/http-request.adoc[]
+include::{snippets}/get-a-vote-with-id/path-parameters.adoc[]
+
+**Response**
+include::{snippets}/get-a-vote-with-id/response-body.adoc[]
+include::{snippets}/get-a-vote-with-id/response-fields.adoc[]
+
+=== 존재하지 않는 id로 접근할 경우 실패
+
+**Request**
+include::{snippets}/get-a-vote-with-wrong-id/http-request.adoc[]
+
+**Response**
+include::{snippets}/get-a-vote-with-wrong-id/response-body.adoc[]
+
+== 투표 삭제
+
+**Request**
+include::{snippets}/delete-vote/http-request.adoc[]
+
+include::{snippets}/delete-vote/path-parameters.adoc[]
+
+**Response**
+include::{snippets}/delete-vote/http-response.adoc[]
+
+== 투표 상태 변경
+
+=== 투표 open
+
+**Request**
+include::{snippets}/open-vote/http-request.adoc[]
+
+include::{snippets}/open-vote/request-body.adoc[]
+
+include::{snippets}/open-vote/request-fields.adoc[]
+
+**Response**
+include::{snippets}/open-vote/http-response.adoc[]
+
+include::{snippets}/open-vote/response-body.adoc[]
+
+include::{snippets}/open-vote/response-fields.adoc[]
+
+== 투표 close
+
+**Request**
+include::{snippets}/close-vote/http-request.adoc[]
+
+include::{snippets}/close-vote/request-body.adoc[]
+
+include::{snippets}/close-vote/request-fields.adoc[]
+
+**Response**
+include::{snippets}/close-vote/http-response.adoc[]
+
+include::{snippets}/close-vote/response-body.adoc[]
+
+include::{snippets}/close-vote/response-fields.adoc[]
