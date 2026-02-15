@@ -9,6 +9,7 @@ class Vote(
     var startedAt: LocalDateTime? = null,
     var endedAt: LocalDateTime? = null,
     val createdAt: LocalDateTime = LocalDateTime.now(),
+    val lastModified: LocalDateTime = LocalDateTime.now(),
 ) {
     fun open() {
         isOpen = true

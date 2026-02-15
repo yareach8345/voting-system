@@ -24,6 +24,9 @@ class VoteJpaEntity(
 
     @Column("created_at")
     val createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column("last_modified")
+    var lastModified: LocalDateTime = LocalDateTime.now(),
 ): Persistable<String> {
     @Transient
     private var isNewRecord: Boolean = false
@@ -32,7 +35,7 @@ class VoteJpaEntity(
 
     override fun isNew(): Boolean = isNewRecord
 
-    fun toModel() = Vote(id, isOpen, startedAt, endedAt, createdAt)
+    fun toModel() = Vote(id, isOpen, startedAt, endedAt, createdAt, lastModified)
 
     companion object {
         fun fromModel(voteModel: Vote, isNewRecord: Boolean = false) = VoteJpaEntity(
@@ -41,6 +44,7 @@ class VoteJpaEntity(
             startedAt = voteModel.startedAt,
             endedAt = voteModel.endedAt,
             createdAt = voteModel.createdAt,
+            lastModified = voteModel.lastModified,
         ).apply { this.isNewRecord = isNewRecord }
     }
 }

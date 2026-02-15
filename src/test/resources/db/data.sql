@@ -6,7 +6,8 @@ create table if not exists "vote" (
     "is_open" boolean not null default false,
     "started_at" datetime default null,
     "ended_at" datetime default null,
-    "created_at" datetime not null default current_timestamp
+    "created_at" datetime not null default current_timestamp,
+    "last_modified" datetime default current_timestamp on update current_timestamp
 );
 
 create table if not exists "vote_record" (

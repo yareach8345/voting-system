@@ -11,7 +11,10 @@ create table if not exists vote (
     is_open bool not null default false,
     started_at datetime default null,
     ended_at datetime default null,
-    created_at datetime not null default current_timestamp
+    created_at datetime not null default current_timestamp,
+    last_modified timestamp default current_timestamp on update current_timestamp,
+
+    index idx_last_modified (last_modified)
 );
 
 # write 시 vote의 is_open을 필히 확인 할 것
