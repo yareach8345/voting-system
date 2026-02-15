@@ -18,15 +18,18 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.assertInstanceOf
 import org.junit.jupiter.api.assertThrows
+import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class VoteServiceImplTest {
+    val ttlSeconds: Long = 10
+
     val voteRepositoryMock = mockk<VoteRepository>()
 
-    val voteService: VoteService = spyk(VoteServiceImpl(voteRepositoryMock))
+    val voteService: VoteService = spyk(VoteServiceImpl(voteRepositoryMock, ttlSeconds))
 
     @Nested
     @DisplayName("새 투표 생성(createNewVote)")
@@ -247,6 +250,30 @@ class VoteServiceImplTest {
                 val exception: Exception = assertThrows { voteService.changeVoteState(uuid, "wrong state") }
 
                 assertInstanceOf<IllegalStateException>(exception)
+            }
+        }
+
+        @Nested
+        @DisplayName("delete expired votes")
+        inner class DeleteExpiredVotesTest {
+
+            @Test
+            @DisplayName("expire")
+            fun deleteExpiredVotesTest() = runTest {
+                val cutoffSlot = slot<LocalDateTime>()
+
+                coEvery { voteRepositoryMock.deleteVotesBeforeCutoff(capture(cutoffSlot)) } returns 3
+
+                val timeBeforeWork = LocalDateTime.now()
+                val result = voteService.deleteExpiredVotes()
+                val timeAfterWork = LocalDateTime.now()
+
+                coVerify(exactly = 1) { voteRepositoryMock.deleteVotesBeforeCutoff(cutoffSlot.captured) }
+
+                assert(cutoffSlot.captured.isAfter(timeBeforeWork.minusSeconds(ttlSeconds)))
+                assert(cutoffSlot.captured.isBefore(timeAfterWork.minusSeconds(ttlSeconds)))
+
+                assertEquals(3, result)
             }
         }
     }

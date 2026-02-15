@@ -11,3 +11,7 @@ spring:
 logging:
   level:
     org.springframework.r2dbc.core: debug
+vote:
+  expire:
+    use-expire: true
+    ttl-seconds: 10

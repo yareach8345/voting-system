@@ -7,6 +7,7 @@ import com.yareach._2_voting_system.vote.entity.VoteJpaEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 interface VoteRepository {
     suspend fun findAll(): Flow<Vote>
@@ -20,6 +21,8 @@ interface VoteRepository {
     suspend fun modify(voteId: String, block: Vote.() -> Unit): Vote
 
     suspend fun deleteById(voteId: String)
+
+    suspend fun deleteVotesBeforeCutoff(cutoff: LocalDateTime): Long
 }
 
 @Repository
@@ -55,5 +58,9 @@ class VoteRepositoryJpaImpl(
 
     override suspend fun deleteById(voteId: String) {
         voteJpaRepository.deleteById(voteId)
+    }
+
+    override suspend fun deleteVotesBeforeCutoff(cutoff: LocalDateTime): Long {
+        return voteJpaRepository.deleteByLastModifiedBefore(cutoff)
     }
 }

@@ -5,8 +5,11 @@ import com.yareach._2_voting_system.core.extension.IllegalStateException
 import com.yareach._2_voting_system.core.extension.NotFoundException
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
+import com.yareach._2_voting_system.vote.scheduler.VoteExpireProperties
 import kotlinx.coroutines.flow.Flow
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 interface VoteService {
     suspend fun createNewVote(): String
@@ -22,11 +25,14 @@ interface VoteService {
     suspend fun closeVote(voteId: String): Vote
 
     suspend fun changeVoteState(voteId: String, newState: String): Vote
+
+    suspend fun deleteExpiredVotes(): Long
 }
 
 @Service
 class VoteServiceImpl(
-    private val voteRepository: VoteRepository
+    private val voteRepository: VoteRepository,
+    @Value($$"${vote.expire.ttl-seconds:600}") private val ttlSeconds: Long = 600
 ) : VoteService {
     override suspend fun createNewVote(): String {
         val newVote = Vote.new()
@@ -58,5 +64,10 @@ class VoteServiceImpl(
         "open" -> openVote(voteId)
         "close" -> closeVote(voteId)
         else -> throw IllegalStateException(ErrorCode.ILLEGAL_VOTE_STATE, newState)
+    }
+
+    override suspend fun deleteExpiredVotes(): Long {
+        val cutoff = LocalDateTime.now().minusSeconds(ttlSeconds)
+        return voteRepository.deleteVotesBeforeCutoff(cutoff)
     }
 }

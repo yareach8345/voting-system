@@ -4,8 +4,13 @@ import com.yareach._2_voting_system.vote.dto.request.VoteStateChangeRequest
 import com.yareach._2_voting_system.vote.dto.response.VoteGenerateResponse
 import com.yareach._2_voting_system.vote.dto.response.VoteInfoResponse
 import com.yareach._2_voting_system.vote.dto.response.VoteStateChangeResponse
+import com.yareach._2_voting_system.vote.entity.VoteJpaEntity
+import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
+import com.yareach._2_voting_system.vote.scheduler.VoteExpireScheduler
 import com.yareach._2_voting_system.vote.service.VoteService
+import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.test.currentTime
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -40,7 +45,10 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 
-@SpringBootTest
+@SpringBootTest(properties = [
+    "vote.expire.ttl-seconds=10",
+    "vote.expire.delay-sec=2"
+])
 @AutoConfigureWebTestClient
 @ExtendWith(RestDocumentationExtension::class)
 class VoteTest {
@@ -53,6 +61,9 @@ class VoteTest {
 
     @Autowired
     private lateinit var voteRepository: VoteRepository
+    
+    @Autowired
+    private lateinit var expireScheduler: VoteExpireScheduler
 
     @BeforeEach
     fun setUp(context: WebApplicationContext, restDocumentation: RestDocumentationContextProvider) {
@@ -268,6 +279,28 @@ class VoteTest {
                     "change-vote-state-fail",
                     pathParameters(parameterWithName("voteId").description("투표 식별자")),
                 ))
+        }
+    }
+
+    @Nested
+    @DisplayName("투표 만료")
+    inner class ExpireVoteTest {
+
+        @Test
+        @DisplayName("만료시간이 지날 시 삭제됨")
+        fun expireVoteTest() = runTest {
+            val numberOfWillExpiredVotes = 2
+
+            List(numberOfWillExpiredVotes) { Vote.new().apply { lastModified = LocalDateTime.now().minusSeconds(11) } }
+                .forEach{ voteRepository.insert(it) }
+
+            val numberOfVotesBeforeExpire = voteRepository.findAll().count()
+
+            voteService.deleteExpiredVotes()
+
+            val numberOfVotesAfterExpire = voteRepository.findAll().count()
+
+            assertEquals(2, numberOfVotesBeforeExpire - numberOfVotesAfterExpire)
         }
     }
 }
