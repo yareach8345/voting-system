@@ -1,9 +1,9 @@
 package com.yareach._2_voting_system.integration.vote
 
-import com.yareach._2_voting_system.vote.dto.request.VoteStateChangeRequest
-import com.yareach._2_voting_system.vote.dto.response.VoteGenerateResponse
-import com.yareach._2_voting_system.vote.dto.response.VoteInfoResponse
-import com.yareach._2_voting_system.vote.dto.response.VoteStateChangeResponse
+import com.yareach._2_voting_system.vote.dto.ChangeVoteStateRequestDto
+import com.yareach._2_voting_system.vote.dto.GenerateVoteResponseDto
+import com.yareach._2_voting_system.vote.dto.VoteInfoResponseDto
+import com.yareach._2_voting_system.vote.dto.ChangeVoteStateResponseDto
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import com.yareach._2_voting_system.vote.scheduler.VoteExpireScheduler
@@ -88,7 +88,7 @@ class VoteTest {
                 .exchange()
                 .expectStatus().isCreated
                 .expectHeader().valueMatches("Location", "^/votes/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$")
-                .expectBody<VoteGenerateResponse>()
+                .expectBody<GenerateVoteResponseDto>()
                 .value {
                     assertNotNull(it)
                     assertDoesNotThrow{ UUID.fromString(it.voteId) }
@@ -116,7 +116,7 @@ class VoteTest {
                 .uri("/votes")
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<Collection<VoteInfoResponse>>()
+                .expectBody<Collection<VoteInfoResponseDto>>()
                 .consumeWith(document(
                     "get-all-votes",
                     responseFields(
@@ -138,7 +138,7 @@ class VoteTest {
                 .uri("/votes/{voteId}", voteId)
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<VoteInfoResponse>()
+                .expectBody<VoteInfoResponseDto>()
                 .value {
                     assertNotNull(it)
                     assertEquals(voteId, it.id)
@@ -209,10 +209,10 @@ class VoteTest {
 
             webTestClient.patch()
                 .uri("/votes/{voteId}/state", voteId)
-                .bodyValue(VoteStateChangeRequest("open"))
+                .bodyValue(ChangeVoteStateRequestDto("open"))
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<VoteStateChangeResponse>()
+                .expectBody<ChangeVoteStateResponseDto>()
                 .value {
                     assertNotNull(it)
                     assertEquals(voteId, it.voteId)
@@ -240,10 +240,10 @@ class VoteTest {
 
             webTestClient.patch()
                 .uri("/votes/{voteId}/state", voteId)
-                .bodyValue(VoteStateChangeRequest("close"))
+                .bodyValue(ChangeVoteStateRequestDto("close"))
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<VoteStateChangeResponse>()
+                .expectBody<ChangeVoteStateResponseDto>()
                 .value {
                     assertNotNull(it)
                     assertEquals(voteId, it.voteId)
@@ -269,7 +269,7 @@ class VoteTest {
 
             webTestClient.patch()
                 .uri("/votes/{voteId}/state", voteId)
-                .bodyValue(VoteStateChangeRequest("wrong state"))
+                .bodyValue(ChangeVoteStateRequestDto("wrong state"))
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody()

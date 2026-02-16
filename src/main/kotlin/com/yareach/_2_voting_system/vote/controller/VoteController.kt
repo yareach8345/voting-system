@@ -1,9 +1,9 @@
 package com.yareach._2_voting_system.vote.controller
 
-import com.yareach._2_voting_system.vote.dto.request.VoteStateChangeRequest
-import com.yareach._2_voting_system.vote.dto.response.VoteGenerateResponse
-import com.yareach._2_voting_system.vote.dto.response.VoteInfoResponse
-import com.yareach._2_voting_system.vote.dto.response.VoteStateChangeResponse
+import com.yareach._2_voting_system.vote.dto.ChangeVoteStateRequestDto
+import com.yareach._2_voting_system.vote.dto.GenerateVoteResponseDto
+import com.yareach._2_voting_system.vote.dto.VoteInfoResponseDto
+import com.yareach._2_voting_system.vote.dto.ChangeVoteStateResponseDto
 import com.yareach._2_voting_system.vote.service.VoteService
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
@@ -24,25 +24,25 @@ class VoteController(
     val voteService: VoteService
 ) {
     @GetMapping
-    suspend fun getAllVotes(): ResponseEntity<List<VoteInfoResponse>> =
+    suspend fun getAllVotes(): ResponseEntity<List<VoteInfoResponseDto>> =
         voteService.getAllVotes()
-            .map { VoteInfoResponse.fromVote(it) }
+            .map { VoteInfoResponseDto.fromVote(it) }
             .toList()
             .let { ResponseEntity.ok(it) }
 
     @GetMapping("/{voteId}")
     suspend fun getVote(
         @PathVariable voteId: String
-    ): ResponseEntity<VoteInfoResponse> = voteService.getVote(voteId)
-        .let { VoteInfoResponse.fromVote(it) }
+    ): ResponseEntity<VoteInfoResponseDto> = voteService.getVote(voteId)
+        .let { VoteInfoResponseDto.fromVote(it) }
         .let { ResponseEntity.ok(it) }
 
     @PostMapping
-    suspend fun generateVote(): ResponseEntity<VoteGenerateResponse> {
+    suspend fun generateVote(): ResponseEntity<GenerateVoteResponseDto> {
         val voteId = voteService.createNewVote()
         return ResponseEntity
             .created(URI("/votes/${voteId}"))
-            .body(VoteGenerateResponse(voteId))
+            .body(GenerateVoteResponseDto(voteId))
     }
 
     @DeleteMapping("/{voteId}")
@@ -56,10 +56,10 @@ class VoteController(
     @PatchMapping("/{voteId}/state")
     suspend fun changeVoteState(
         @PathVariable voteId: String,
-        @RequestBody changeStateRequest: VoteStateChangeRequest
-    ): ResponseEntity<VoteStateChangeResponse> {
+        @RequestBody changeStateRequest: ChangeVoteStateRequestDto
+    ): ResponseEntity<ChangeVoteStateResponseDto> {
         val result = voteService.changeVoteState(voteId, changeStateRequest.newState)
 
-        return ResponseEntity.ok(VoteStateChangeResponse.fromNewVoteModel(result))
+        return ResponseEntity.ok(ChangeVoteStateResponseDto.fromNewVoteModel(result))
     }
 }
