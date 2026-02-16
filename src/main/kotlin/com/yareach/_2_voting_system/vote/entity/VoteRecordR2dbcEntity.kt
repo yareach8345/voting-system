@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
 @Table("vote_record")
-class VoteRecordJpaEntity(
+class VoteRecordR2dbcEntity(
     @Id
     val id: Int?,
 
@@ -23,7 +23,7 @@ class VoteRecordJpaEntity(
     val votedAt: LocalDateTime
 ) {
     companion object {
-        fun fromModel(voteRecord: VoteRecord) = VoteRecordJpaEntity(
+        fun fromModel(voteRecord: VoteRecord) = VoteRecordR2dbcEntity(
             id = voteRecord.id,
             voteId = voteRecord.voteId,
             userId = voteRecord.userId,

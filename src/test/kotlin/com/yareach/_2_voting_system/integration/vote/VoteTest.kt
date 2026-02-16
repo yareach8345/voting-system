@@ -4,13 +4,11 @@ import com.yareach._2_voting_system.vote.dto.request.VoteStateChangeRequest
 import com.yareach._2_voting_system.vote.dto.response.VoteGenerateResponse
 import com.yareach._2_voting_system.vote.dto.response.VoteInfoResponse
 import com.yareach._2_voting_system.vote.dto.response.VoteStateChangeResponse
-import com.yareach._2_voting_system.vote.entity.VoteJpaEntity
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import com.yareach._2_voting_system.vote.scheduler.VoteExpireScheduler
 import com.yareach._2_voting_system.vote.service.VoteService
 import kotlinx.coroutines.flow.count
-import kotlinx.coroutines.test.currentTime
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

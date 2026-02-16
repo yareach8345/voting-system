@@ -3,7 +3,7 @@ package com.yareach._2_voting_system.vote.repository
 import com.yareach._2_voting_system.core.error.ErrorCode
 import com.yareach._2_voting_system.core.extension.NotFoundException
 import com.yareach._2_voting_system.vote.model.Vote
-import com.yareach._2_voting_system.vote.entity.VoteJpaEntity
+import com.yareach._2_voting_system.vote.entity.VoteR2dbcEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.springframework.stereotype.Repository
@@ -26,41 +26,41 @@ interface VoteRepository {
 }
 
 @Repository
-class VoteRepositoryJpaImpl(
-    private val voteJpaRepository: VoteJpaRepository
+class VoteRepositoryR2dbcImpl(
+    private val voteR2dbcRepository: VoteR2dbcRepository
 ) : VoteRepository {
     override suspend fun findAll(): Flow<Vote> {
-        return voteJpaRepository.findAll().map { it.toModel() }
+        return voteR2dbcRepository.findAll().map { it.toModel() }
     }
 
     override suspend fun findById(voteId: String): Vote? {
-        return voteJpaRepository.findById(voteId)?.toModel()
+        return voteR2dbcRepository.findById(voteId)?.toModel()
     }
 
     override suspend fun insert(vote: Vote): String {
-        val voteEntity = VoteJpaEntity.fromModel(vote, isNewRecord = true)
-        val result = voteJpaRepository.save(voteEntity)
+        val voteEntity = VoteR2dbcEntity.fromModel(vote, isNewRecord = true)
+        val result = voteR2dbcRepository.save(voteEntity)
         return result.id
     }
 
     override suspend fun update(vote: Vote): Vote {
-        val voteEntity = VoteJpaEntity.fromModel(vote)
-        return voteJpaRepository.save(voteEntity).toModel()
+        val voteEntity = VoteR2dbcEntity.fromModel(vote)
+        return voteR2dbcRepository.save(voteEntity).toModel()
     }
 
     override suspend fun modify(voteId: String, block: Vote.() -> Unit): Vote {
-        return voteJpaRepository.findById(voteId)
+        return voteR2dbcRepository.findById(voteId)
             ?.toModel()
             ?.apply { block() }
-            ?.also{ voteJpaRepository.save(VoteJpaEntity.fromModel(it)) }
+            ?.also{ voteR2dbcRepository.save(VoteR2dbcEntity.fromModel(it)) }
             ?: throw NotFoundException(ErrorCode.VOTE_NOT_FOUND, voteId)
     }
 
     override suspend fun deleteById(voteId: String) {
-        voteJpaRepository.deleteById(voteId)
+        voteR2dbcRepository.deleteById(voteId)
     }
 
     override suspend fun deleteVotesBeforeCutoff(cutoff: LocalDateTime): Long {
-        return voteJpaRepository.deleteByLastModifiedBefore(cutoff)
+        return voteR2dbcRepository.deleteByLastModifiedBefore(cutoff)
     }
 }

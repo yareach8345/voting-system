@@ -1,10 +1,10 @@
 package com.yareach._2_voting_system.unit.vote.repository
 
-import com.yareach._2_voting_system.vote.entity.VoteJpaEntity
+import com.yareach._2_voting_system.vote.entity.VoteR2dbcEntity
 import com.yareach._2_voting_system.vote.model.Vote
-import com.yareach._2_voting_system.vote.repository.VoteJpaRepository
+import com.yareach._2_voting_system.vote.repository.VoteR2dbcRepository
 import com.yareach._2_voting_system.vote.repository.VoteRepository
-import com.yareach._2_voting_system.vote.repository.VoteRepositoryJpaImpl
+import com.yareach._2_voting_system.vote.repository.VoteRepositoryR2dbcImpl
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -27,8 +27,8 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class VoteRepositoryTest {
-    val voteJpaRepositoryMock = mockk<VoteJpaRepository>()
-    val voteRepository: VoteRepository = VoteRepositoryJpaImpl(voteJpaRepositoryMock)
+    val voteR2dbcRepositoryMock = mockk<VoteR2dbcRepository>()
+    val voteRepository: VoteRepository = VoteRepositoryR2dbcImpl(voteR2dbcRepositoryMock)
 
     @Nested
     @DisplayName("데이터 조회 테스트")
@@ -36,11 +36,11 @@ class VoteRepositoryTest {
         @Test
         @DisplayName("모든 데이터 조회(findAll)")
         fun findAllTest() = runTest {
-            every { voteJpaRepositoryMock.findAll() } returns flowOf(Vote.new(), Vote.new()).map{ VoteJpaEntity.fromModel(it) }
+            every { voteR2dbcRepositoryMock.findAll() } returns flowOf(Vote.new(), Vote.new()).map{ VoteR2dbcEntity.fromModel(it) }
 
             val result = voteRepository.findAll()
 
-            coVerify(exactly = 1) { voteJpaRepositoryMock.findAll() }
+            coVerify(exactly = 1) { voteR2dbcRepositoryMock.findAll() }
             assertEquals(result.count(), 2)
         }
 
@@ -50,11 +50,11 @@ class VoteRepositoryTest {
             val uuid = UUID.randomUUID().toString()
             val idSlot = slot<String>()
 
-            coEvery { voteJpaRepositoryMock.findById(id = capture(idSlot)) } answers { VoteJpaEntity.fromModel(Vote(idSlot.captured)) }
+            coEvery { voteR2dbcRepositoryMock.findById(id = capture(idSlot)) } answers { VoteR2dbcEntity.fromModel(Vote(idSlot.captured)) }
 
             val result = voteRepository.findById(uuid)
 
-            coVerify(exactly = 1) { voteJpaRepositoryMock.findById(uuid) }
+            coVerify(exactly = 1) { voteR2dbcRepositoryMock.findById(uuid) }
             assertNotNull(result)
             assertEquals(result.id, uuid)
         }
@@ -65,11 +65,11 @@ class VoteRepositoryTest {
             val uuid = UUID.randomUUID().toString()
             val idSlot = slot<String>()
 
-            coEvery { voteJpaRepositoryMock.findById(id = capture(idSlot)) } returns null
+            coEvery { voteR2dbcRepositoryMock.findById(id = capture(idSlot)) } returns null
 
             val result = voteRepository.findById(uuid)
 
-            coVerify(exactly = 1) { voteJpaRepositoryMock.findById(uuid) }
+            coVerify(exactly = 1) { voteR2dbcRepositoryMock.findById(uuid) }
             assertNull(result)
         }
     }
@@ -80,14 +80,14 @@ class VoteRepositoryTest {
         @Test
         @DisplayName("데이터 삽입(insert)")
         fun insertTest() = runTest {
-            val slot = slot<VoteJpaEntity>()
+            val slot = slot<VoteR2dbcEntity>()
             val uuid = UUID.randomUUID().toString()
 
-            coEvery { voteJpaRepositoryMock.save(capture(slot)) } coAnswers { slot.captured }
+            coEvery { voteR2dbcRepositoryMock.save(capture(slot)) } coAnswers { slot.captured }
 
             val result = voteRepository.insert(Vote(uuid))
 
-            coVerify(exactly = 1) { voteJpaRepositoryMock.save(slot.captured) }
+            coVerify(exactly = 1) { voteR2dbcRepositoryMock.save(slot.captured) }
 
             assertEquals(uuid, result)
 
@@ -101,14 +101,14 @@ class VoteRepositoryTest {
         @Test
         @DisplayName("데이터 교체(update)")
         fun updateTest() = runTest {
-            val slot = slot<VoteJpaEntity>()
+            val slot = slot<VoteR2dbcEntity>()
             val uuid = UUID.randomUUID().toString()
 
-            coEvery { voteJpaRepositoryMock.save(capture(slot)) } coAnswers { slot.captured }
+            coEvery { voteR2dbcRepositoryMock.save(capture(slot)) } coAnswers { slot.captured }
 
             val updated = voteRepository.update(Vote(uuid))
 
-            coVerify(exactly = 1) { voteJpaRepositoryMock.save(slot.captured) }
+            coVerify(exactly = 1) { voteR2dbcRepositoryMock.save(slot.captured) }
 
             assertFalse(slot.captured.isNew)
             assertEquals(updated.id, uuid)
@@ -124,19 +124,19 @@ class VoteRepositoryTest {
             val uuid = UUID.randomUUID().toString()
 
             val voteMock = spyk(Vote(uuid))
-            val voteEntityMock = mockk<VoteJpaEntity>()
+            val voteEntityMock = mockk<VoteR2dbcEntity>()
             coEvery { voteEntityMock.toModel() } returns voteMock
 
-            val entitySlot = slot<VoteJpaEntity>()
+            val entitySlot = slot<VoteR2dbcEntity>()
             val idSlot = slot<String>()
 
-            coEvery { voteJpaRepositoryMock.findById(capture(idSlot)) } coAnswers { voteEntityMock }
-            coEvery { voteJpaRepositoryMock.save(capture(entitySlot)) } coAnswers { entitySlot.captured }
+            coEvery { voteR2dbcRepositoryMock.findById(capture(idSlot)) } coAnswers { voteEntityMock }
+            coEvery { voteR2dbcRepositoryMock.save(capture(entitySlot)) } coAnswers { entitySlot.captured }
 
             val result = voteRepository.modify(uuid) { open() }
 
-            coVerify(exactly = 1) { voteJpaRepositoryMock.findById(uuid) }
-            coVerify(exactly = 1) { voteJpaRepositoryMock.save(entitySlot.captured) }
+            coVerify(exactly = 1) { voteR2dbcRepositoryMock.findById(uuid) }
+            coVerify(exactly = 1) { voteR2dbcRepositoryMock.save(entitySlot.captured) }
             verify(exactly = 1) { voteMock.open() }
 
             assertFalse(entitySlot.captured.isNew)
@@ -158,11 +158,11 @@ class VoteRepositoryTest {
 
             val uuid = UUID.randomUUID().toString()
 
-            coEvery { voteJpaRepositoryMock.deleteById(id = capture(idSlot)) } returns Unit
+            coEvery { voteR2dbcRepositoryMock.deleteById(id = capture(idSlot)) } returns Unit
 
             voteRepository.deleteById(uuid)
 
-            coVerify(exactly = 1) { voteJpaRepositoryMock.deleteById(uuid) }
+            coVerify(exactly = 1) { voteR2dbcRepositoryMock.deleteById(uuid) }
             assertEquals(uuid, idSlot.captured)
         }
     }
