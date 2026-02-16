@@ -20,11 +20,11 @@ interface VoteRepository {
 
     suspend fun countByElectionId(electionId: String): Long
 
-    suspend fun getNumberOfVotes(electionId: String): Flow<ItemAndVotesCountPairDto>
+    suspend fun getVoteCountsByElectionId(electionId: String): Flow<ItemAndVotesCountPairDto>
 }
 
 @Repository
-class VoteRepositoryR2DbcImpl(
+class VoteRepositoryR2dbcImpl(
     private val voteR2DbcRepository: VoteR2dbcRepository,
 ): VoteRepository {
     override suspend fun findAllByElectionId(electionId: String): Flow<Vote> {
@@ -53,7 +53,7 @@ class VoteRepositoryR2DbcImpl(
         return voteR2DbcRepository.countByElectionId(electionId)
     }
 
-    override suspend fun getNumberOfVotes(electionId: String): Flow<ItemAndVotesCountPairDto> {
+    override suspend fun getVoteCountsByElectionId(electionId: String): Flow<ItemAndVotesCountPairDto> {
         return voteR2DbcRepository.countGroupByElectionId(electionId)
     }
 }

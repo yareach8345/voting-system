@@ -6,9 +6,20 @@ class Vote(
     val id: Int? = null,
     val electionId: String,
     val userId: String,
-    val item: String,
-    val votedAt: LocalDateTime = LocalDateTime.now()
+    item: String,
+    votedAt: LocalDateTime = LocalDateTime.now()
 ) {
+    var item = item
+        private set
+
+    var votedAt: LocalDateTime = LocalDateTime.now()
+        private set
+
+    fun updateItem(newItem: String) {
+        item = newItem
+        votedAt = LocalDateTime.now()
+    }
+
     companion object {
         fun of(
             electionId: String,

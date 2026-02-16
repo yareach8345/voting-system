@@ -26,7 +26,7 @@ interface ElectionRepository {
 }
 
 @Repository
-class ElectionRepositoryR2DbcImpl(
+class ElectionRepositoryR2dbcImpl(
     private val electionR2DbcRepository: ElectionR2dbcRepository
 ) : ElectionRepository {
     override suspend fun findAll(): Flow<Election> {

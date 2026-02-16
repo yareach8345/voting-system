@@ -50,6 +50,6 @@ class VoteServiceImpl(
             throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "voteId $electionId not found.")
         }
 
-        return voteRepository.getNumberOfVotes(electionId)
+        return voteRepository.getVoteCountsByElectionId(electionId)
     }
 }

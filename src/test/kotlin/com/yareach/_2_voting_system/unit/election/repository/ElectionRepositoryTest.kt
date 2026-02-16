@@ -4,7 +4,7 @@ import com.yareach._2_voting_system.election.entity.ElectionR2dbcEntity
 import com.yareach._2_voting_system.election.model.Election
 import com.yareach._2_voting_system.election.repository.ElectionR2dbcRepository
 import com.yareach._2_voting_system.election.repository.ElectionRepository
-import com.yareach._2_voting_system.election.repository.ElectionRepositoryR2DbcImpl
+import com.yareach._2_voting_system.election.repository.ElectionRepositoryR2dbcImpl
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -28,7 +28,7 @@ import kotlin.test.assertTrue
 
 class ElectionRepositoryTest {
     val electionR2DbcRepositoryMock = mockk<ElectionR2dbcRepository>()
-    val electionRepository: ElectionRepository = ElectionRepositoryR2DbcImpl(electionR2DbcRepositoryMock)
+    val electionRepository: ElectionRepository = ElectionRepositoryR2dbcImpl(electionR2DbcRepositoryMock)
 
     @Nested
     @DisplayName("데이터 조회 테스트")
