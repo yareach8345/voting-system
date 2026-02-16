@@ -27,7 +27,6 @@ interface VoteRepository {
 @Repository
 class VoteRepositoryR2DbcImpl(
     private val voteR2DbcRepository: VoteR2dbcRepository,
-    private val template: R2dbcEntityTemplate
 ): VoteRepository {
     override suspend fun findAllByVoteId(voteId: String): Flow<Vote> {
         return voteR2DbcRepository.findAllByElectionId(voteId).map { it.toModel() }
