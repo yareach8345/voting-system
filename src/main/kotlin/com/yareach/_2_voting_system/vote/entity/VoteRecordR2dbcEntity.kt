@@ -6,12 +6,12 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
-@Table("vote_record")
+@Table("vote")
 class VoteRecordR2dbcEntity(
     @Id
     val id: Int?,
 
-    @Column("vote_id")
+    @Column("election_id")
     val voteId: String,
 
     @Column("user_id")

@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
-@Table("vote")
+@Table("election")
 class VoteR2dbcEntity(
     @Id
     private val id: String,
