@@ -1,4 +1,4 @@
-package com.yareach._2_voting_system.vote.dto
+package com.yareach._2_voting_system.election.dto
 
 data class GenerateElectionResponseDto(
     val newElectionId: String

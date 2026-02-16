@@ -1,6 +1,6 @@
-package com.yareach._2_voting_system.vote.repository
+package com.yareach._2_voting_system.election.repository
 
-import com.yareach._2_voting_system.vote.entity.ElectionR2dbcEntity
+import com.yareach._2_voting_system.election.entity.ElectionR2dbcEntity
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime

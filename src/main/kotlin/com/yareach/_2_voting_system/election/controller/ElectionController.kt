@@ -1,10 +1,10 @@
-package com.yareach._2_voting_system.vote.controller
+package com.yareach._2_voting_system.election.controller
 
-import com.yareach._2_voting_system.vote.dto.ChangeElectionStateRequestDto
-import com.yareach._2_voting_system.vote.dto.GenerateElectionResponseDto
-import com.yareach._2_voting_system.vote.dto.ElectionInfoResponseDto
-import com.yareach._2_voting_system.vote.dto.ChangeElectionStateResponseDto
-import com.yareach._2_voting_system.vote.service.ElectionService
+import com.yareach._2_voting_system.election.dto.ChangeElectionStateRequestDto
+import com.yareach._2_voting_system.election.dto.GenerateElectionResponseDto
+import com.yareach._2_voting_system.election.dto.ElectionInfoResponseDto
+import com.yareach._2_voting_system.election.dto.ChangeElectionStateResponseDto
+import com.yareach._2_voting_system.election.service.ElectionService
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.http.ResponseEntity

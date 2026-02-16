@@ -1,10 +1,10 @@
 package com.yareach._2_voting_system.unit.vote.repository
 
-import com.yareach._2_voting_system.vote.entity.ElectionR2dbcEntity
-import com.yareach._2_voting_system.vote.model.Election
-import com.yareach._2_voting_system.vote.repository.ElectionR2dbcRepository
-import com.yareach._2_voting_system.vote.repository.ElectionRepository
-import com.yareach._2_voting_system.vote.repository.ElectionRepositoryR2DbcImpl
+import com.yareach._2_voting_system.election.entity.ElectionR2dbcEntity
+import com.yareach._2_voting_system.election.model.Election
+import com.yareach._2_voting_system.election.repository.ElectionR2dbcRepository
+import com.yareach._2_voting_system.election.repository.ElectionRepository
+import com.yareach._2_voting_system.election.repository.ElectionRepositoryR2DbcImpl
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

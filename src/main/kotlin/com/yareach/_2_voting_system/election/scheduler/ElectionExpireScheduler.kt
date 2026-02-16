@@ -1,7 +1,7 @@
-package com.yareach._2_voting_system.vote.scheduler
+package com.yareach._2_voting_system.election.scheduler
 
 import com.yareach._2_voting_system.core.extension.logger
-import com.yareach._2_voting_system.vote.service.ElectionService
+import com.yareach._2_voting_system.election.service.ElectionService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

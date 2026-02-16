@@ -1,4 +1,4 @@
-package com.yareach._2_voting_system.vote.model
+package com.yareach._2_voting_system.election.model
 
 import java.time.LocalDateTime
 import java.util.UUID

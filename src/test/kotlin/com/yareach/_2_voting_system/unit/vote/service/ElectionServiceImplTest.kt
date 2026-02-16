@@ -2,10 +2,10 @@ package com.yareach._2_voting_system.unit.vote.service
 
 import com.yareach._2_voting_system.core.error.ApiException
 import com.yareach._2_voting_system.core.error.ErrorCode
-import com.yareach._2_voting_system.vote.model.Election
-import com.yareach._2_voting_system.vote.repository.ElectionRepository
-import com.yareach._2_voting_system.vote.service.ElectionService
-import com.yareach._2_voting_system.vote.service.ElectionServiceImpl
+import com.yareach._2_voting_system.election.model.Election
+import com.yareach._2_voting_system.election.repository.ElectionRepository
+import com.yareach._2_voting_system.election.service.ElectionService
+import com.yareach._2_voting_system.election.service.ElectionServiceImpl
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

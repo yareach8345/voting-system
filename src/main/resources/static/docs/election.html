@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /votes HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /elections HTTP/1.1
 Host: localhost:8080
 Content-Type: application/x-www-form-urlencoded</code></pre>
 </div>
@@ -457,12 +457,12 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Location: /votes/5e510f17-9d1a-4942-bcfe-a9176516748d
+Location: /elections/378afda7-c5b6-46b9-8a9d-5881d043636f
 Content-Type: application/json
-Content-Length: 55
+Content-Length: 62
 
 {
-  "voteId" : "5e510f17-9d1a-4942-bcfe-a9176516748d"
+  "newElectionId" : "378afda7-c5b6-46b9-8a9d-5881d043636f"
 }</code></pre>
 </div>
 </div>
@@ -472,7 +472,7 @@ Content-Length: 55
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-json" data-lang="json">{
-  "voteId" : "5e510f17-9d1a-4942-bcfe-a9176516748d"
+  "newElectionId" : "378afda7-c5b6-46b9-8a9d-5881d043636f"
 }</code></pre>
 </div>
 </div>
@@ -491,7 +491,7 @@ Content-Length: 55
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>voteId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>newElectionId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성된 투표의 id</p></td>
 </tr>
@@ -539,23 +539,47 @@ Content-Length: 55
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-json" data-lang="json">[ {
-  "id" : "ded60865-f5e2-46ed-9bb9-e4ee1a7d24cc",
+  "id" : "be55148f-5bdb-46c4-af94-d1cfbc85e7fa",
   "state" : "open",
-  "startedAt" : "2026-02-15T13:07:27",
+  "startedAt" : "2026-02-16T17:49:50",
   "endedAt" : null,
-  "createdAt" : "2026-02-15T13:07:27"
+  "createdAt" : "2026-02-16T17:49:50"
 }, {
-  "id" : "4b6d3579-0ddf-43d3-bf36-e1309d05f781",
+  "id" : "010d9548-5760-4a64-b8dc-36e5c4b1dc9a",
   "state" : "close",
-  "startedAt" : "2026-02-15T13:07:27",
-  "endedAt" : "2026-02-15T13:07:27",
-  "createdAt" : "2026-02-15T13:07:27"
+  "startedAt" : "2026-02-16T17:49:50",
+  "endedAt" : "2026-02-16T17:49:50",
+  "createdAt" : "2026-02-16T17:49:50"
 }, {
-  "id" : "88b0a4f3-4b72-4995-81a3-d036b752d008",
+  "id" : "fc348cee-347f-466b-be96-23dccdde1c75",
   "state" : "close",
   "startedAt" : null,
   "endedAt" : null,
-  "createdAt" : "2026-02-15T13:07:28"
+  "createdAt" : "2026-02-16T17:49:51"
+}, {
+  "id" : "82c1ab4a-ddfa-41dd-8eeb-82b1a10a1ca0",
+  "state" : "close",
+  "startedAt" : null,
+  "endedAt" : "2026-02-16T17:49:51",
+  "createdAt" : "2026-02-16T17:49:51"
+}, {
+  "id" : "6dd978f2-4897-4cde-81c5-5883ea64bc60",
+  "state" : "open",
+  "startedAt" : "2026-02-16T17:49:52",
+  "endedAt" : null,
+  "createdAt" : "2026-02-16T17:49:52"
+}, {
+  "id" : "378afda7-c5b6-46b9-8a9d-5881d043636f",
+  "state" : "close",
+  "startedAt" : null,
+  "endedAt" : null,
+  "createdAt" : "2026-02-16T17:49:52"
+}, {
+  "id" : "751a9723-605d-4569-85f3-c538a972cfb7",
+  "state" : "close",
+  "startedAt" : null,
+  "endedAt" : null,
+  "createdAt" : "2026-02-16T17:49:52"
 } ]</code></pre>
 </div>
 </div>
@@ -608,12 +632,12 @@ Content-Length: 55
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /votes/88b0a4f3-4b72-4995-81a3-d036b752d008 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /elections/751a9723-605d-4569-85f3-c538a972cfb7 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /votes/{voteId}</caption>
+<caption class="title">Table 1. /elections/{voteId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -637,11 +661,11 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-json" data-lang="json">{
-  "id" : "88b0a4f3-4b72-4995-81a3-d036b752d008",
+  "id" : "751a9723-605d-4569-85f3-c538a972cfb7",
   "state" : "close",
   "startedAt" : null,
   "endedAt" : null,
-  "createdAt" : "2026-02-15T13:07:28"
+  "createdAt" : "2026-02-16T17:49:52"
 }</code></pre>
 </div>
 </div>
@@ -694,7 +718,7 @@ Host: localhost:8080</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /votes/uuid-not-exists HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /elections/uuid-not-exists HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -706,8 +730,8 @@ Host: localhost:8080</code></pre>
 <pre class="highlight nowrap"><code class="language-json" data-lang="json">{
   "state" : "404 NOT_FOUND",
   "message" : "투표를 찾을 수 없습니다.",
-  "code" : "VOTE_NOT_FOUND",
-  "details" : "ID가 [uuid-not-exists]인 투표를 찾을 수 없습니다."
+  "errorCode" : "ELECTION_001",
+  "details" : "투표를 찾을 수 없습니다."
 }</code></pre>
 </div>
 </div>
@@ -722,12 +746,12 @@ Host: localhost:8080</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /votes/952b9b0e-4f6a-493e-8c71-1cb85d8f20ac HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /elections/914ad7ad-d2d5-42cc-acd8-2fadf865a4f8 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. /votes/{voteId}</caption>
+<caption class="title">Table 2. /elections/{voteId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -765,7 +789,7 @@ Host: localhost:8080</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /votes/643aa98b-11f5-4f5f-9470-0dda6c5b195b/state HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /elections/b4a592f9-6160-44f0-80fb-a71874c867f6/state HTTP/1.1
 Content-Type: application/json
 Content-Length: 25
 Host: localhost:8080
@@ -810,21 +834,21 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 129
+Content-Length: 133
 
 {
-  "voteId" : "643aa98b-11f5-4f5f-9470-0dda6c5b195b",
+  "electionId" : "b4a592f9-6160-44f0-80fb-a71874c867f6",
   "newState" : "open",
-  "updatedTime" : "2026-02-15T13:07:28.889185062"
+  "updatedTime" : "2026-02-16T17:52:30.677166268"
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-json" data-lang="json">{
-  "voteId" : "643aa98b-11f5-4f5f-9470-0dda6c5b195b",
+  "electionId" : "b4a592f9-6160-44f0-80fb-a71874c867f6",
   "newState" : "open",
-  "updatedTime" : "2026-02-15T13:07:28.889185062"
+  "updatedTime" : "2026-02-16T17:52:30.677166268"
 }</code></pre>
 </div>
 </div>
@@ -843,7 +867,7 @@ Content-Length: 129
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>voteId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">변경된 투표의 식별자</p></td>
 </tr>
@@ -870,7 +894,7 @@ Content-Length: 129
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /votes/f1bb1e2b-d7ea-4398-9414-4852521ad8c3/state HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /elections/e3a88635-b039-4c50-805c-893750121ecc/state HTTP/1.1
 Content-Type: application/json
 Content-Length: 26
 Host: localhost:8080
@@ -915,21 +939,21 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 130
+Content-Length: 134
 
 {
-  "voteId" : "f1bb1e2b-d7ea-4398-9414-4852521ad8c3",
+  "electionId" : "e3a88635-b039-4c50-805c-893750121ecc",
   "newState" : "close",
-  "updatedTime" : "2026-02-15T13:07:28.770432383"
+  "updatedTime" : "2026-02-16T17:52:30.593421173"
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-json" data-lang="json">{
-  "voteId" : "f1bb1e2b-d7ea-4398-9414-4852521ad8c3",
+  "electionId" : "e3a88635-b039-4c50-805c-893750121ecc",
   "newState" : "close",
-  "updatedTime" : "2026-02-15T13:07:28.770432383"
+  "updatedTime" : "2026-02-16T17:52:30.593421173"
 }</code></pre>
 </div>
 </div>
@@ -948,7 +972,7 @@ Content-Length: 130
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>voteId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">변경된 투표의 식별자</p></td>
 </tr>

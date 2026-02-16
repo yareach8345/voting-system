@@ -1,6 +1,6 @@
-package com.yareach._2_voting_system.vote.entity
+package com.yareach._2_voting_system.election.entity
 
-import com.yareach._2_voting_system.vote.model.Election
+import com.yareach._2_voting_system.election.model.Election
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Transient
 import org.springframework.data.domain.Persistable

@@ -2,14 +2,14 @@ package com.yareach._2_voting_system.integration.vote
 
 import com.yareach._2_voting_system.core.error.ErrorCode
 import com.yareach._2_voting_system.core.error.ErrorResponseDto
-import com.yareach._2_voting_system.vote.dto.ChangeElectionStateRequestDto
-import com.yareach._2_voting_system.vote.dto.GenerateElectionResponseDto
-import com.yareach._2_voting_system.vote.dto.ElectionInfoResponseDto
-import com.yareach._2_voting_system.vote.dto.ChangeElectionStateResponseDto
-import com.yareach._2_voting_system.vote.model.Election
-import com.yareach._2_voting_system.vote.repository.ElectionRepository
-import com.yareach._2_voting_system.vote.scheduler.ElectionExpireScheduler
-import com.yareach._2_voting_system.vote.service.ElectionService
+import com.yareach._2_voting_system.election.dto.ChangeElectionStateRequestDto
+import com.yareach._2_voting_system.election.dto.GenerateElectionResponseDto
+import com.yareach._2_voting_system.election.dto.ElectionInfoResponseDto
+import com.yareach._2_voting_system.election.dto.ChangeElectionStateResponseDto
+import com.yareach._2_voting_system.election.model.Election
+import com.yareach._2_voting_system.election.repository.ElectionRepository
+import com.yareach._2_voting_system.election.scheduler.ElectionExpireScheduler
+import com.yareach._2_voting_system.election.service.ElectionService
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach

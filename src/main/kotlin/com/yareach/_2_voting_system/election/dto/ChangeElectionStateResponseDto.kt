@@ -1,8 +1,8 @@
-package com.yareach._2_voting_system.vote.dto
+package com.yareach._2_voting_system.election.dto
 
 import com.yareach._2_voting_system.core.error.ApiException
 import com.yareach._2_voting_system.core.error.ErrorCode
-import com.yareach._2_voting_system.vote.model.Election
+import com.yareach._2_voting_system.election.model.Election
 import java.time.LocalDateTime
 
 data class ChangeElectionStateResponseDto(

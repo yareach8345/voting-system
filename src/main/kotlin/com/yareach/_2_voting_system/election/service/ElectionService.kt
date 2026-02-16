@@ -1,9 +1,9 @@
-package com.yareach._2_voting_system.vote.service
+package com.yareach._2_voting_system.election.service
 
 import com.yareach._2_voting_system.core.error.ApiException
 import com.yareach._2_voting_system.core.error.ErrorCode
-import com.yareach._2_voting_system.vote.model.Election
-import com.yareach._2_voting_system.vote.repository.ElectionRepository
+import com.yareach._2_voting_system.election.model.Election
+import com.yareach._2_voting_system.election.repository.ElectionRepository
 import kotlinx.coroutines.flow.Flow
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service

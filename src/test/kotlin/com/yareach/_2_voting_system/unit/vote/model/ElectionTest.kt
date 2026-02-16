@@ -1,6 +1,6 @@
 package com.yareach._2_voting_system.unit.vote.model
 
-import com.yareach._2_voting_system.vote.model.Election
+import com.yareach._2_voting_system.election.model.Election
 import org.junit.jupiter.api.DisplayName
 import java.time.LocalDateTime
 import java.util.UUID
