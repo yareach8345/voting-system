@@ -1,4 +1,4 @@
-package com.yareach._2_voting_system.unit.vote.model
+package com.yareach._2_voting_system.unit.election.model
 
 import com.yareach._2_voting_system.election.model.Election
 import org.junit.jupiter.api.DisplayName

@@ -1,4 +1,4 @@
-package com.yareach._2_voting_system.unit.vote.repository
+package com.yareach._2_voting_system.unit.election.repository
 
 import com.yareach._2_voting_system.election.entity.ElectionR2dbcEntity
 import com.yareach._2_voting_system.election.model.Election

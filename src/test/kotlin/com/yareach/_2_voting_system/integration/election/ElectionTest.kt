@@ -1,4 +1,4 @@
-package com.yareach._2_voting_system.integration.vote
+package com.yareach._2_voting_system.integration.election
 
 import com.yareach._2_voting_system.core.error.ErrorCode
 import com.yareach._2_voting_system.core.error.ErrorResponseDto

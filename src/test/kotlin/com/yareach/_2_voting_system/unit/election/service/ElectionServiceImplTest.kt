@@ -1,4 +1,4 @@
-package com.yareach._2_voting_system.unit.vote.service
+package com.yareach._2_voting_system.unit.election.service
 
 import com.yareach._2_voting_system.core.error.ApiException
 import com.yareach._2_voting_system.core.error.ErrorCode
