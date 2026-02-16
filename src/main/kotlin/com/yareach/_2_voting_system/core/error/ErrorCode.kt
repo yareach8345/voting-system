@@ -12,5 +12,6 @@ enum class ErrorCode(
 
     ELECTION_IS_NOT_OPEN(HttpStatus.BAD_REQUEST, "투표가 진행중이지 않습니다.", "VOTE_001"),
 
+    VALIDATION_FAILED(HttpStatus.BAD_REQUEST, "요청으로 보낸 데이터가 잘못되었습니다.", "VALID_ERROR"),
     SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 에러가 발생했습니다.", "SERVER_ERROR")
 }

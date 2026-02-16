@@ -5,6 +5,7 @@ import com.yareach._2_voting_system.election.dto.GenerateElectionResponseDto
 import com.yareach._2_voting_system.election.dto.ElectionInfoResponseDto
 import com.yareach._2_voting_system.election.dto.ChangeElectionStateResponseDto
 import com.yareach._2_voting_system.election.service.ElectionService
+import jakarta.validation.Valid
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.http.ResponseEntity
@@ -56,7 +57,7 @@ class ElectionController(
     @PatchMapping("/{electionId}/state")
     suspend fun changeElectionState(
         @PathVariable electionId: String,
-        @RequestBody changeStateRequest: ChangeElectionStateRequestDto
+        @RequestBody @Valid changeStateRequest: ChangeElectionStateRequestDto
     ): ResponseEntity<ChangeElectionStateResponseDto> {
         val result = electionService.changeElectionState(electionId, changeStateRequest.newState)
 
