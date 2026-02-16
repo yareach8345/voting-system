@@ -1,8 +1,8 @@
 package com.yareach._2_voting_system.core.error
 
-import com.yareach._2_voting_system.core.extension.IllegalStateException
-import com.yareach._2_voting_system.core.extension.NotFoundException
-import com.yareach._2_voting_system.core.extension.ServerErrorException
+import com.yareach._2_voting_system.core.error.exception.IllegalStateException
+import com.yareach._2_voting_system.core.error.exception.NotFoundException
+import com.yareach._2_voting_system.core.error.exception.ServerErrorException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler

@@ -1,4 +1,4 @@
-package com.yareach._2_voting_system.core.extension
+package com.yareach._2_voting_system.core.error.exception
 
 import com.yareach._2_voting_system.core.error.ErrorCode
 import com.yareach._2_voting_system.core.error.ErrorResponse

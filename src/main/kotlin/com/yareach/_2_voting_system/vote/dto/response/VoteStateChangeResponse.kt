@@ -1,6 +1,6 @@
 package com.yareach._2_voting_system.vote.dto.response
 
-import com.yareach._2_voting_system.core.extension.ServerErrorException
+import com.yareach._2_voting_system.core.error.exception.ServerErrorException
 import com.yareach._2_voting_system.vote.model.Vote
 import java.time.LocalDateTime
 

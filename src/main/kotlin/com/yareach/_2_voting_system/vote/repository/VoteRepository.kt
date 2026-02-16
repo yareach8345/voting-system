@@ -1,7 +1,7 @@
 package com.yareach._2_voting_system.vote.repository
 
 import com.yareach._2_voting_system.core.error.ErrorCode
-import com.yareach._2_voting_system.core.extension.NotFoundException
+import com.yareach._2_voting_system.core.error.exception.NotFoundException
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.entity.VoteR2dbcEntity
 import kotlinx.coroutines.flow.Flow

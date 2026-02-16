@@ -1,11 +1,10 @@
 package com.yareach._2_voting_system.vote.service
 
 import com.yareach._2_voting_system.core.error.ErrorCode
-import com.yareach._2_voting_system.core.extension.IllegalStateException
-import com.yareach._2_voting_system.core.extension.NotFoundException
+import com.yareach._2_voting_system.core.error.exception.IllegalStateException
+import com.yareach._2_voting_system.core.error.exception.NotFoundException
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
-import com.yareach._2_voting_system.vote.scheduler.VoteExpireProperties
 import kotlinx.coroutines.flow.Flow
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
