@@ -1,5 +1,7 @@
 package com.yareach._2_voting_system.integration.vote
 
+import com.yareach._2_voting_system.core.error.ErrorCode
+import com.yareach._2_voting_system.core.error.ErrorResponseDto
 import com.yareach._2_voting_system.vote.dto.ChangeVoteStateRequestDto
 import com.yareach._2_voting_system.vote.dto.GenerateVoteResponseDto
 import com.yareach._2_voting_system.vote.dto.VoteInfoResponseDto
@@ -272,7 +274,12 @@ class VoteTest {
                 .bodyValue(ChangeVoteStateRequestDto("wrong state"))
                 .exchange()
                 .expectStatus().isBadRequest
-                .expectBody()
+                .expectBody<ErrorResponseDto>()
+                .value {
+                    assertNotNull(it)
+                    assertEquals(ErrorCode.ILLEGAL_VOTE_STATE.state, it.state)
+                    assertEquals(ErrorCode.ILLEGAL_VOTE_STATE.errorCode, it.errorCode)
+                }
                 .consumeWith(document(
                     "change-vote-state-fail",
                     pathParameters(parameterWithName("voteId").description("투표 식별자")),

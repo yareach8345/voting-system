@@ -1,7 +1,7 @@
 package com.yareach._2_voting_system.unit.vote.service
 
-import com.yareach._2_voting_system.core.error.exception.IllegalStateException
-import com.yareach._2_voting_system.core.error.exception.NotFoundException
+import com.yareach._2_voting_system.core.error.ApiException
+import com.yareach._2_voting_system.core.error.ErrorCode
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import com.yareach._2_voting_system.vote.service.VoteService
@@ -118,7 +118,9 @@ class VoteServiceImplTest {
             val exception: Exception = assertThrows { voteService.getVote(wrongId) }
 
             coVerify(exactly = 1) { voteRepositoryMock.findById(wrongId) }
-            assertInstanceOf<NotFoundException>(exception)
+
+            assertInstanceOf<ApiException>(exception)
+            assertEquals(ErrorCode.VOTE_NOT_FOUND, exception.errorCode)
         }
     }
 
@@ -249,7 +251,8 @@ class VoteServiceImplTest {
 
                 val exception: Exception = assertThrows { voteService.changeVoteState(uuid, "wrong state") }
 
-                assertInstanceOf<IllegalStateException>(exception)
+                assertInstanceOf<ApiException>(exception)
+                assertEquals(ErrorCode.ILLEGAL_VOTE_STATE, exception.errorCode)
             }
         }
 

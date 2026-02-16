@@ -8,7 +8,7 @@ enum class ErrorCode(
     val errorCode: String,
 ) {
     VOTE_NOT_FOUND(HttpStatus.NOT_FOUND, "투표를 찾을 수 없습니다.", "VOTE_001"),
-    ILLEGAL_VOTE_STATE(HttpStatus.BAD_GATEWAY, "올바른 상태가 아닙니다.", "VOTE_002"),
+    ILLEGAL_VOTE_STATE(HttpStatus.BAD_REQUEST, "올바른 상태가 아닙니다.", "VOTE_002"),
 
     VOTE_IS_NOT_OPEN(HttpStatus.BAD_REQUEST, "투표가 진행중이지 않습니다.", "VOTE_RECORD_001"),
 
