@@ -1,8 +1,7 @@
 package com.yareach._2_voting_system.vote.service
 
+import com.yareach._2_voting_system.core.error.ApiException
 import com.yareach._2_voting_system.core.error.ErrorCode
-import com.yareach._2_voting_system.core.error.exception.IllegalStateException
-import com.yareach._2_voting_system.core.error.exception.NotFoundException
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import kotlinx.coroutines.flow.Flow
@@ -48,7 +47,7 @@ class VoteServiceImpl(
     }
 
     override suspend fun getVote(voteId: String): Vote {
-        return voteRepository.findById(voteId) ?: throw NotFoundException(ErrorCode.VOTE_NOT_FOUND, voteId)
+        return voteRepository.findById(voteId) ?: throw ApiException(ErrorCode.VOTE_NOT_FOUND, "voteId: $voteId")
     }
 
     override suspend fun openVote(voteId: String): Vote {
@@ -62,7 +61,7 @@ class VoteServiceImpl(
     override suspend fun changeVoteState(voteId: String, newState: String) = when (newState) {
         "open" -> openVote(voteId)
         "close" -> closeVote(voteId)
-        else -> throw IllegalStateException(ErrorCode.ILLEGAL_VOTE_STATE, newState)
+        else -> throw ApiException(ErrorCode.ILLEGAL_VOTE_STATE, newState)
     }
 
     override suspend fun deleteExpiredVotes(): Long {

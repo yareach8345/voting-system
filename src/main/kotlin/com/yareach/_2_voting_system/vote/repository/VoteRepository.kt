@@ -1,7 +1,7 @@
 package com.yareach._2_voting_system.vote.repository
 
+import com.yareach._2_voting_system.core.error.ApiException
 import com.yareach._2_voting_system.core.error.ErrorCode
-import com.yareach._2_voting_system.core.error.exception.NotFoundException
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.entity.VoteR2dbcEntity
 import kotlinx.coroutines.flow.Flow
@@ -53,7 +53,7 @@ class VoteRepositoryR2dbcImpl(
             ?.toModel()
             ?.apply { block() }
             ?.also{ voteR2dbcRepository.save(VoteR2dbcEntity.fromModel(it)) }
-            ?: throw NotFoundException(ErrorCode.VOTE_NOT_FOUND, voteId)
+            ?: throw ApiException(ErrorCode.VOTE_NOT_FOUND, "voteId: $voteId")
     }
 
     override suspend fun deleteById(voteId: String) {
