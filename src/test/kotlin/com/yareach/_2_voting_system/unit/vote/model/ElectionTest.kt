@@ -1,6 +1,6 @@
 package com.yareach._2_voting_system.unit.vote.model
 
-import com.yareach._2_voting_system.vote.model.Vote
+import com.yareach._2_voting_system.vote.model.Election
 import org.junit.jupiter.api.DisplayName
 import java.time.LocalDateTime
 import java.util.UUID
@@ -11,11 +11,11 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class VoteTest {
+class ElectionTest {
     @Test
     @DisplayName("모델 생성 테스트")
     fun generateTest() {
-        val model = Vote.new()
+        val model = Election.new()
 
         assertEquals(UUID.fromString(model.id).toString(), model.id)
         assertFalse(model.isOpen)
@@ -26,8 +26,8 @@ class VoteTest {
 
     @Test
     @DisplayName("투표 open 테스트")
-    fun openVoteTest() {
-        val model = Vote.new()
+    fun openElectionTest() {
+        val model = Election.new()
             .apply { open() }
 
         assertTrue(model.isOpen)
@@ -38,8 +38,8 @@ class VoteTest {
 
     @Test
     @DisplayName("투표 close 테스트")
-    fun closeVoteTest() {
-        val model = Vote.new()
+    fun closeElectionTest() {
+        val model = Election.new()
             .apply { open() }
             .apply { close() }
 

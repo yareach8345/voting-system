@@ -1,7 +1,7 @@
 package com.yareach._2_voting_system.vote.scheduler
 
 import com.yareach._2_voting_system.core.extension.logger
-import com.yareach._2_voting_system.vote.service.VoteService
+import com.yareach._2_voting_system.vote.service.ElectionService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 
 @Component
 @ConfigurationProperties(prefix = "vote.expire")
-data class VoteExpireProperties(
+data class ElectionExpireProperties(
     var useExpire: Boolean = false,
     var delaySec: Long = 60,
     var ttlSeconds: Long = 600,
@@ -22,24 +22,24 @@ data class VoteExpireProperties(
 
 @Component
 @ConditionalOnProperty(prefix = "vote.expire", name = ["use-expire"], havingValue = "true")
-class VoteExpireScheduler(
-    private val service: VoteService
+class ElectionExpireScheduler(
+    private val service: ElectionService
 ) {
     private val schedulerScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     private val logger = logger()
 
     init {
-        logger.info("Initializing VoteExpireScheduler")
+        logger.info("Initializing ElectionExpireScheduler")
     }
 
     @Scheduled(fixedRateString = $$"${vote.expire.delay-sec:60}", timeUnit = TimeUnit.SECONDS)
-    fun processDeletingExpiredVotes() {
+    fun processDeletingExpiredElections() {
         schedulerScope.launch {
             try {
-                logger.debug("[Scheduler START] Delete Expired Votes Job 시작.")
-                val numberOfDeletedVotes = service.deleteExpiredVotes()
-                logger.debug("[Scheduler SUCCESS] $numberOfDeletedVotes 개의 만료된 투표 삭제")
+                logger.debug("[Scheduler START] Delete Expired Election Job 시작.")
+                val numberOfDeletedElections = service.deleteExpiredElections()
+                logger.debug("[Scheduler SUCCESS] $numberOfDeletedElections 개의 만료된 투표 삭제")
             } catch (e: Exception) {
                 logger.error("[Scheduler ERROR] 스케줄러 작업중 오류가 발생했습니다.")
                 throw e

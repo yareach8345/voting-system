@@ -1,5 +1,5 @@
 package com.yareach._2_voting_system.vote.dto
 
-data class ChangeVoteStateRequestDto (
+data class ChangeElectionStateRequestDto (
     val newState: String
 )

@@ -2,49 +2,35 @@ package com.yareach._2_voting_system.vote.entity
 
 import com.yareach._2_voting_system.vote.model.Vote
 import org.springframework.data.annotation.Id
-import org.springframework.data.annotation.Transient
-import org.springframework.data.domain.Persistable
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
-@Table("election")
+@Table("vote")
 class VoteR2dbcEntity(
     @Id
-    private val id: String,
+    val id: Int?,
 
-    @Column("is_open")
-    var isOpen: Boolean = false,
+    @Column("election_id")
+    val electionId: String,
 
-    @Column("started_at")
-    var startedAt: LocalDateTime? = null,
+    @Column("user_id")
+    val userId: String,
 
-    @Column("ended_at")
-    var endedAt: LocalDateTime? = null,
+    val item: String,
 
-    @Column("created_at")
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column("last_modified")
-    var lastModified: LocalDateTime = LocalDateTime.now(),
-): Persistable<String> {
-    @Transient
-    private var isNewRecord: Boolean = false
-
-    override fun getId(): String = id
-
-    override fun isNew(): Boolean = isNewRecord
-
-    fun toModel() = Vote(id, isOpen, startedAt, endedAt, createdAt, lastModified)
-
+    @Column("voted_at")
+    val votedAt: LocalDateTime
+) {
     companion object {
-        fun fromModel(voteModel: Vote, isNewRecord: Boolean = false) = VoteR2dbcEntity(
-            id = voteModel.id,
-            isOpen = voteModel.isOpen,
-            startedAt = voteModel.startedAt,
-            endedAt = voteModel.endedAt,
-            createdAt = voteModel.createdAt,
-            lastModified = voteModel.lastModified,
-        ).apply { this.isNewRecord = isNewRecord }
+        fun fromModel(vote: Vote) = VoteR2dbcEntity(
+            id = vote.id,
+            electionId = vote.electionId,
+            userId = vote.userId,
+            item = vote.item,
+            votedAt = vote.votedAt
+        )
     }
+
+    fun toModel() = Vote(id, electionId, userId, item, votedAt)
 }

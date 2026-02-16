@@ -2,14 +2,14 @@ package com.yareach._2_voting_system.integration.vote
 
 import com.yareach._2_voting_system.core.error.ErrorCode
 import com.yareach._2_voting_system.core.error.ErrorResponseDto
-import com.yareach._2_voting_system.vote.dto.ChangeVoteStateRequestDto
-import com.yareach._2_voting_system.vote.dto.GenerateVoteResponseDto
-import com.yareach._2_voting_system.vote.dto.VoteInfoResponseDto
-import com.yareach._2_voting_system.vote.dto.ChangeVoteStateResponseDto
-import com.yareach._2_voting_system.vote.model.Vote
-import com.yareach._2_voting_system.vote.repository.VoteRepository
-import com.yareach._2_voting_system.vote.scheduler.VoteExpireScheduler
-import com.yareach._2_voting_system.vote.service.VoteService
+import com.yareach._2_voting_system.vote.dto.ChangeElectionStateRequestDto
+import com.yareach._2_voting_system.vote.dto.GenerateElectionResponseDto
+import com.yareach._2_voting_system.vote.dto.ElectionInfoResponseDto
+import com.yareach._2_voting_system.vote.dto.ChangeElectionStateResponseDto
+import com.yareach._2_voting_system.vote.model.Election
+import com.yareach._2_voting_system.vote.repository.ElectionRepository
+import com.yareach._2_voting_system.vote.scheduler.ElectionExpireScheduler
+import com.yareach._2_voting_system.vote.service.ElectionService
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
@@ -51,19 +51,19 @@ import kotlin.test.assertNull
 ])
 @AutoConfigureWebTestClient
 @ExtendWith(RestDocumentationExtension::class)
-class VoteTest {
+class ElectionTest {
 
     @Autowired
     private lateinit var webTestClient: WebTestClient
 
     @Autowired
-    private lateinit var voteService: VoteService
+    private lateinit var electionService: ElectionService
 
     @Autowired
-    private lateinit var voteRepository: VoteRepository
+    private lateinit var electionRepository: ElectionRepository
     
     @Autowired
-    private lateinit var expireScheduler: VoteExpireScheduler
+    private lateinit var expireScheduler: ElectionExpireScheduler
 
     @BeforeEach
     fun setUp(context: WebApplicationContext, restDocumentation: RestDocumentationContextProvider) {
@@ -80,25 +80,25 @@ class VoteTest {
 
     @Nested
     @DisplayName("투표 생성")
-    inner class CreateVoteTest {
+    inner class CreateElectionTest {
 
         @Test
         @DisplayName("새로운 투표 생성")
-        fun createVote() {
+        fun createElection() {
             webTestClient.post()
-                .uri("/votes")
+                .uri("/elections")
                 .exchange()
                 .expectStatus().isCreated
-                .expectHeader().valueMatches("Location", "^/votes/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$")
-                .expectBody<GenerateVoteResponseDto>()
+                .expectHeader().valueMatches("Location", "^/elections/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$")
+                .expectBody<GenerateElectionResponseDto>()
                 .value {
                     assertNotNull(it)
-                    assertDoesNotThrow{ UUID.fromString(it.voteId) }
+                    assertDoesNotThrow{ UUID.fromString(it.newElectionId) }
                 }
                 .consumeWith(document(
-                    "create-vote",
+                    "create-election",
                     responseFields(
-                        fieldWithPath("voteId").description("생성된 투표의 id").attributes(key("format").value("uuid"))
+                        fieldWithPath("newElectionId").description("생성된 투표의 id").attributes(key("format").value("uuid"))
                     ),
                     responseHeaders(
                         headerWithName("Location").description("새로 생성된 투표 uri"),
@@ -109,18 +109,18 @@ class VoteTest {
 
     @Nested
     @DisplayName("투표 조회")
-    inner class FindVoteTest {
+    inner class FindElectionTest {
 
         @Test
         @DisplayName("모든 투표 조회")
-        fun findAllVotesTest() = runTest {
+        fun findAllElectionsTest() = runTest {
             webTestClient.get()
-                .uri("/votes")
+                .uri("/elections")
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<Collection<VoteInfoResponseDto>>()
+                .expectBody<Collection<ElectionInfoResponseDto>>()
                 .consumeWith(document(
-                    "get-all-votes",
+                    "get-all-elections",
                     responseFields(
                         fieldWithPath("[].id").description("투표 식별자"),
                         fieldWithPath("[].state").description("투표의 진행 여부"),
@@ -133,20 +133,20 @@ class VoteTest {
 
         @Test
         @DisplayName("id를 사용해 특정 투표 조회")
-        fun findAVoteTest() = runTest {
-            val voteId = voteService.createNewVote()
+        fun findElectionTest() = runTest {
+            val electionId = electionService.createNewElection()
 
             webTestClient.get()
-                .uri("/votes/{voteId}", voteId)
+                .uri("/elections/{electionId}", electionId)
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<VoteInfoResponseDto>()
+                .expectBody<ElectionInfoResponseDto>()
                 .value {
                     assertNotNull(it)
-                    assertEquals(voteId, it.id)
+                    assertEquals(electionId, it.id)
                 }.consumeWith(document(
-                    "get-a-vote-with-id",
-                    pathParameters(parameterWithName("voteId").description("투표 식별자")),
+                    "get-a-election-with-id",
+                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
                     responseFields(
                         fieldWithPath("id").description("투표 식별자"),
                         fieldWithPath("state").description("투표의 진행 여부"),
@@ -159,74 +159,74 @@ class VoteTest {
 
         @Test
         @DisplayName("유효하지 않은 id를 사용해 조회")
-        fun findAVoteTestWithWrongId() = runTest {
-            val wrongUuid = "uuid-not-exists"
+        fun findElectionTestWithWrongId() = runTest {
+            val wrongElectionId = "uuid-not-exists"
             webTestClient.get()
-                .uri("/votes/{voteId}", wrongUuid)
+                .uri("/elections/{electionId}", wrongElectionId)
                 .exchange()
                 .expectStatus().isNotFound
                 .expectBody()
                 .consumeWith(
                     document(
-                        "get-a-vote-with-wrong-id",
-                        pathParameters(parameterWithName("voteId").description("투표 식별자")),
+                        "get-a-election-with-wrong-id",
+                        pathParameters(parameterWithName("electionId").description("투표 식별자")),
                 ))
         }
     }
 
     @Nested
     @DisplayName("투표 삭제")
-    inner class DeleteVoteTest {
+    inner class DeleteElectionTest {
 
         @Test
         @DisplayName("투표 id를 사용하여 투표 삭제")
-        fun deleteVoteTest() = runTest {
-            val voteId = voteService.createNewVote()
+        fun deleteElectionTest() = runTest {
+            val electionId = electionService.createNewElection()
 
             webTestClient.delete()
-                .uri("/votes/{voteId}", voteId)
+                .uri("/elections/{electionId}", electionId)
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
                 .consumeWith(document(
-                    "delete-vote",
-                    pathParameters(parameterWithName("voteId").description("투표 식별자"))
+                    "delete-electionId",
+                    pathParameters(parameterWithName("electionId").description("투표 식별자"))
                 ))
 
-            val vote = voteRepository.findById(voteId)
-            assertNull(vote)
+            val election = electionRepository.findById(electionId)
+            assertNull(election)
         }
     }
 
     @Nested
     @DisplayName("투표 상태 변경")
-    inner class ChangeVoteStateTest {
+    inner class ChangeElectionStateTest {
 
         @Test
         @DisplayName("투표 open")
-        fun openVoteTest() = runTest {
-            val voteId = voteService.createNewVote()
+        fun openElectionTest() = runTest {
+            val electionId = electionService.createNewElection()
 
             val timeBeforeSendRequest = LocalDateTime.now()
 
             webTestClient.patch()
-                .uri("/votes/{voteId}/state", voteId)
-                .bodyValue(ChangeVoteStateRequestDto("open"))
+                .uri("/elections/{electionId}/state", electionId)
+                .bodyValue(ChangeElectionStateRequestDto("open"))
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<ChangeVoteStateResponseDto>()
+                .expectBody<ChangeElectionStateResponseDto>()
                 .value {
                     assertNotNull(it)
-                    assertEquals(voteId, it.voteId)
+                    assertEquals(electionId, it.electionId)
                     assertEquals("open", it.newState)
                     assert(it.updatedTime.isAfter(timeBeforeSendRequest))
                     assert(it.updatedTime.isBefore(LocalDateTime.now()))
                 }.consumeWith(document(
-                    "open-vote",
-                    pathParameters(parameterWithName("voteId").description("투표 식별자")),
+                    "open-election",
+                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
                     requestFields(fieldWithPath("newState").description("변경할 상태")),
                     responseFields(
-                        fieldWithPath("voteId").description("변경된 투표의 식별자"),
+                        fieldWithPath("electionId").description("변경된 투표의 식별자"),
                         fieldWithPath("newState").description("변경된 새로운 상태"),
                         fieldWithPath("updatedTime").description("상태가 변경된 시각"),
                     ),
@@ -235,29 +235,29 @@ class VoteTest {
 
         @Test
         @DisplayName("투표 close")
-        fun closeVoteTest() = runTest {
-            val voteId = voteService.createNewVote()
+        fun closeElectionTest() = runTest {
+            val electionId = electionService.createNewElection()
 
             val timeBeforeSendRequest = LocalDateTime.now()
 
             webTestClient.patch()
-                .uri("/votes/{voteId}/state", voteId)
-                .bodyValue(ChangeVoteStateRequestDto("close"))
+                .uri("/elections/{electionId}/state", electionId)
+                .bodyValue(ChangeElectionStateRequestDto("close"))
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<ChangeVoteStateResponseDto>()
+                .expectBody<ChangeElectionStateResponseDto>()
                 .value {
                     assertNotNull(it)
-                    assertEquals(voteId, it.voteId)
+                    assertEquals(electionId, it.electionId)
                     assertEquals("close", it.newState)
                     assert(it.updatedTime.isAfter(timeBeforeSendRequest))
                     assert(it.updatedTime.isBefore(LocalDateTime.now()))
                 }.consumeWith(document(
-                    "close-vote",
-                    pathParameters(parameterWithName("voteId").description("투표 식별자")),
+                    "close-electionId",
+                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
                     requestFields(fieldWithPath("newState").description("변경할 상태")),
                     responseFields(
-                        fieldWithPath("voteId").description("변경된 투표의 식별자"),
+                        fieldWithPath("electionId").description("변경된 투표의 식별자"),
                         fieldWithPath("newState").description("변경된 새로운 상태"),
                         fieldWithPath("updatedTime").description("상태가 변경된 시각"),
                     ),
@@ -266,46 +266,46 @@ class VoteTest {
 
         @Test
         @DisplayName("잘못된 상태 투표상태 변경 시도")
-        fun tryChangeVoteStateWithWrongStateTest() = runTest {
-            val voteId = voteService.createNewVote()
+        fun tryChangeElectionStateWithWrongStateTest() = runTest {
+            val electionId = electionService.createNewElection()
 
             webTestClient.patch()
-                .uri("/votes/{voteId}/state", voteId)
-                .bodyValue(ChangeVoteStateRequestDto("wrong state"))
+                .uri("/elections/{electionId}/state", electionId)
+                .bodyValue(ChangeElectionStateRequestDto("wrong state"))
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody<ErrorResponseDto>()
                 .value {
                     assertNotNull(it)
-                    assertEquals(ErrorCode.ILLEGAL_VOTE_STATE.state, it.state)
-                    assertEquals(ErrorCode.ILLEGAL_VOTE_STATE.errorCode, it.errorCode)
+                    assertEquals(ErrorCode.ILLEGAL_ELECTION_STATE.state, it.state)
+                    assertEquals(ErrorCode.ILLEGAL_ELECTION_STATE.errorCode, it.errorCode)
                 }
                 .consumeWith(document(
-                    "change-vote-state-fail",
-                    pathParameters(parameterWithName("voteId").description("투표 식별자")),
+                    "change-election-state-fail",
+                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
                 ))
         }
     }
 
     @Nested
     @DisplayName("투표 만료")
-    inner class ExpireVoteTest {
+    inner class ExpireElectionTest {
 
         @Test
         @DisplayName("만료시간이 지날 시 삭제됨")
-        fun expireVoteTest() = runTest {
-            val numberOfWillExpiredVotes = 2
+        fun expireElectionTest() = runTest {
+            val numberOfWillExpiredElections = 2
 
-            List(numberOfWillExpiredVotes) { Vote.new().apply { lastModified = LocalDateTime.now().minusSeconds(11) } }
-                .forEach{ voteRepository.insert(it) }
+            List(numberOfWillExpiredElections) { Election.new().apply { lastModified = LocalDateTime.now().minusSeconds(11) } }
+                .forEach{ electionRepository.insert(it) }
 
-            val numberOfVotesBeforeExpire = voteRepository.findAll().count()
+            val numberOfElectionsBeforeExpire = electionRepository.findAll().count()
 
-            voteService.deleteExpiredVotes()
+            electionService.deleteExpiredElections()
 
-            val numberOfVotesAfterExpire = voteRepository.findAll().count()
+            val numberOfElectionsAfterExpire = electionRepository.findAll().count()
 
-            assertEquals(2, numberOfVotesBeforeExpire - numberOfVotesAfterExpire)
+            assertEquals(2, numberOfElectionsBeforeExpire - numberOfElectionsAfterExpire)
         }
     }
 }
