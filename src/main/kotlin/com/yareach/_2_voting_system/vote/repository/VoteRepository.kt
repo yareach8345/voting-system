@@ -1,9 +1,11 @@
 package com.yareach._2_voting_system.vote.repository
 
+import com.yareach._2_voting_system.vote.dto.ItemAndVotesCountPairDto
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.entity.VoteR2dbcEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.stereotype.Repository
 
 interface VoteRepository {
@@ -16,11 +18,16 @@ interface VoteRepository {
     suspend fun insert(record: Vote)
 
     suspend fun update(record: Vote)
+
+    suspend fun countByElectionId(electionId: String): Long
+
+    suspend fun getNumberOfVotes(electionId: String): Flow<ItemAndVotesCountPairDto>
 }
 
 @Repository
 class VoteRepositoryR2DbcImpl(
-    private val voteR2DbcRepository: VoteR2dbcRepository
+    private val voteR2DbcRepository: VoteR2dbcRepository,
+    private val template: R2dbcEntityTemplate
 ): VoteRepository {
     override suspend fun findAllByVoteId(voteId: String): Flow<Vote> {
         return voteR2DbcRepository.findAllByElectionId(voteId).map { it.toModel() }
@@ -42,5 +49,13 @@ class VoteRepositoryR2DbcImpl(
     override suspend fun update(record: Vote) {
         val entity = VoteR2dbcEntity.fromModel(record)
         voteR2DbcRepository.save(entity)
+    }
+
+    override suspend fun countByElectionId(electionId: String): Long {
+        return voteR2DbcRepository.countByElectionId(electionId)
+    }
+
+    override suspend fun getNumberOfVotes(electionId: String): Flow<ItemAndVotesCountPairDto> {
+        return voteR2DbcRepository.countGroupByElectionId(electionId)
     }
 }

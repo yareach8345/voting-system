@@ -9,6 +9,7 @@ import java.time.LocalDateTime
 @Table("vote")
 class VoteR2dbcEntity(
     @Id
+    @Column("id")
     val id: Int?,
 
     @Column("election_id")
@@ -17,6 +18,7 @@ class VoteR2dbcEntity(
     @Column("user_id")
     val userId: String,
 
+    @Column("item")
     val item: String,
 
     @Column("voted_at")

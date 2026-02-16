@@ -11,6 +11,7 @@ import java.time.LocalDateTime
 @Table("election")
 class ElectionR2dbcEntity(
     @Id
+    @Column("id")
     private val id: String,
 
     @Column("is_open")
