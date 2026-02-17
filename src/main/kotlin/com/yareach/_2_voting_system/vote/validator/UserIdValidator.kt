@@ -5,30 +5,29 @@ import com.yareach._2_voting_system.core.validator.Validator
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
 
 @Component
-@ConfigurationProperties(prefix = "vote.validation.item")
-class ItemValidatorProperties(
+@ConfigurationProperties(prefix = "vote.validation.user-id")
+class UserIdValidatorProperties(
     var useValidator: Boolean = false,
     var regexString: String = ".*"
 )
 
-interface ItemValidator {
+interface UserIdValidator {
     fun valid(input: String): Boolean
 }
 
 @Component
-@ConditionalOnProperty(prefix = "vote.validation.item", name = ["use-validator"], havingValue = "true", matchIfMissing = false)
-class ItemValidatorEnableImpl(
-    itemValidatorProperties: ItemValidatorProperties,
-) : ItemValidator {
-    private val validator = Validator(itemValidatorProperties.regexString)
+@ConditionalOnProperty(prefix = "vote.validation.user-id", name = ["use-validator"], havingValue = "true", matchIfMissing = false)
+class UserIdValidatorEnableImpl(
+    userIdValidator: UserIdValidatorProperties
+) : UserIdValidator {
+    private val validator = Validator(userIdValidator.regexString)
 
     private val logger = logger()
 
     init {
-        logger.info("ItemValidator enabled")
+        logger.info("UserValidator enabled")
     }
 
     override fun valid(input: String): Boolean {
@@ -37,10 +36,8 @@ class ItemValidatorEnableImpl(
 }
 
 @Component
-@ConditionalOnProperty(prefix = "vote.validation", name = ["use-validator"], havingValue = "false", matchIfMissing = true)
-class ItemValidatorDisenableImpl : ItemValidator {
-    val logger = logger()
-
+@ConditionalOnProperty(prefix = "vote.validation.user-id", name = ["use-validator"], havingValue = "false", matchIfMissing = true)
+class UserIdValidatorDisenableImpl : UserIdValidator {
     override fun valid(input: String): Boolean {
         return true
     }

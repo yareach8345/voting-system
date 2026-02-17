@@ -5,5 +5,9 @@ vote:
   expire:
     use-expire: true
   validation:
-    use-validator: true
-    regex-string: "[0-2]{2}"
+    item:
+      use-validator: true
+      regex-string: "[0-2]{2}"
+    user-id:
+      use-validator: true
+      regex-string: "[a-zA-Z]+"
