@@ -10,9 +10,11 @@ import org.springframework.stereotype.Repository
 interface VoteRepository {
     suspend fun findAllByElectionId(electionId: String): Flow<Vote>
 
+    suspend fun findByElectionIdAndUserId(electionId: String, userId: String): VoteR2dbcEntity?
+
     suspend fun deleteAllByElectionId(electionId: String): Long
 
-    suspend fun deleteByVoteIdAndUserId(electionId: String, userId: String)
+    suspend fun deleteByVoteIdAndUserId(electionId: String, userId: String): Long
 
     suspend fun insert(vote: Vote)
 
@@ -31,11 +33,15 @@ class VoteRepositoryR2dbcImpl(
         return voteR2DbcRepository.findAllByElectionId(electionId).map { it.toModel() }
     }
 
+    override suspend fun findByElectionIdAndUserId(electionId: String, userId: String): VoteR2dbcEntity? {
+        return voteR2DbcRepository.findByElectionIdAndUserId(electionId, userId)
+    }
+
     override suspend fun deleteAllByElectionId(electionId: String): Long {
         return voteR2DbcRepository.deleteAllByElectionId(electionId)
     }
 
-    override suspend fun deleteByVoteIdAndUserId(electionId: String, userId: String) {
+    override suspend fun deleteByVoteIdAndUserId(electionId: String, userId: String): Long {
         return voteR2DbcRepository.deleteByElectionIdAndUserId(electionId, userId)
     }
 

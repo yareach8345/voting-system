@@ -11,10 +11,14 @@ import com.yareach._2_voting_system.vote.repository.VoteRepositoryR2dbcImpl
 import kotlinx.coroutines.flow.all
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.none
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.r2dbc.test.autoconfigure.DataR2dbcTest
 import java.time.LocalDateTime
@@ -40,6 +44,48 @@ class VoteRepositoryTest {
         voteRepository = VoteRepositoryR2dbcImpl(voteR2dbcRepository)
 
         electionRepository = ElectionRepositoryR2dbcImpl(electionR2dbcRepository)
+    }
+
+    @Nested
+    @DisplayName("데이터 조회")
+    inner class FindTest {
+
+        @Test
+        @DisplayName("투표 id와 유저 id로 특정 표 조회")
+        fun findByElectionIdAndUserId() = runTest {
+            val electionId = electionRepository.insert(Election.new())
+            val userId = "testUserId"
+
+            val vote = Vote.of(electionId, userId, "test")
+            voteRepository.insert(vote)
+
+            val findResult = voteRepository.findByElectionIdAndUserId(electionId, userId)
+
+            assertNotNull(findResult)
+            assertEquals(vote.electionId, findResult.electionId)
+            assertEquals(vote.userId, findResult.userId)
+            assertEquals(vote.item, findResult.item)
+        }
+
+        @Test
+        @DisplayName("투표 id로 표 조회")
+        fun findByElectionId() = runTest {
+            val testSize = 10
+
+            val electionId = electionRepository.insert(Election.new())
+
+            val votes = List(testSize) { index -> Vote.of(electionId, "userId$index", Random.nextInt(0, 10).toString()) }
+
+            votes.forEach { voteRepository.insert(it) }
+
+            val findResults = voteRepository.findAllByElectionId(electionId).map { it.userId to it }.toList().toMap()
+
+            assert(findResults.values.all { it.electionId == electionId })
+            assert(votes.all {
+                val result = findResults[it.userId]
+                result?.electionId == it.electionId && result.userId == it.userId && result.item == it.item
+            })
+        }
     }
 
     @Test

@@ -11,9 +11,11 @@ import org.springframework.stereotype.Repository
 interface VoteR2dbcRepository: CoroutineCrudRepository<VoteR2dbcEntity, Int> {
     suspend fun findAllByElectionId(electionId: String): Flow<VoteR2dbcEntity>
 
+    suspend fun findByElectionIdAndUserId(electionId: String, userId: String): VoteR2dbcEntity?
+
     suspend fun deleteAllByElectionId(electionId: String): Long
 
-    suspend fun deleteByElectionIdAndUserId(electionId: String, userId: String)
+    suspend fun deleteByElectionIdAndUserId(electionId: String, userId: String): Long
 
     suspend fun countByElectionId(electionId: String): Long
 
