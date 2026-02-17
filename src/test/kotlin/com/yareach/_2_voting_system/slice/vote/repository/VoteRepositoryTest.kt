@@ -205,7 +205,7 @@ class VoteRepositoryTest {
 
         votes.forEach { voteRepository.insert(it) }
 
-        voteRepository.deleteByVoteIdAndUserId(electionId, userId)
+        voteRepository.deleteByElectionIdAndUserId(electionId, userId)
 
         val votesAfterDelete = voteRepository.findAllByElectionId(electionId)
 

@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service
 interface VoteService {
     suspend fun record(electionId: String, userId: String, item: String)
 
+    suspend fun cancel(electionId: String, userId: String)
+
+    suspend fun changeItem(electionId: String, userId: String, newItem: String)
+
     suspend fun deleteByElectionId(electionId: String)
 
     suspend fun getElectionStatistics(electionId: String): Flow<ItemAndVotesCountPairDto>
@@ -41,6 +45,22 @@ class VoteServiceImpl(
         }
 
         voteRepository.insert(Vote.of(electionId, item, userId))
+    }
+
+    override suspend fun cancel(electionId: String, userId: String) {
+        voteRepository.findByElectionIdAndUserId(electionId, userId) ?: throw ApiException(
+            ErrorCode.VOTE_NOT_FOUND,
+            "electionId: $electionId, userId: $userId is not found."
+        )
+
+        voteRepository.deleteByElectionIdAndUserId(electionId, userId)
+    }
+
+    override suspend fun changeItem(electionId: String, userId: String, newItem: String) {
+        voteRepository.findByElectionIdAndUserId(electionId, userId)
+            ?.apply { updateItem(newItem) }
+            ?.also { voteRepository.update(it) }
+            ?: throw ApiException(ErrorCode.VOTE_NOT_FOUND, "electionId: $electionId, userId: $userId is not found.")
     }
 
     override suspend fun deleteByElectionId(electionId: String) {
