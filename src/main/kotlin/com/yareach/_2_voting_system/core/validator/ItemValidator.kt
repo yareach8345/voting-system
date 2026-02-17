@@ -24,11 +24,15 @@ fun interface Validator {
     fun valid(input: String): Boolean
 
     companion object {
-        fun fromProperties( properties: ValidatorProperties ) =
-            when (properties.useValidator) {
-                true -> properties.regexString?.let{ fromRegexString(it) } ?: throw ApiException(ErrorCode.INVALID_PROP, "useValidator은 true이나 regexString이 설정되어있지 않습니다.")
-                false -> alwaysTrue
+        fun fromProperties(properties: ValidatorProperties): Validator {
+            if(!properties.useValidator) {
+                return alwaysTrue
             }
+
+            return fromRegexString(
+                properties.regexString ?: throw ApiException(ErrorCode.INVALID_PROP, "useValidator은 true이나 regexString이 설정되어있지 않습니다.")
+            )
+        }
 
         fun fromRegexString(regexString: String): Validator {
             val validRegex = Regex(regexString)
