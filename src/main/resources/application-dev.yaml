@@ -4,3 +4,6 @@ logging:
 vote:
   expire:
     use-expire: true
+  validation:
+    use-validator: true
+    regex-string: "[0-2]{2}"

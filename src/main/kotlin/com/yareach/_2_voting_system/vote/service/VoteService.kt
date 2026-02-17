@@ -6,7 +6,9 @@ import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import com.yareach._2_voting_system.election.repository.ElectionRepository
 import com.yareach._2_voting_system.vote.dto.ItemAndVotesCountPairDto
+import com.yareach._2_voting_system.vote.validator.ItemValidator
 import kotlinx.coroutines.flow.Flow
+import org.springframework.stereotype.Service
 
 interface VoteService {
     suspend fun record(electionId: String, userId: String, item: String)
@@ -16,9 +18,11 @@ interface VoteService {
     suspend fun getElectionStatistics(electionId: String): Flow<ItemAndVotesCountPairDto>
 }
 
+@Service
 class VoteServiceImpl(
     private val voteRepository: VoteRepository,
     private val electionRepository: ElectionRepository,
+    private val validator: ItemValidator
 ) : VoteService {
 
     override suspend fun record(electionId: String, userId: String, item: String) {
@@ -30,6 +34,10 @@ class VoteServiceImpl(
 
         if(!vote.isOpen) {
             throw ApiException(ErrorCode.ELECTION_IS_NOT_OPEN, "voteId $electionId is not open.")
+        }
+
+        if(!validator.valid(item)) {
+            throw ApiException(ErrorCode.NOT_VALID_ITEM, "item $item is not valid.")
         }
 
         voteRepository.insert(Vote.of(electionId, item, userId))
