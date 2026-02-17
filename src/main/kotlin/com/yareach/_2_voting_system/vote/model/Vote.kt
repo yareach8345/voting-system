@@ -12,7 +12,7 @@ class Vote(
     var item = item
         private set
 
-    var votedAt: LocalDateTime = LocalDateTime.now()
+    var votedAt: LocalDateTime = votedAt
         private set
 
     fun updateItem(newItem: String) {

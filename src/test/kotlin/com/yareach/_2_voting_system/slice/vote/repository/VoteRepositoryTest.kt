@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.r2dbc.test.autoconfigure.DataR2dbcTest
+import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.test.BeforeTest
@@ -62,7 +63,7 @@ class VoteRepositoryTest {
     fun updateTest() = runTest {
         val electionId = electionRepository.insert(Election.new())
 
-        val firstVoteTime = Vote.of(electionId, "user1", "hello")
+        val firstVoteTime = Vote(null, electionId, "user1", "hello", LocalDateTime.now().minusSeconds(1))
             .also { voteRepository.insert(it) }
             .votedAt
 
