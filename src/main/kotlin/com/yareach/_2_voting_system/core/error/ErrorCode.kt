@@ -16,5 +16,6 @@ enum class ErrorCode(
     NOT_VALID_USERID(HttpStatus.BAD_REQUEST, "유저 아이디가 유효하지 않습니다.", "VOTE_004"),
 
     VALIDATION_FAILED(HttpStatus.BAD_REQUEST, "요청으로 보낸 데이터가 잘못되었습니다.", "VALID_ERROR"),
-    SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 에러가 발생했습니다.", "SERVER_ERROR")
+    SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 에러가 발생했습니다.", "SERVER_ERROR"),
+    INVALID_PROP(HttpStatus.INTERNAL_SERVER_ERROR, "인수가 잘못되었습니다.", "PROP_ERROR")
 }
