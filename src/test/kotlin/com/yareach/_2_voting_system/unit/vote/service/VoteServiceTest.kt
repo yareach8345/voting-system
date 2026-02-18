@@ -2,12 +2,13 @@ package com.yareach._2_voting_system.unit.vote.service
 
 import com.yareach._2_voting_system.core.error.ApiException
 import com.yareach._2_voting_system.core.error.ErrorCode
+import com.yareach._2_voting_system.core.validation.Validator
 import com.yareach._2_voting_system.election.model.Election
 import com.yareach._2_voting_system.election.repository.ElectionRepository
 import com.yareach._2_voting_system.vote.dto.ItemAndVotesCountPairDto
 import com.yareach._2_voting_system.vote.model.Vote
-import com.yareach._2_voting_system.vote.properties.ItemValidatorProperties
-import com.yareach._2_voting_system.vote.properties.UserIdValidatorProperties
+import com.yareach._2_voting_system.core.validation.validator.ItemValidatorProperties
+import com.yareach._2_voting_system.core.validation.validator.UserIdValidator
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import com.yareach._2_voting_system.vote.service.VoteService
 import com.yareach._2_voting_system.vote.service.VoteServiceImpl
@@ -30,6 +31,9 @@ import kotlin.test.assertEquals
 
 class VoteServiceTest {
 
+    val itemValidator = Validator.fromProperties(ItemValidatorProperties(true, "[0-9]{2}-[0-9]{2}"))
+    val userIdValidator = Validator.fromProperties(UserIdValidator(true, "(user|admin)-[0-9]+"))
+
     val voteRepositoryMock: VoteRepository = mockk()
 
     val electionRepositoryMock: ElectionRepository = mockk()
@@ -37,8 +41,8 @@ class VoteServiceTest {
     val voteService: VoteService = VoteServiceImpl(
         voteRepositoryMock,
         electionRepositoryMock,
-        ItemValidatorProperties(true, "[0-9]{2}-[0-9]{2}"),
-        UserIdValidatorProperties(true, "(user|admin)-[0-9]+"),
+        itemValidator,
+        userIdValidator,
     )
 
     @Nested

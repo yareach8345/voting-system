@@ -1,4 +1,4 @@
-package com.yareach._2_voting_system.core.validator
+package com.yareach._2_voting_system.core.validation
 
 import com.yareach._2_voting_system.core.error.ApiException
 import com.yareach._2_voting_system.core.error.ErrorCode

@@ -2,14 +2,15 @@ package com.yareach._2_voting_system.vote.service
 
 import com.yareach._2_voting_system.core.error.ApiException
 import com.yareach._2_voting_system.core.error.ErrorCode
-import com.yareach._2_voting_system.core.validator.Validator
+import com.yareach._2_voting_system.core.validation.Validator
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import com.yareach._2_voting_system.election.repository.ElectionRepository
 import com.yareach._2_voting_system.vote.dto.ItemAndVotesCountPairDto
-import com.yareach._2_voting_system.vote.properties.ItemValidatorProperties
-import com.yareach._2_voting_system.vote.properties.UserIdValidatorProperties
+import com.yareach._2_voting_system.core.validation.validator.ItemValidatorProperties
+import com.yareach._2_voting_system.core.validation.validator.UserIdValidator
 import kotlinx.coroutines.flow.Flow
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 interface VoteService {
@@ -28,13 +29,9 @@ interface VoteService {
 class VoteServiceImpl(
     private val voteRepository: VoteRepository,
     private val electionRepository: ElectionRepository,
-    itemValidatorProperties: ItemValidatorProperties,
-    userIdValidatorProperties: UserIdValidatorProperties
+    @Qualifier("ItemValidator") private val itemValidator: Validator,
+    @Qualifier("UserIdValidator") private val userIdValidator: Validator,
 ) : VoteService {
-
-    private val itemValidator = Validator.fromProperties(itemValidatorProperties)
-
-    private val userIdValidator = Validator.fromProperties(userIdValidatorProperties)
 
     override suspend fun record(electionId: String, userId: String, item: String): Vote {
 

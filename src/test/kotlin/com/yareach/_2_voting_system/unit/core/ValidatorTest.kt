@@ -2,8 +2,8 @@ package com.yareach._2_voting_system.unit.core
 
 import com.yareach._2_voting_system.core.error.ApiException
 import com.yareach._2_voting_system.core.error.ErrorCode
-import com.yareach._2_voting_system.core.validator.Validator
-import com.yareach._2_voting_system.core.validator.ValidatorProperties
+import com.yareach._2_voting_system.core.validation.Validator
+import com.yareach._2_voting_system.core.validation.ValidatorProperties
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
