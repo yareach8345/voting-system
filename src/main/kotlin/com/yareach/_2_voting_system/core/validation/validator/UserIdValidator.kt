@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @ConfigurationProperties(prefix = "vote.validation.user-id")
-data class UserIdValidator(
+data class UserIdValidatorProperties(
     override val useValidator: Boolean = false,
     override val regexString: String? = null
 ) : ValidatorProperties
@@ -17,7 +17,7 @@ class UserIdValidation {
 
     @Bean(name = ["UserIdValidator"])
     fun generateUserIdValidator(
-        userIdValidatorProperties: ItemValidatorProperties
+        userIdValidatorProperties: UserIdValidatorProperties
     ): Validator {
         return Validator.fromProperties(userIdValidatorProperties)
     }

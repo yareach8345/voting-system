@@ -8,7 +8,7 @@ import com.yareach._2_voting_system.election.repository.ElectionRepository
 import com.yareach._2_voting_system.vote.dto.ItemAndVotesCountPairDto
 import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.core.validation.validator.ItemValidatorProperties
-import com.yareach._2_voting_system.core.validation.validator.UserIdValidator
+import com.yareach._2_voting_system.core.validation.validator.UserIdValidatorProperties
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import com.yareach._2_voting_system.vote.service.VoteService
 import com.yareach._2_voting_system.vote.service.VoteServiceImpl
@@ -32,7 +32,7 @@ import kotlin.test.assertEquals
 class VoteServiceTest {
 
     val itemValidator = Validator.fromProperties(ItemValidatorProperties(true, "[0-9]{2}-[0-9]{2}"))
-    val userIdValidator = Validator.fromProperties(UserIdValidator(true, "(user|admin)-[0-9]+"))
+    val userIdValidator = Validator.fromProperties(UserIdValidatorProperties(true, "(user|admin)-[0-9]+"))
 
     val voteRepositoryMock: VoteRepository = mockk()
 
