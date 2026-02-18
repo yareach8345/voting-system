@@ -16,9 +16,9 @@ interface VoteRepository {
 
     suspend fun deleteByElectionIdAndUserId(electionId: String, userId: String): Long
 
-    suspend fun insert(vote: Vote)
+    suspend fun insert(vote: Vote): Vote
 
-    suspend fun update(vote: Vote)
+    suspend fun update(vote: Vote): Vote
 
     suspend fun countByElectionId(electionId: String): Long
 
@@ -45,14 +45,14 @@ class VoteRepositoryR2dbcImpl(
         return voteR2DbcRepository.deleteByElectionIdAndUserId(electionId, userId)
     }
 
-    override suspend fun insert(vote: Vote) {
+    override suspend fun insert(vote: Vote): Vote {
         val entity = VoteR2dbcEntity.fromModel(vote)
-        voteR2DbcRepository.save(entity)
+        return voteR2DbcRepository.save(entity).toModel()
     }
 
-    override suspend fun update(vote: Vote) {
+    override suspend fun update(vote: Vote): Vote {
         val entity = VoteR2dbcEntity.fromModel(vote)
-        voteR2DbcRepository.save(entity)
+        return voteR2DbcRepository.save(entity).toModel()
     }
 
     override suspend fun countByElectionId(electionId: String): Long {

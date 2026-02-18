@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.Flow
 import org.springframework.stereotype.Service
 
 interface VoteService {
-    suspend fun record(electionId: String, userId: String, item: String)
+    suspend fun record(electionId: String, userId: String, item: String): Vote
 
     suspend fun cancel(electionId: String, userId: String)
 
     suspend fun changeItem(electionId: String, userId: String, newItem: String)
 
-    suspend fun deleteByElectionId(electionId: String)
+    suspend fun deleteByElectionId(electionId: String): Long
 
     suspend fun getElectionStatistics(electionId: String): Flow<ItemAndVotesCountPairDto>
 }
@@ -36,7 +36,7 @@ class VoteServiceImpl(
 
     private val userIdValidator = Validator.fromProperties(userIdValidatorProperties)
 
-    override suspend fun record(electionId: String, userId: String, item: String) {
+    override suspend fun record(electionId: String, userId: String, item: String): Vote {
 
         val vote = electionRepository.findById(electionId)
         if(vote === null) {
@@ -52,15 +52,15 @@ class VoteServiceImpl(
         }
 
         if(!userIdValidator.valid(userId)) {
-            throw ApiException(ErrorCode.NOT_VALID_ITEM, "userId $userId is not valid.")
+            throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
         }
 
-        voteRepository.insert(Vote.of(electionId, item, userId))
+        return voteRepository.insert(Vote.of(electionId, userId, item))
     }
 
     override suspend fun cancel(electionId: String, userId: String) {
         if(!userIdValidator.valid(userId)) {
-            throw ApiException(ErrorCode.NOT_VALID_ITEM, "userId $userId is not valid.")
+            throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
         }
 
         voteRepository.findByElectionIdAndUserId(electionId, userId) ?: throw ApiException(
@@ -73,7 +73,11 @@ class VoteServiceImpl(
 
     override suspend fun changeItem(electionId: String, userId: String, newItem: String) {
         if(!userIdValidator.valid(userId)) {
-            throw ApiException(ErrorCode.NOT_VALID_ITEM, "userId $userId is not valid.")
+            throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
+        }
+
+        if(!itemValidator.valid(newItem)) {
+            throw ApiException(ErrorCode.NOT_VALID_ITEM, "item $newItem is not valid.")
         }
 
         voteRepository.findByElectionIdAndUserId(electionId, userId)
@@ -82,13 +86,13 @@ class VoteServiceImpl(
             ?: throw ApiException(ErrorCode.VOTE_NOT_FOUND, "electionId: $electionId, userId: $userId is not found.")
     }
 
-    override suspend fun deleteByElectionId(electionId: String) {
+    override suspend fun deleteByElectionId(electionId: String): Long {
         val vote = electionRepository.findById(electionId)
         if(vote === null) {
             throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "voteId $electionId not found.")
         }
 
-        voteRepository.deleteAllByElectionId(electionId)
+        return voteRepository.deleteAllByElectionId(electionId)
     }
 
     override suspend fun getElectionStatistics(electionId: String): Flow<ItemAndVotesCountPairDto> {
