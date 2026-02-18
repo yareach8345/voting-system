@@ -23,10 +23,10 @@ class ValidatorTest {
 
         @Test
         @DisplayName("성공 케이스 검사")
-        fun testWithValidStrings() {
+        fun testWithIsValidStrings() {
             val validTexts = List(10) { List(3) { Random.nextInt(0, 10) }.joinToString("") }
 
-            val validResults = validTexts.map { validator.valid(it) }
+            val validResults = validTexts.map { validator.isValid(it) }
 
             assert(validResults.all{ it } )
         }
@@ -41,7 +41,7 @@ class ValidatorTest {
                 "afs", // 로마자 포함
             )
 
-            val validResults = invalidTexts.map { validator.valid(it) }
+            val validResults = invalidTexts.map { validator.isValid(it) }
 
             assert(validResults.none{ it } )
         }
@@ -57,7 +57,7 @@ class ValidatorTest {
         fun testAlwaysTrue() {
             val string = "something word"
 
-            val result = alwaysTrue.valid(string)
+            val result = alwaysTrue.isValid(string)
 
             assert(result)
         }
@@ -76,7 +76,7 @@ class ValidatorTest {
 
             val inputs = listOf("abc", "aBc", "1fd", "hello world", "konnichiwa") // "abc"와 "konnichiwa"만 통과
 
-            val countOfValidInputs = inputs.map { validator.valid(it) }.count{ it }
+            val countOfValidInputs = inputs.map { validator.isValid(it) }.count{ it }
 
             assertEquals(2, countOfValidInputs)
         }
@@ -96,7 +96,7 @@ class ValidatorTest {
                 ValidatorProperties.from(false)
             )
 
-            assert(inputs.map { validator.valid(it) }.all{ it })
+            assert(inputs.map { validator.isValid(it) }.all{ it })
         }
 
         @Test

@@ -21,7 +21,7 @@ interface ValidatorProperties {
 }
 
 fun interface Validator {
-    fun valid(input: String): Boolean
+    fun isValid(input: String): Boolean
 
     companion object {
         fun fromProperties(properties: ValidatorProperties): Validator {

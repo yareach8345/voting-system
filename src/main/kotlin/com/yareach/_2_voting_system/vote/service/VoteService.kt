@@ -7,8 +7,6 @@ import com.yareach._2_voting_system.vote.model.Vote
 import com.yareach._2_voting_system.vote.repository.VoteRepository
 import com.yareach._2_voting_system.election.repository.ElectionRepository
 import com.yareach._2_voting_system.vote.dto.ItemAndVotesCountPairDto
-import com.yareach._2_voting_system.core.validation.validator.ItemValidatorProperties
-import com.yareach._2_voting_system.core.validation.validator.UserIdValidator
 import kotlinx.coroutines.flow.Flow
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
@@ -44,11 +42,11 @@ class VoteServiceImpl(
             throw ApiException(ErrorCode.ELECTION_IS_NOT_OPEN, "voteId $electionId is not open.")
         }
 
-        if(!itemValidator.valid(item)) {
+        if(!itemValidator.isValid(item)) {
             throw ApiException(ErrorCode.NOT_VALID_ITEM, "item $item is not valid.")
         }
 
-        if(!userIdValidator.valid(userId)) {
+        if(!userIdValidator.isValid(userId)) {
             throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
         }
 
@@ -56,7 +54,7 @@ class VoteServiceImpl(
     }
 
     override suspend fun cancel(electionId: String, userId: String) {
-        if(!userIdValidator.valid(userId)) {
+        if(!userIdValidator.isValid(userId)) {
             throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
         }
 
@@ -69,11 +67,11 @@ class VoteServiceImpl(
     }
 
     override suspend fun changeItem(electionId: String, userId: String, newItem: String) {
-        if(!userIdValidator.valid(userId)) {
+        if(!userIdValidator.isValid(userId)) {
             throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
         }
 
-        if(!itemValidator.valid(newItem)) {
+        if(!itemValidator.isValid(newItem)) {
             throw ApiException(ErrorCode.NOT_VALID_ITEM, "item $newItem is not valid.")
         }
 
