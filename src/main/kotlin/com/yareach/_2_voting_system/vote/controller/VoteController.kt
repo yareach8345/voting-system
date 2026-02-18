@@ -46,7 +46,10 @@ class VoteController(
         @PathVariable electionId: String,
         @PathVariable userId: String,
     ): ResponseEntity<VoteInfoResponseDto> {
-        TODO("아직 지원하지 않는 기능입니다.")
+        val responseBody = voteService.getVoteInfo(electionId, userId)
+            .let { VoteInfoResponseDto.fromVote(it) }
+
+        return ResponseEntity.ok(responseBody)
     }
 
     @GetMapping("/statistic")

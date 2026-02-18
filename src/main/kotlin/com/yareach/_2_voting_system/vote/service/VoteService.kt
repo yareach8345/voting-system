@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service
 interface VoteService {
     suspend fun record(electionId: String, userId: String, item: String): Vote
 
+    suspend fun getVoteInfo(electionId: String, userId: String): Vote
+
     suspend fun cancel(electionId: String, userId: String)
 
     suspend fun changeItem(electionId: String, userId: String, newItem: String)
@@ -57,6 +59,11 @@ class VoteServiceImpl(
         }
 
         return voteRepository.insert(Vote.of(electionId, userId, item))
+    }
+
+    override suspend fun getVoteInfo(electionId: String, userId: String): Vote {
+        return voteRepository.findByElectionIdAndUserId(electionId, userId)
+            ?: throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "voteId $electionId not found.")
     }
 
     override suspend fun cancel(electionId: String, userId: String) {
