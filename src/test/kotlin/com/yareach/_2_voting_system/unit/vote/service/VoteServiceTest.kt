@@ -97,11 +97,9 @@ class VoteServiceTest {
         @Test
         @DisplayName("[실패 케이스] 아이템의 형식이 맞지 않음")
         fun recordVoteWithIllegalItem() = runTest {
-            coEvery {
-                electionRepositoryMock.findById(electionId)
-            } returns ( Election.new().apply { open() } )
-
             val exception: ApiException = assertThrows { voteService.record(electionId, "user-1", "01-er9") } //허용하지 않는 문자(로마자)가 들어있음
+
+            coVerify(exactly = 0) { electionRepositoryMock.findById(any())  }
 
             assertEquals(ErrorCode.NOT_VALID_ITEM, exception.errorCode)
         }
@@ -109,11 +107,9 @@ class VoteServiceTest {
         @Test
         @DisplayName("[실패 케이스] userId의 형식이 맞지 않음")
         fun recordVoteWithIllegalUserId() = runTest {
-            coEvery {
-                electionRepositoryMock.findById(electionId)
-            } returns ( Election.new().apply { open() } )
-
             val exception: ApiException = assertThrows { voteService.record(electionId, "tester-1", "12-34") } //유저id 형식이 잘못됨
+
+            coVerify(exactly = 0) { electionRepositoryMock.findById(any())  }
 
             assertEquals(ErrorCode.NOT_VALID_USERID, exception.errorCode)
         }

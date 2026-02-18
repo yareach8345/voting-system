@@ -31,7 +31,21 @@ class VoteServiceImpl(
     @Qualifier("UserIdValidator") private val userIdValidator: Validator,
 ) : VoteService {
 
+    fun validateItem(item: String) {
+        if(!itemValidator.isValid(item)) {
+            throw ApiException(ErrorCode.NOT_VALID_ITEM, "item $item is not valid.")
+        }
+    }
+
+    fun validateUserId(userId: String) {
+        if(!userIdValidator.isValid(userId)) {
+            throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
+        }
+    }
+
     override suspend fun record(electionId: String, userId: String, item: String): Vote {
+        validateItem(item)
+        validateUserId(userId)
 
         val vote = electionRepository.findById(electionId)
         if(vote === null) {
@@ -42,21 +56,11 @@ class VoteServiceImpl(
             throw ApiException(ErrorCode.ELECTION_IS_NOT_OPEN, "voteId $electionId is not open.")
         }
 
-        if(!itemValidator.isValid(item)) {
-            throw ApiException(ErrorCode.NOT_VALID_ITEM, "item $item is not valid.")
-        }
-
-        if(!userIdValidator.isValid(userId)) {
-            throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
-        }
-
         return voteRepository.insert(Vote.of(electionId, userId, item))
     }
 
     override suspend fun cancel(electionId: String, userId: String) {
-        if(!userIdValidator.isValid(userId)) {
-            throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
-        }
+        validateUserId(userId)
 
         voteRepository.findByElectionIdAndUserId(electionId, userId) ?: throw ApiException(
             ErrorCode.VOTE_NOT_FOUND,
@@ -67,13 +71,8 @@ class VoteServiceImpl(
     }
 
     override suspend fun changeItem(electionId: String, userId: String, newItem: String) {
-        if(!userIdValidator.isValid(userId)) {
-            throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
-        }
-
-        if(!itemValidator.isValid(newItem)) {
-            throw ApiException(ErrorCode.NOT_VALID_ITEM, "item $newItem is not valid.")
-        }
+        validateItem(newItem)
+        validateUserId(userId)
 
         voteRepository.findByElectionIdAndUserId(electionId, userId)
             ?.apply { updateItem(newItem) }
