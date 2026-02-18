@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 @Component
@@ -23,7 +24,8 @@ data class ElectionExpireProperties(
 @Component
 @ConditionalOnProperty(prefix = "vote.expire", name = ["use-expire"], havingValue = "true")
 class ElectionExpireScheduler(
-    private val service: ElectionService
+    private val electionExpireProperties: ElectionExpireProperties,
+    private val service: ElectionService,
 ) {
     private val schedulerScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
@@ -38,7 +40,8 @@ class ElectionExpireScheduler(
         schedulerScope.launch {
             try {
                 logger.debug("[Scheduler START] Delete Expired Election Job 시작.")
-                val numberOfDeletedElections = service.deleteExpiredElections()
+                val cutoff = LocalDateTime.now().minusSeconds(electionExpireProperties.ttlSeconds)
+                val numberOfDeletedElections = service.deleteExpiredElections(cutoff)
                 logger.debug("[Scheduler SUCCESS] $numberOfDeletedElections 개의 만료된 투표 삭제")
             } catch (e: Exception) {
                 logger.error("[Scheduler ERROR] 스케줄러 작업중 오류가 발생했습니다.")

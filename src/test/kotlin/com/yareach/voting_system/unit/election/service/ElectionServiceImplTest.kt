@@ -25,11 +25,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class ElectionServiceImplTest {
-    val ttlSeconds: Long = 10
-
     val electionRepositoryMock = mockk<ElectionRepository>()
 
-    val electionService: ElectionService = spyk(ElectionServiceImpl(electionRepositoryMock, ttlSeconds))
+    val electionService: ElectionService = spyk(ElectionServiceImpl(electionRepositoryMock))
 
     @Nested
     @DisplayName("새 투표 생성(createNewElection)")
@@ -259,6 +257,7 @@ class ElectionServiceImplTest {
         @Nested
         @DisplayName("delete expired elections")
         inner class DeleteExpiredElectionsTest {
+            val ttlSeconds: Long = 10
 
             @Test
             @DisplayName("expire")
@@ -268,7 +267,8 @@ class ElectionServiceImplTest {
                 coEvery { electionRepositoryMock.deleteElectionsBeforeCutoff(capture(cutoffSlot)) } returns 3
 
                 val timeBeforeWork = LocalDateTime.now()
-                val result = electionService.deleteExpiredElections()
+                val cutoff = LocalDateTime.now().minusSeconds(ttlSeconds)
+                val result = electionService.deleteExpiredElections(cutoff)
                 val timeAfterWork = LocalDateTime.now()
 
                 coVerify(exactly = 1) { electionRepositoryMock.deleteElectionsBeforeCutoff(cutoffSlot.captured) }

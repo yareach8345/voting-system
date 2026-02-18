@@ -299,9 +299,11 @@ class ElectionTest {
             List(numberOfWillExpiredElections) { Election.new().apply { lastModified = LocalDateTime.now().minusSeconds(11) } }
                 .forEach{ electionRepository.insert(it) }
 
+            val cutoff = LocalDateTime.now().minusSeconds(10)
+
             val numberOfElectionsBeforeExpire = electionRepository.findAll().count()
 
-            electionService.deleteExpiredElections()
+            electionService.deleteExpiredElections(cutoff)
 
             val numberOfElectionsAfterExpire = electionRepository.findAll().count()
 

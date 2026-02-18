@@ -24,13 +24,12 @@ interface ElectionService {
 
     suspend fun changeElectionState(id: String, newState: String): Election
 
-    suspend fun deleteExpiredElections(): Long
+    suspend fun deleteExpiredElections(cutoff: LocalDateTime): Long
 }
 
 @Service
 class ElectionServiceImpl(
-    private val electionRepository: ElectionRepository,
-    @Value($$"${vote.expire.ttl-seconds:600}") private val ttlSeconds: Long = 600
+    private val electionRepository: ElectionRepository
 ) : ElectionService {
     override suspend fun createNewElection(): String {
         val newElection = Election.new()
@@ -64,8 +63,7 @@ class ElectionServiceImpl(
         else -> throw ApiException(ErrorCode.ILLEGAL_ELECTION_STATE, newState)
     }
 
-    override suspend fun deleteExpiredElections(): Long {
-        val cutoff = LocalDateTime.now().minusSeconds(ttlSeconds)
+    override suspend fun deleteExpiredElections(cutoff: LocalDateTime): Long {
         return electionRepository.deleteElectionsBeforeCutoff(cutoff)
     }
 }
