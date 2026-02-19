@@ -18,7 +18,7 @@ interface VoteService {
 
     suspend fun cancel(electionId: String, userId: String)
 
-    suspend fun changeItem(electionId: String, userId: String, newItem: String)
+    suspend fun changeItem(electionId: String, userId: String, newItem: String): Vote
 
     suspend fun deleteByElectionId(electionId: String): Long
 
@@ -49,12 +49,12 @@ class VoteServiceImpl(
         validateItem(item)
         validateUserId(userId)
 
-        val vote = electionRepository.findById(electionId)
-        if(vote === null) {
+        val election = electionRepository.findById(electionId)
+        if(election === null) {
             throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "voteId $electionId not found.")
         }
 
-        if(!vote.isOpen) {
+        if(!election.isOpen) {
             throw ApiException(ErrorCode.ELECTION_IS_NOT_OPEN, "voteId $electionId is not open.")
         }
 
@@ -63,10 +63,18 @@ class VoteServiceImpl(
 
     override suspend fun getVoteInfo(electionId: String, userId: String): Vote {
         return voteRepository.findByElectionIdAndUserId(electionId, userId)
-            ?: throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "voteId $electionId not found.")
+            ?: throw ApiException(ErrorCode.VOTE_NOT_FOUND, "voteId $electionId not found.")
     }
 
     override suspend fun cancel(electionId: String, userId: String) {
+        val election = electionRepository.findById(electionId)
+        if(election === null) {
+            throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "voteId $electionId not found.")
+        }
+        if(!election.isOpen) {
+            throw ApiException(ErrorCode.ELECTION_IS_NOT_OPEN, "voteId $electionId is not open.")
+        }
+
         validateUserId(userId)
 
         voteRepository.findByElectionIdAndUserId(electionId, userId) ?: throw ApiException(
@@ -77,19 +85,27 @@ class VoteServiceImpl(
         voteRepository.deleteByElectionIdAndUserId(electionId, userId)
     }
 
-    override suspend fun changeItem(electionId: String, userId: String, newItem: String) {
+    override suspend fun changeItem(electionId: String, userId: String, newItem: String): Vote {
         validateItem(newItem)
         validateUserId(userId)
 
-        voteRepository.findByElectionIdAndUserId(electionId, userId)
+        val election = electionRepository.findById(electionId)
+        if(election === null) {
+            throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "voteId $electionId not found.")
+        }
+        if(!election.isOpen) {
+            throw ApiException(ErrorCode.ELECTION_IS_NOT_OPEN, "voteId $electionId is not open.")
+        }
+
+        return voteRepository.findByElectionIdAndUserId(electionId, userId)
             ?.apply { updateItem(newItem) }
             ?.also { voteRepository.update(it) }
             ?: throw ApiException(ErrorCode.VOTE_NOT_FOUND, "electionId: $electionId, userId: $userId is not found.")
     }
 
     override suspend fun deleteByElectionId(electionId: String): Long {
-        val vote = electionRepository.findById(electionId)
-        if(vote === null) {
+        val election = electionRepository.findById(electionId)
+        if(election === null) {
             throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "voteId $electionId not found.")
         }
 

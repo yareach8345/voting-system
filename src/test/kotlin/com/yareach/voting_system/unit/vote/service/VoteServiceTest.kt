@@ -124,6 +124,8 @@ class VoteServiceTest {
         fun cancelVoteTest() = runTest {
             val electionId = UUID.randomUUID().toString()
 
+            coEvery { electionRepositoryMock.findById(electionId) } returns Election(electionId).apply { open() }
+
             val testUserId = "user-1"
 
             val testVote = Vote.of(electionId, testUserId, "01-01")
@@ -143,6 +145,8 @@ class VoteServiceTest {
         fun cancelVoteWithNotFound() = runTest {
             val electionId = UUID.randomUUID().toString()
 
+            coEvery { electionRepositoryMock.findById(electionId) } returns Election(electionId).apply { open() }
+
             val testUserId = "user-1"
 
             coEvery { voteRepositoryMock.findByElectionIdAndUserId(electionId, testUserId) } returns null
@@ -159,6 +163,8 @@ class VoteServiceTest {
         fun cancelVoteWithIllegalUserId() = runTest {
             val electionId = UUID.randomUUID().toString()
 
+            coEvery { electionRepositoryMock.findById(electionId) } returns Election(electionId).apply { open() }
+
             val testUserId = "tester-1"
 
             val exception: ApiException = assertThrows { voteService.cancel(electionId, testUserId) }
@@ -166,6 +172,22 @@ class VoteServiceTest {
             coVerify(exactly = 0) { voteRepositoryMock.findByElectionIdAndUserId(electionId, testUserId) }
 
             assertEquals(ErrorCode.NOT_VALID_USERID, exception.errorCode)
+        }
+
+        @Test
+        @DisplayName("[실패 케이스] 투표가 열려있지 않음")
+        fun cancelVoteWithClosedElectionId() = runTest {
+            val electionId = UUID.randomUUID().toString()
+
+            coEvery { electionRepositoryMock.findById(electionId) } returns Election(electionId)
+
+            val testUserId = "tester-1"
+
+            val exception: ApiException = assertThrows { voteService.cancel(electionId, testUserId) }
+
+            coVerify(exactly = 0) { voteRepositoryMock.findByElectionIdAndUserId(electionId, testUserId) }
+
+            assertEquals(ErrorCode.ELECTION_IS_NOT_OPEN, exception.errorCode)
         }
     }
 
@@ -176,8 +198,12 @@ class VoteServiceTest {
         @Test
         @DisplayName("[성공 케이스] 새로운 item으로 업데이트 됨")
         fun successCaseItemIsChanged() = runTest {
-            val testVoteId = Random.nextInt()
             val electionId = UUID.randomUUID().toString()
+
+            coEvery { electionRepositoryMock.findById(electionId) } returns Election(electionId).apply { open() }
+
+            val testVoteId = Random.nextInt()
+
             val userId = "user-001"
 
             val testVote = Vote(testVoteId, electionId, userId, "01-01")
@@ -204,6 +230,9 @@ class VoteServiceTest {
         @DisplayName("[실패 케이스] 해당하는 투표기록이 존재하지 않음")
         fun failCaseItemVoteNotExists() = runTest {
             val electionId = UUID.randomUUID().toString()
+
+            coEvery { electionRepositoryMock.findById(electionId) } returns Election(electionId).apply { open() }
+
             val userId = "user-001"
 
             coEvery { voteRepositoryMock.findByElectionIdAndUserId(electionId, userId) } returns null
@@ -218,9 +247,24 @@ class VoteServiceTest {
         }
 
         @Test
+        @DisplayName("[실패 케이스] election이 열려있지 않음")
+        fun failCaseElectionIsClosed() = runTest {
+            val electionId = UUID.randomUUID().toString()
+
+            coEvery { electionRepositoryMock.findById(electionId) } returns Election(electionId)
+
+            val userId = "user-001"
+
+            val exception: ApiException = assertThrows { voteService.changeItem(electionId, userId, "05-05") }
+
+            assertEquals(ErrorCode.ELECTION_IS_NOT_OPEN, exception.errorCode)
+        }
+
+        @Test
         @DisplayName("[실패 케이스] item의 형식이 잘못됨")
         fun failCaseInvalidItem() = runTest {
             val electionId = UUID.randomUUID().toString()
+
             val userId = "user-001"
 
             val exception: ApiException = assertThrows { voteService.changeItem(electionId, userId, "05-aa") }

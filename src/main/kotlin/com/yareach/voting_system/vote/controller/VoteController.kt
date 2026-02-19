@@ -3,7 +3,7 @@ package com.yareach.voting_system.vote.controller
 import com.yareach.voting_system.vote.dto.RecordVoteRequestDto
 import com.yareach.voting_system.vote.dto.UpdateVoteItemRequestDto
 import com.yareach.voting_system.vote.dto.VoteInfoResponseDto
-import com.yareach.voting_system.vote.dto.VoteStatisticsResponse
+import com.yareach.voting_system.vote.dto.VoteStatisticsResponseDto
 import com.yareach.voting_system.vote.service.VoteService
 import kotlinx.coroutines.flow.toList
 import org.springframework.http.ResponseEntity
@@ -55,9 +55,9 @@ class VoteController(
     @GetMapping("/statistic")
     suspend fun getVoteStatistics(
         @PathVariable electionId: String
-    ): ResponseEntity<VoteStatisticsResponse> {
+    ): ResponseEntity<VoteStatisticsResponseDto> {
         val statistics = voteService.getElectionStatistics(electionId)
-        val responseBody = VoteStatisticsResponse.from(statistics.toList(), LocalDateTime.now())
+        val responseBody = VoteStatisticsResponseDto.from(statistics.toList(), LocalDateTime.now())
 
         return ResponseEntity.ok(responseBody)
     }
@@ -86,11 +86,13 @@ class VoteController(
         @PathVariable electionId: String,
         @PathVariable userId: String,
         @RequestBody updateVoteItemRequest: UpdateVoteItemRequestDto,
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<VoteInfoResponseDto> {
         val newItem = updateVoteItemRequest.item
 
-        voteService.changeItem( electionId, userId, newItem )
+        val updatedVote = voteService.changeItem( electionId, userId, newItem )
 
-        return ResponseEntity.ok().build()
+        val responseDto = VoteInfoResponseDto.fromVote(updatedVote)
+
+        return ResponseEntity.ok(responseDto)
     }
 }
