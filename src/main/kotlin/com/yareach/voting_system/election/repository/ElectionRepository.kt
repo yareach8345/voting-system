@@ -1,7 +1,5 @@
 package com.yareach.voting_system.election.repository
 
-import com.yareach.voting_system.core.error.ApiException
-import com.yareach.voting_system.core.error.ErrorCode
 import com.yareach.voting_system.election.model.Election
 import com.yareach.voting_system.election.entity.ElectionR2dbcEntity
 import kotlinx.coroutines.flow.Flow
@@ -14,11 +12,13 @@ interface ElectionRepository {
 
     suspend fun findById(id: String): Election?
 
+    suspend fun isExists(id: String): Boolean
+
+    suspend fun getIsOpen(id: String): Boolean?
+
     suspend fun insert(election: Election): String
 
     suspend fun update(election: Election): Election
-
-    suspend fun modify(id: String, block: Election.() -> Unit): Election
 
     suspend fun deleteById(id: String)
 
@@ -37,6 +37,14 @@ class ElectionRepositoryR2dbcImpl(
         return electionR2DbcRepository.findById(id)?.toModel()
     }
 
+    override suspend fun isExists(id: String): Boolean {
+        return electionR2DbcRepository.existsById(id)
+    }
+
+    override suspend fun getIsOpen(id: String): Boolean? {
+        return electionR2DbcRepository.getIsOpenBy(id)
+    }
+
     override suspend fun insert(election: Election): String {
         val electionEntity = ElectionR2dbcEntity.fromModel(election, isNewRecord = true)
         val result = electionR2DbcRepository.save(electionEntity)
@@ -46,14 +54,6 @@ class ElectionRepositoryR2dbcImpl(
     override suspend fun update(election: Election): Election {
         val electionEntity = ElectionR2dbcEntity.fromModel(election)
         return electionR2DbcRepository.save(electionEntity).toModel()
-    }
-
-    override suspend fun modify(id: String, block: Election.() -> Unit): Election {
-        return electionR2DbcRepository.findById(id)
-            ?.toModel()
-            ?.apply { block() }
-            ?.also{ electionR2DbcRepository.save(ElectionR2dbcEntity.fromModel(it)) }
-            ?: throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "electionId: $id")
     }
 
     override suspend fun deleteById(id: String) {

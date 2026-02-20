@@ -2,6 +2,7 @@ package com.yareach.voting_system.election.service
 
 import com.yareach.voting_system.core.error.ApiException
 import com.yareach.voting_system.core.error.ErrorCode
+import com.yareach.voting_system.election.entity.ElectionR2dbcEntity
 import com.yareach.voting_system.election.model.Election
 import com.yareach.voting_system.election.repository.ElectionRepository
 import kotlinx.coroutines.flow.Flow
@@ -49,11 +50,17 @@ class ElectionServiceImpl(
     }
 
     override suspend fun openElection(id: String): Election {
-        return electionRepository.modify(id) { open() }
+        return electionRepository.findById(id)
+            ?.apply { open() }
+            ?.also{ electionRepository.update(it) }
+            ?: throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "electionId: $id")
     }
 
     override suspend fun closeElection(id: String): Election {
-        return electionRepository.modify(id) { close() }
+        return electionRepository.findById(id)
+            ?.apply { close() }
+            ?.also{ electionRepository.update(it) }
+            ?: throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "electionId: $id")
     }
 
     override suspend fun changeElectionState(id: String, newState: String) = when (newState) {

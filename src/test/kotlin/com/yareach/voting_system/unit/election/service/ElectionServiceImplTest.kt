@@ -135,17 +135,23 @@ class ElectionServiceImplTest {
                 val electionMock = spyk<Election>(Election(uuid))
 
                 val electionIdSlot = slot<String>()
-                val blockSlot = slot<Election.() -> Unit>()
                 coEvery {
-                    electionRepositoryMock.modify(capture(electionIdSlot), capture(blockSlot))
+                    electionRepositoryMock.findById(capture(electionIdSlot))
                 } answers {
-                    blockSlot.captured(electionMock)
+                    electionMock
+                }
+
+                val updatedElectionSlot = slot<Election>()
+                coEvery {
+                    electionRepositoryMock.update(capture(updatedElectionSlot))
+                } answers {
                     electionMock
                 }
 
                 val result = electionService.openElection(uuid)
 
-                coVerify(exactly = 1) { electionRepositoryMock.modify(uuid, any()) }
+                coVerify(exactly = 1) { electionRepositoryMock.findById(uuid) }
+                coVerify(exactly = 1) { electionRepositoryMock.update(updatedElectionSlot.captured) }
                 coVerify(exactly = 1) { electionMock.open() }
 
                 assertEquals(uuid, result.id)
@@ -165,17 +171,23 @@ class ElectionServiceImplTest {
                 val electionMock = spyk<Election>(Election(uuid).apply { open() })
 
                 val electionIdSlot = slot<String>()
-                val blockSlot = slot<Election.() -> Unit>()
                 coEvery {
-                    electionRepositoryMock.modify(capture(electionIdSlot), capture(blockSlot))
+                    electionRepositoryMock.findById(capture(electionIdSlot))
                 } answers {
-                    blockSlot.captured(electionMock)
+                    electionMock
+                }
+
+                val updatedElectionSlot = slot<Election>()
+                coEvery {
+                    electionRepositoryMock.update(capture(updatedElectionSlot))
+                } answers {
                     electionMock
                 }
 
                 val result = electionService.closeElection(uuid)
 
-                coVerify(exactly = 1) { electionRepositoryMock.modify(uuid, any()) }
+                coVerify(exactly = 1) { electionRepositoryMock.findById(uuid) }
+                coVerify(exactly = 1) { electionRepositoryMock.update(updatedElectionSlot.captured) }
                 coVerify(exactly = 1) { electionMock.close() }
 
                 assertEquals(uuid, result.id)
@@ -195,11 +207,16 @@ class ElectionServiceImplTest {
                 val electionMock = spyk<Election>(Election(uuid))
 
                 val electionIdSlot = slot<String>()
-                val blockSlot = slot<Election.() -> Unit>()
                 coEvery {
-                    electionRepositoryMock.modify(capture(electionIdSlot), capture(blockSlot))
+                    electionRepositoryMock.findById(capture(electionIdSlot))
                 } answers {
-                    blockSlot.captured(electionMock)
+                    electionMock
+                }
+
+                val updatedElectionSlot = slot<Election>()
+                coEvery {
+                    electionRepositoryMock.update(capture(updatedElectionSlot))
+                } answers {
                     electionMock
                 }
 
@@ -207,7 +224,8 @@ class ElectionServiceImplTest {
 
                 coVerify(exactly = 1) { electionMock.open() }
                 coVerify(exactly = 1) { electionService.openElection(uuid) }
-                coVerify(exactly = 1) { electionRepositoryMock.modify(uuid, any()) }
+                coVerify(exactly = 1) { electionRepositoryMock.findById(uuid) }
+                coVerify(exactly = 1) { electionRepositoryMock.update(updatedElectionSlot.captured) }
 
                 assertEquals(uuid, result.id)
                 assertEquals(result.id, electionIdSlot.captured)
@@ -222,11 +240,16 @@ class ElectionServiceImplTest {
                 val electionMock = spyk<Election>(Election(uuid).apply { open() })
 
                 val electionIdSlot = slot<String>()
-                val blockSlot = slot<Election.() -> Unit>()
                 coEvery {
-                    electionRepositoryMock.modify(capture(electionIdSlot), capture(blockSlot))
+                    electionRepositoryMock.findById(capture(electionIdSlot))
                 } answers {
-                    blockSlot.captured(electionMock)
+                    electionMock
+                }
+
+                val updatedElectionSlot = slot<Election>()
+                coEvery {
+                    electionRepositoryMock.update(capture(updatedElectionSlot))
+                } answers {
                     electionMock
                 }
 
@@ -234,7 +257,8 @@ class ElectionServiceImplTest {
 
                 coVerify(exactly = 1) { electionMock.close() }
                 coVerify(exactly = 1) { electionService.closeElection(uuid) }
-                coVerify(exactly = 1) { electionRepositoryMock.modify(uuid, any()) }
+                coVerify(exactly = 1) { electionRepositoryMock.findById(uuid) }
+                coVerify(exactly = 1) { electionRepositoryMock.update(updatedElectionSlot.captured) }
 
                 assertEquals(uuid, result.id)
                 assertEquals(result.id, electionIdSlot.captured)
