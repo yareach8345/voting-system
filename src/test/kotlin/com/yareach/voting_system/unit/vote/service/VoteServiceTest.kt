@@ -101,7 +101,7 @@ class VoteServiceTest {
 
             coVerify(exactly = 0) { electionRepositoryMock.findById(any())  }
 
-            assertEquals(ErrorCode.NOT_VALID_ITEM, exception.errorCode)
+            assertEquals(ErrorCode.INVALID_ITEM, exception.errorCode)
         }
 
         @Test
@@ -111,7 +111,7 @@ class VoteServiceTest {
 
             coVerify(exactly = 0) { electionRepositoryMock.findById(any())  }
 
-            assertEquals(ErrorCode.NOT_VALID_USERID, exception.errorCode)
+            assertEquals(ErrorCode.INVALID_USERID, exception.errorCode)
         }
     }
 
@@ -171,7 +171,7 @@ class VoteServiceTest {
 
             coVerify(exactly = 0) { voteRepositoryMock.findByElectionIdAndUserId(electionId, testUserId) }
 
-            assertEquals(ErrorCode.NOT_VALID_USERID, exception.errorCode)
+            assertEquals(ErrorCode.INVALID_USERID, exception.errorCode)
         }
 
         @Test
@@ -269,7 +269,7 @@ class VoteServiceTest {
 
             val exception: ApiException = assertThrows { voteService.changeItem(electionId, userId, "05-aa") }
 
-            assertEquals(ErrorCode.NOT_VALID_ITEM, exception.errorCode)
+            assertEquals(ErrorCode.INVALID_ITEM, exception.errorCode)
         }
 
         @Test
@@ -280,7 +280,7 @@ class VoteServiceTest {
 
             val exception: ApiException = assertThrows { voteService.changeItem(electionId, userId, "12-34") }
 
-            assertEquals(ErrorCode.NOT_VALID_USERID, exception.errorCode)
+            assertEquals(ErrorCode.INVALID_USERID, exception.errorCode)
         }
     }
 

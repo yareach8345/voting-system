@@ -250,7 +250,7 @@ class ElectionServiceImplTest {
                 val exception: Exception = assertThrows { electionService.changeElectionState(uuid, "wrong state") }
 
                 assertInstanceOf<ApiException>(exception)
-                assertEquals(ErrorCode.ILLEGAL_ELECTION_STATE, exception.errorCode)
+                assertEquals(ErrorCode.INVALID_ELECTION_STATE, exception.errorCode)
             }
         }
 

@@ -6,7 +6,7 @@ data class ErrorResponseDto(
     val state: HttpStatus,
     val message: String,
     val errorCode: String,
-    val details: String
+    val detail: String
 ) {
     companion object {
         fun fromApiException(exception: ApiException): ErrorResponseDto {
@@ -14,7 +14,7 @@ data class ErrorResponseDto(
                 state = exception.errorCode.state,
                 message = exception.errorCode.message,
                 errorCode = exception.errorCode.errorCode,
-                details = exception.errorCode.message
+                detail = exception.detail
             )
         }
     }

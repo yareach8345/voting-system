@@ -5,7 +5,6 @@ import com.yareach.voting_system.core.error.ErrorCode
 import com.yareach.voting_system.election.model.Election
 import com.yareach.voting_system.election.repository.ElectionRepository
 import kotlinx.coroutines.flow.Flow
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -60,7 +59,7 @@ class ElectionServiceImpl(
     override suspend fun changeElectionState(id: String, newState: String) = when (newState) {
         "open" -> openElection(id)
         "close" -> closeElection(id)
-        else -> throw ApiException(ErrorCode.ILLEGAL_ELECTION_STATE, newState)
+        else -> throw ApiException(ErrorCode.INVALID_ELECTION_STATE, newState)
     }
 
     override suspend fun deleteExpiredElections(cutoff: LocalDateTime): Long {

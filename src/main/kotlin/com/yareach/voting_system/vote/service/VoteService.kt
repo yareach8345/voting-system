@@ -35,13 +35,13 @@ class VoteServiceImpl(
 
     fun validateItem(item: String) {
         if(!itemValidator.isValid(item)) {
-            throw ApiException(ErrorCode.NOT_VALID_ITEM, "item $item is not valid.")
+            throw ApiException(ErrorCode.INVALID_ITEM, "item $item is not valid.")
         }
     }
 
     fun validateUserId(userId: String) {
         if(!userIdValidator.isValid(userId)) {
-            throw ApiException(ErrorCode.NOT_VALID_USERID, "userId $userId is not valid.")
+            throw ApiException(ErrorCode.INVALID_USERID, "userId $userId is not valid.")
         }
     }
 

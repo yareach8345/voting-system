@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertInstanceOf
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -39,6 +40,7 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient
 import org.springframework.web.context.WebApplicationContext
 import java.time.LocalDateTime
 import java.util.UUID
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -65,6 +67,18 @@ class ElectionTest {
     @Autowired
     private lateinit var expireScheduler: ElectionExpireScheduler
 
+    private val identifierBase = "elections"
+    private val genIdentifier = { method: String ->
+        { case: String -> "$identifierBase/$method/$case" }
+    }
+
+    fun assertErrorResponse(errorCode: ErrorCode, errorResponse: ErrorResponseDto?) {
+        org.junit.jupiter.api.assertNotNull(errorResponse)
+        assertEquals(errorCode.state, errorResponse.state)
+        assertEquals(errorCode.errorCode, errorResponse.errorCode)
+        assertEquals(errorCode.message, errorResponse.message)
+    }
+
     @BeforeEach
     fun setUp(context: WebApplicationContext, restDocumentation: RestDocumentationContextProvider) {
         webTestClient = MockMvcWebTestClient.bindToApplicationContext(context)
@@ -82,6 +96,8 @@ class ElectionTest {
     @DisplayName("투표 생성")
     inner class CreateElectionTest {
 
+        private val genIdentifier = this@ElectionTest.genIdentifier("create")
+
         @Test
         @DisplayName("새로운 투표 생성")
         fun createElection() {
@@ -96,7 +112,7 @@ class ElectionTest {
                     assertDoesNotThrow{ UUID.fromString(it.newElectionId) }
                 }
                 .consumeWith(document(
-                    "create-election",
+                    genIdentifier("create"),
                     responseFields(
                         fieldWithPath("newElectionId").description("생성된 투표의 id").attributes(key("format").value("uuid"))
                     ),
@@ -108,8 +124,10 @@ class ElectionTest {
     }
 
     @Nested
-    @DisplayName("투표 조회")
-    inner class FindElectionTest {
+    @DisplayName("모든 투표 조회")
+    inner class FindAllElectionTest {
+
+        private val genIdentifier = this@ElectionTest.genIdentifier("find-all")
 
         @Test
         @DisplayName("모든 투표 조회")
@@ -119,8 +137,12 @@ class ElectionTest {
                 .exchange()
                 .expectStatus().isOk
                 .expectBody<Collection<ElectionInfoResponseDto>>()
+                .value {
+                    assertNotNull(it)
+                    it.forEach { election -> assertInstanceOf<ElectionInfoResponseDto>(election) }
+                }
                 .consumeWith(document(
-                    "get-all-elections",
+                    genIdentifier("success"),
                     responseFields(
                         fieldWithPath("[].id").description("투표 식별자"),
                         fieldWithPath("[].state").description("투표의 진행 여부"),
@@ -145,7 +167,7 @@ class ElectionTest {
                     assertNotNull(it)
                     assertEquals(electionId, it.id)
                 }.consumeWith(document(
-                    "get-a-election-with-id",
+                    genIdentifier("success"),
                     pathParameters(parameterWithName("electionId").description("투표 식별자")),
                     responseFields(
                         fieldWithPath("id").description("투표 식별자"),
@@ -165,10 +187,11 @@ class ElectionTest {
                 .uri("/elections/{electionId}", wrongElectionId)
                 .exchange()
                 .expectStatus().isNotFound
-                .expectBody()
+                .expectBody<ErrorResponseDto>()
+                .value { assertErrorResponse(ErrorCode.ELECTION_NOT_FOUND, it) }
                 .consumeWith(
                     document(
-                        "get-a-election-with-wrong-id",
+                        genIdentifier("election-is-not-found"),
                         pathParameters(parameterWithName("electionId").description("투표 식별자")),
                 ))
         }
@@ -177,6 +200,8 @@ class ElectionTest {
     @Nested
     @DisplayName("투표 삭제")
     inner class DeleteElectionTest {
+
+        private val genIdentifier = this@ElectionTest.genIdentifier("delete")
 
         @Test
         @DisplayName("투표 id를 사용하여 투표 삭제")
@@ -189,7 +214,7 @@ class ElectionTest {
                 .expectStatus().isOk
                 .expectBody()
                 .consumeWith(document(
-                    "delete-electionId",
+                    genIdentifier("success"),
                     pathParameters(parameterWithName("electionId").description("투표 식별자"))
                 ))
 
@@ -201,6 +226,8 @@ class ElectionTest {
     @Nested
     @DisplayName("투표 상태 변경")
     inner class ChangeElectionStateTest {
+
+        private val genIdentifier = this@ElectionTest.genIdentifier("change-state")
 
         @Test
         @DisplayName("투표 open")
@@ -222,7 +249,7 @@ class ElectionTest {
                     assert(it.updatedTime.isAfter(timeBeforeSendRequest))
                     assert(it.updatedTime.isBefore(LocalDateTime.now()))
                 }.consumeWith(document(
-                    "open-election",
+                    genIdentifier("success-open"),
                     pathParameters(parameterWithName("electionId").description("투표 식별자")),
                     requestFields(fieldWithPath("newState").description("변경할 상태")),
                     responseFields(
@@ -253,7 +280,7 @@ class ElectionTest {
                     assert(it.updatedTime.isAfter(timeBeforeSendRequest))
                     assert(it.updatedTime.isBefore(LocalDateTime.now()))
                 }.consumeWith(document(
-                    "close-electionId",
+                    genIdentifier("success-close"),
                     pathParameters(parameterWithName("electionId").description("투표 식별자")),
                     requestFields(fieldWithPath("newState").description("변경할 상태")),
                     responseFields(
@@ -275,13 +302,9 @@ class ElectionTest {
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody<ErrorResponseDto>()
-                .value {
-                    assertNotNull(it)
-                    assertEquals(ErrorCode.VALIDATION_FAILED.state, it.state)
-                    assertEquals(ErrorCode.VALIDATION_FAILED.errorCode, it.errorCode)
-                }
+                .value { assertErrorResponse(ErrorCode.VALIDATION_FAILED, it) }
                 .consumeWith(document(
-                    "change-election-state-fail",
+                    genIdentifier("invalid-election-state"),
                     pathParameters(parameterWithName("electionId").description("투표 식별자")),
                 ))
         }
