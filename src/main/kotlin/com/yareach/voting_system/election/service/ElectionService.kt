@@ -38,6 +38,9 @@ class ElectionServiceImpl(
     }
 
     override suspend fun deleteElection(id: String) {
+        if (!electionRepository.isExists(id)) {
+            throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "electionId: $id")
+        }
         electionRepository.deleteById(id)
     }
 

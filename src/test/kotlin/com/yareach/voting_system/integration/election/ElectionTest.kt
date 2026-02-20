@@ -29,6 +29,7 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPri
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.requestFields
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
+import org.springframework.restdocs.payload.ResponseFieldsSnippet
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
 import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.snippet.Attributes.key
@@ -40,7 +41,6 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient
 import org.springframework.web.context.WebApplicationContext
 import java.time.LocalDateTime
 import java.util.UUID
-import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -78,6 +78,13 @@ class ElectionTest {
         assertEquals(errorCode.errorCode, errorResponse.errorCode)
         assertEquals(errorCode.message, errorResponse.message)
     }
+
+    private val errorResponseFieldsSnippet: ResponseFieldsSnippet = responseFields(
+        fieldWithPath("state").description("http state"),
+        fieldWithPath("errorCode").description("errorCode"),
+        fieldWithPath("message").description("에러 메시지"),
+        fieldWithPath("detail").description("상세 설명"),
+    )
 
     @BeforeEach
     fun setUp(context: WebApplicationContext, restDocumentation: RestDocumentationContextProvider) {
@@ -193,6 +200,7 @@ class ElectionTest {
                     document(
                         genIdentifier("election-is-not-found"),
                         pathParameters(parameterWithName("electionId").description("투표 식별자")),
+                        errorResponseFieldsSnippet
                 ))
         }
     }
@@ -220,6 +228,24 @@ class ElectionTest {
 
             val election = electionRepository.findById(electionId)
             assertNull(election)
+        }
+
+        @Test
+        @DisplayName("id에 해당하는 투표가 존재하지 않음")
+        fun electionIdNotExists() = runTest {
+            val unexistsElectionId = UUID.randomUUID().toString()
+
+            webTestClient.delete()
+                .uri("/elections/{electionId}", unexistsElectionId)
+                .exchange()
+                .expectStatus().isNotFound
+                .expectBody<ErrorResponseDto>()
+                .value { assertErrorResponse(ErrorCode.ELECTION_NOT_FOUND, it) }
+                .consumeWith(document(
+                    genIdentifier("election-not-found"),
+                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
+                    errorResponseFieldsSnippet
+                ))
         }
     }
 
@@ -306,6 +332,26 @@ class ElectionTest {
                 .consumeWith(document(
                     genIdentifier("invalid-election-state"),
                     pathParameters(parameterWithName("electionId").description("투표 식별자")),
+                    errorResponseFieldsSnippet
+                ))
+        }
+
+        @Test
+        @DisplayName("투표가 존재하지 않음")
+        fun electionIsNotExists() = runTest {
+            val unexistElectionId = UUID.randomUUID().toString()
+
+            webTestClient.patch()
+                .uri("/elections/{electionId}/state", unexistElectionId)
+                .bodyValue(ChangeElectionStateRequestDto("open"))
+                .exchange()
+                .expectStatus().isNotFound
+                .expectBody<ErrorResponseDto>()
+                .value { assertErrorResponse(ErrorCode.ELECTION_NOT_FOUND, it) }
+                .consumeWith(document(
+                    genIdentifier("invalid-election-state"),
+                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
+                    errorResponseFieldsSnippet
                 ))
         }
     }

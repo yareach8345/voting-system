@@ -56,6 +56,7 @@ class ElectionServiceImplTest {
         @DisplayName("투표 삭제")
         fun deleteElection() = runTest {
             val uuid = UUID.randomUUID().toString()
+            coEvery { electionRepositoryMock.isExists(uuid) } returns true
 
             val electionIdSlot = slot<String>()
             coEvery { electionRepositoryMock.deleteById(capture(electionIdSlot)) } returns Unit
@@ -65,6 +66,17 @@ class ElectionServiceImplTest {
             coVerify(exactly = 1) { electionRepositoryMock.deleteById(electionIdSlot.captured) }
 
             assertEquals(uuid, electionIdSlot.captured)
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 투표id를 사용")
+        fun electionIsNotExists() = runTest {
+            val uuid = UUID.randomUUID().toString()
+            coEvery { electionRepositoryMock.isExists(uuid) } returns false
+
+            val exception: ApiException = assertThrows { electionService.deleteElection(uuid) }
+
+            assertEquals(ErrorCode.ELECTION_NOT_FOUND, exception.errorCode)
         }
     }
 
