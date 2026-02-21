@@ -4,6 +4,7 @@ import com.yareach.voting_system.election.dto.ChangeElectionStateRequestDto
 import com.yareach.voting_system.election.dto.GenerateElectionResponseDto
 import com.yareach.voting_system.election.dto.ElectionInfoResponseDto
 import com.yareach.voting_system.election.dto.ChangeElectionStateResponseDto
+import com.yareach.voting_system.election.dto.GetNumberOfElectionsResponseDto
 import com.yareach.voting_system.election.service.ElectionService
 import jakarta.validation.Valid
 import kotlinx.coroutines.flow.map
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import java.net.URI
 
 @Controller
@@ -25,11 +27,21 @@ class ElectionController(
     val electionService: ElectionService
 ) {
     @GetMapping
-    suspend fun getAllElections(): ResponseEntity<List<ElectionInfoResponseDto>> =
-        electionService.getAllElections()
+    suspend fun getAllElections(
+        @RequestParam page: Long?,
+        @RequestParam size: Long = 10,
+    ): ResponseEntity<List<ElectionInfoResponseDto>> {
+        val elections = if(page == null) {
+            electionService.getAllElections()
+        } else {
+            electionService.getElectionsWithPage(page - 1, size)
+        }
+
+        return elections
             .map { ElectionInfoResponseDto.fromElection(it) }
             .toList()
             .let { ResponseEntity.ok(it) }
+    }
 
     @GetMapping("/{electionId}")
     suspend fun getElection(
@@ -37,6 +49,13 @@ class ElectionController(
     ): ResponseEntity<ElectionInfoResponseDto> = electionService.getElection(electionId)
         .let { ElectionInfoResponseDto.fromElection(it) }
         .let { ResponseEntity.ok(it) }
+
+    @GetMapping("/count")
+    suspend fun getNumberOfElections(): ResponseEntity<GetNumberOfElectionsResponseDto> {
+        val numberOfElections = electionService.getNumberOfElections()
+
+        return ResponseEntity.ok(GetNumberOfElectionsResponseDto.fromNumberOfElections(numberOfElections))
+    }
 
     @PostMapping
     suspend fun generateElection(): ResponseEntity<GenerateElectionResponseDto> {

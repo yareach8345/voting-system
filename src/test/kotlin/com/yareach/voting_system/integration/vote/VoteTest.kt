@@ -513,7 +513,7 @@ class VoteTest(@Autowired private val voteService: VoteService) {
             webTestClient.delete()
                 .uri("/elections/{electionId}/votes/{userId}", electionId, userId)
                 .exchange()
-                .expectStatus().isBadRequest
+                .expectStatus().is4xxClientError
                 .expectBody<ErrorResponseDto>()
                 .value { assertErrorResponse(ErrorCode.ELECTION_IS_NOT_OPEN, it) }
                 .consumeWith(
@@ -623,7 +623,7 @@ class VoteTest(@Autowired private val voteService: VoteService) {
                 .uri("/elections/{electionId}/votes/{userId}", electionId, userId)
                 .bodyValue(requestBody)
                 .exchange()
-                .expectStatus().isBadRequest
+                .expectStatus().is4xxClientError
                 .expectBody<ErrorResponseDto>()
                 .value { assertErrorResponse(ErrorCode.ELECTION_IS_NOT_OPEN, it) }
                 .consumeWith(

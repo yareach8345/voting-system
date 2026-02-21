@@ -298,11 +298,11 @@ class VoteServiceTest {
 
             coEvery { electionRepositoryMock.findById(electionId) } returns testElection
 
-            coEvery { voteRepositoryMock.deleteAllByElectionId(electionId) } returns numberOfDeletedVotes
+            coEvery { voteRepositoryMock.deleteByElectionId(electionId) } returns numberOfDeletedVotes
 
             val result = voteService.deleteByElectionId(electionId)
 
-            coVerify(exactly = 1) { voteRepositoryMock.deleteAllByElectionId(electionId) }
+            coVerify(exactly = 1) { voteRepositoryMock.deleteByElectionId(electionId) }
 
             assertEquals(numberOfDeletedVotes, result)
         }

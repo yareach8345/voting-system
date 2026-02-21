@@ -109,7 +109,7 @@ class VoteServiceImpl(
             throw ApiException(ErrorCode.ELECTION_NOT_FOUND, "voteId $electionId not found.")
         }
 
-        return voteRepository.deleteAllByElectionId(electionId)
+        return voteRepository.deleteByElectionId(electionId)
     }
 
     override suspend fun getElectionStatistics(electionId: String): Flow<ItemAndVotesCountPairDto> {

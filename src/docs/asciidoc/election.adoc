@@ -1,89 +1,104 @@
-== 투표 생성
+= Vote System API仕様書 - Election
+yareach <mine8345@naver.com>
+v1.0, 2024-02-21
+:toc: left
+:toclevels: 2
+:sectnums:
+:icons: font
+:source-highlighter: highlightjs
+:sectlinks:
 
-**Request**
-include::{snippets}/create-vote/http-request.adoc[]
+== 概要
+Election - 選挙 +
+選挙を初めて人の投票をもらって結果を出すまでの一連のプロセスを意味する。 +
+選挙の識別子、状態、開始時間などの選挙に関するデータをあつかる機能の集まり。
 
-**Response**
-include::{snippets}/create-vote/http-response.adoc[]
+== 投票生成
+=== Request
+include::{snippets}/elections/create/success/http-request.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/elections/create/success/http-response.adoc[]
+**Response Fields**
+include::{snippets}/elections/create/success/response-fields.adoc[]
+idは選挙が生成されるとき、バックエンド側で生成される。 +
+選挙を制御するとき特定するため必要。
 
-**Response Body**
-include::{snippets}/create-vote/response-body.adoc[]
+== 全ての選挙を取得する。
+=== Request
+include::{snippets}/elections/find-all/success/http-request.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/elections/find-all/success/http-response.adoc[]
+**Response Fields**
+include::{snippets}/elections/find-all/success/response-fields.adoc[]
+**注意** データベースに大量の選挙データが保存されている場合、性能上の問題が発生する可能性があります。
 
-include::{snippets}/create-vote/response-fields.adoc[]
+== ページングを用いて一部のデータを取得する。
+=== Request
+include::{snippets}/elections/find-with-paging/success/http-request.adoc[]
+**Query Parameters**
+include::{snippets}/elections/find-with-paging/success/query-parameters.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/elections/find-with-paging/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/elections/find-with-paging/success/response-fields.adoc[]
+==== 400 BAD REQUEST [page に 1 未満の値を指定した場合]
+include::{snippets}/elections/find-with-paging/paging-error-page-less-then-1/http-response.adoc[]
+==== 400 BAD REQUEST [size に 1 未満の値を指定した場合]
+include::{snippets}/elections/find-with-paging/paging-error-size-less-then-1/http-response.adoc[]
 
-**Response Header**
-include::{snippets}/create-vote/response-headers.adoc[]
+== idで一つの選挙を取得する
+=== Request
+include::{snippets}/elections/find-by-id/success/http-request.adoc[]
+**Path Parameters**
+include::{snippets}/elections/find-by-id/success/path-parameters.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/elections/find-by-id/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/elections/find-by-id/success/response-fields.adoc[]
+==== 404 NOT FOUND [指定したIDの選挙が存在しない場合]
+include::{snippets}/elections/find-by-id/election-is-not-found/http-response.adoc[]
 
+== 選挙を削除する
+=== Request
+include::{snippets}/elections/delete/success/http-request.adoc[]
+**Path Parameters**
+include::{snippets}/elections/delete/success/path-parameters.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/elections/delete/success/http-response.adoc[]
+==== 404 NOT FOUND [指定したIDの選挙が存在しない場合]
+include::{snippets}/elections/delete/election-not-found/http-response.adoc[]
 
-== 투표 조회
-=== 모든 투표 조회
+== 投票を開始する。
+=== Request [選挙を開始(open)する]
+include::{snippets}/elections/change-state/success-open/http-request.adoc[]
+**Path Parameters**
+include::{snippets}/elections/change-state/success-open/path-parameters.adoc[]
+**Request Fields**
+include::{snippets}/elections/change-state/success-open/request-fields.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/elections/change-state/success-open/http-response.adoc[]
+==== 404 NOT FOUND [指定したIDの選挙が存在しない場合]
+include::{snippets}/elections/change-state/election-not-exists/http-response.adoc[]
+==== 400 BAD REQUEST [有効ではない状態に変更しようとした場合]
+include::{snippets}/elections/change-state/invalid-election-state/http-response.adoc[]
 
-**Request**
-include::{snippets}/get-all-votes/request-body.adoc[]
-
-**Response**
-include::{snippets}/get-all-votes/response-body.adoc[]
-
-include::{snippets}/get-all-votes/response-fields.adoc[]
-
-=== 투표 id로 투표 조회
-
-**Request**
-include::{snippets}/get-a-vote-with-id/http-request.adoc[]
-include::{snippets}/get-a-vote-with-id/path-parameters.adoc[]
-
-**Response**
-include::{snippets}/get-a-vote-with-id/response-body.adoc[]
-include::{snippets}/get-a-vote-with-id/response-fields.adoc[]
-
-=== 존재하지 않는 id로 접근할 경우 실패
-
-**Request**
-include::{snippets}/get-a-vote-with-wrong-id/http-request.adoc[]
-
-**Response**
-include::{snippets}/get-a-vote-with-wrong-id/response-body.adoc[]
-
-== 투표 삭제
-
-**Request**
-include::{snippets}/delete-vote/http-request.adoc[]
-
-include::{snippets}/delete-vote/path-parameters.adoc[]
-
-**Response**
-include::{snippets}/delete-vote/http-response.adoc[]
-
-== 투표 상태 변경
-
-=== 투표 open
-
-**Request**
-include::{snippets}/open-vote/http-request.adoc[]
-
-include::{snippets}/open-vote/request-body.adoc[]
-
-include::{snippets}/open-vote/request-fields.adoc[]
-
-**Response**
-include::{snippets}/open-vote/http-response.adoc[]
-
-include::{snippets}/open-vote/response-body.adoc[]
-
-include::{snippets}/open-vote/response-fields.adoc[]
-
-== 투표 close
-
-**Request**
-include::{snippets}/close-vote/http-request.adoc[]
-
-include::{snippets}/close-vote/request-body.adoc[]
-
-include::{snippets}/close-vote/request-fields.adoc[]
-
-**Response**
-include::{snippets}/close-vote/http-response.adoc[]
-
-include::{snippets}/close-vote/response-body.adoc[]
-
-include::{snippets}/close-vote/response-fields.adoc[]
+== 投票を終了する。
+=== Request
+include::{snippets}/elections/change-state/success-close/http-request.adoc[]
+**Path Parameters**
+include::{snippets}/elections/change-state/success-open/path-parameters.adoc[]
+**Request Fields**
+include::{snippets}/elections/change-state/success-open/request-fields.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/elections/change-state/success-close/http-response.adoc[]
+==== 404 NOT FOUND [指定したIDの選挙が存在しない場合]
+include::{snippets}/elections/change-state/election-not-exists/http-response.adoc[]
+==== 400 BAD REQUEST [有効ではない状態に変更しようとした場合]
+include::{snippets}/elections/change-state/invalid-election-state/http-response.adoc[]

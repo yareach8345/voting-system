@@ -1,0 +1,100 @@
+= Vote System API仕様書 - Vote
+yareach <mine8345@naver.com>
+v1.0, 2024-02-21
+:toc: left
+:toclevels: 2
+:sectnums:
+:icons: font
+:source-highlighter: highlightjs
+:sectlinks:
+
+== 概要
+Vote - 投票 +
+選挙の参加者が意見を出すこと。 +
+ユーザーの投票データの管理および投票の現状・結果を取得する機能の集まり。 +
+本サービスでは参加者が選択したものを指すとき「候補」という表現を使用せず、「アイテム(item)」という表現を使用する。
+正規表現により入力可能な値の数が無限になる場合があるためである。
+
+== 投票を記録する。
+=== Request
+include::{snippets}/votes/record/success/http-request.adoc[]
+**Path Parameter**
+include::{snippets}/votes/record/success/path-parameters.adoc[]
+**Request Fields**
+include::{snippets}/votes/record/success/request-fields.adoc[]
+=== Response
+==== 201 Created
+include::{snippets}/votes/record/success/http-response.adoc[]
+**Response Fields**
+include::{snippets}/votes/record/success/response-fields.adoc[]
+==== 404 NOT FOUND [指定したＩＤの選挙が存在しない場合]
+include::{snippets}/votes/record/election-not-found/http-response.adoc[]
+==== 400 BAD REQUEST [有効ではないitem]
+include::{snippets}/votes/record/invalid-item/http-response.adoc[]
+==== 400 BAD REQUEST [有効ではないitemユーザーのＩＤ]
+include::{snippets}/votes/record/invalid-userId/http-response.adoc[]
+
+== 投票の記録を取得する。
+=== Request
+include::{snippets}/votes/find-a-vote/success/http-request.adoc[]
+**Path Parameter**
+include::{snippets}/votes/find-a-vote/success/path-parameters.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/votes/find-a-vote/success/http-response.adoc[]
+**Response Fields**
+include::{snippets}/votes/find-a-vote/success/response-fields.adoc[]
+==== 404 NOT FOUND [指定したＩＤの選挙が存在しない場合]
+include::{snippets}/votes/find-a-vote/vote-not-found-for-election-id/http-response.adoc[]
+==== 404 NOT FOUND [指定したＩＤのユーザーの投票記録が存在しない場合]
+include::{snippets}/votes/find-a-vote/vote-not-found-for-user-id/http-response.adoc[]
+
+== itemごとの獲得投票数を取得する
+=== Request
+include::{snippets}/votes/get-statistics/success/http-request.adoc[]
+**Path Parameter**
+include::{snippets}/votes/get-statistics/success/path-parameters.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/votes/get-statistics/success/http-response.adoc[]
+**Response Fields**
+include::{snippets}/votes/get-statistics/success/response-fields.adoc[]
+==== 404 NOT FOUND [指定したＩＤの選挙が存在しない場合]
+include::{snippets}/votes/get-statistics/election-not-found/http-response.adoc[]
+
+== ユーザーの投票をキャンセルする
+=== Request
+include::{snippets}/votes/cancel/success/http-request.adoc[]
+**Path Parameter**
+include::{snippets}/votes/cancel/success/path-parameters.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/votes/cancel/success/http-response.adoc[]
+==== 404 NOT FOUND [指定したＩＤの選挙が存在しない場合]
+include::{snippets}/votes/cancel/vote-not-found/http-response.adoc[]
+==== 404 CONFLICT [選挙が進行中でばない場合]
+include::{snippets}/votes/cancel/election-is-not-open/http-response.adoc[]
+
+== 投票記録のitemを変更
+すでに投票したユーザーが他のものを選択した時の処理。 +
+選択したitemを変更された場合、votedAt も更新される。
+
+=== Path Parameter
+include::{snippets}/votes/change-item/success/path-parameters.adoc[]
+=== Request
+include::{snippets}/votes/change-item/success/http-request.adoc[]
+**Request Fields**
+include::{snippets}/votes/change-item/success/request-fields.adoc[]
+=== Response
+==== 200 OK
+include::{snippets}/votes/change-item/success/http-response.adoc[]
+**Response Fields**
+include::{snippets}/votes/change-item/success/response-fields.adoc[]
+==== 409 CONFLICT [選挙が進行中でばない場合]
+include::{snippets}/votes/change-item/election-is-not-open/http-response.adoc[]
+==== 404 NOT FOUND [指定したＩＤの選挙が存在しない場合]
+include::{snippets}/votes/change-item/election-not-found/http-response.adoc[]
+==== 400 BAD REQUEST [有効ではないuserId]
+include::{snippets}/votes/change-item/invalid-user-id/http-response.adoc[]
+==== 400 BAD REQUEST [有効ではないitem]
+include::{snippets}/votes/change-item/invalid-item/http-response.adoc[]

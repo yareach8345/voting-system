@@ -159,7 +159,7 @@ class VoteRepositoryTest {
 
         val voteCountBeforeDelete = voteRepository.countByElectionId(electionId)
 
-        voteRepository.deleteAllByElectionId(electionId)
+        voteRepository.deleteByElectionId(electionId)
 
         val voteCountAfterDelete = voteRepository.countByElectionId(electionId)
 

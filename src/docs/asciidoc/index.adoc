@@ -1,0 +1,28 @@
+= Vote System API仕様書
+yareach <mine8345@naver.com>
+v1.0, 2024-02-21
+:toc: left
+:toclevels: 2
+:sectnums:
+:icons: font
+:source-highlighter: highlightjs
+:sectlinks:
+
+== 概要
+*サービス名*　：　Vote System (投票システム) +
+*バージョン*　：　v1.0
+
+=== 目的
+本システムは、様々な外部システムで再利用可能な汎用投票システムとして設計された。 +
+高い汎用性と安定性を両立することを目的とする。
+
+=== 説明
+汎用性を確保するため、候補データは String 型としてデータベースに保存される。 +
+
+安定性を担保するため、yaml ファイルにて有効な候補値を判定する正規表現を設定可能とした。
+これにより、システムごとに異なる入力制約を柔軟に定義できる。
+
+== API 一覧
+リンクを通して各機能の文書に移動 +
+* link:/docs/election.html[Election] +
+* link:/docs/vote.html[Vote]

@@ -2,6 +2,7 @@ package com.yareach.voting_system.unit.election.service
 
 import com.yareach.voting_system.core.error.ApiException
 import com.yareach.voting_system.core.error.ErrorCode
+import com.yareach.voting_system.election.dto.IsOpenAndCountPairDto
 import com.yareach.voting_system.election.model.Election
 import com.yareach.voting_system.election.repository.ElectionRepository
 import com.yareach.voting_system.election.service.ElectionService
@@ -12,6 +13,9 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.DisplayName
@@ -20,6 +24,7 @@ import org.junit.jupiter.api.assertInstanceOf
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDateTime
 import java.util.UUID
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -95,6 +100,109 @@ class ElectionServiceImplTest {
             coVerify(exactly = 1) { electionRepositoryMock.findAll() }
             assertEquals(sampleElections.count(), result.count())
             assertEquals(sampleElections.map { it.id }, result.map { it.id })
+        }
+    }
+
+    @Nested
+    @DisplayName("페이징 조회 테스트")
+    inner class GetElectionsWithPaging {
+
+        @Test
+        @DisplayName("[성공 케이스] 특정 페이지의 데이터만 불러옴")
+        fun pagingTest() = runTest {
+            val pageSlot = slot<Long>()
+            val sizeSlot = slot<Long>()
+
+            coEvery {
+                electionRepositoryMock.findWithPaging(capture(pageSlot), capture(sizeSlot))
+            } answers {
+                List(sizeSlot.captured.toInt()) { Election.new() }.asFlow()
+            }
+
+            val page = Random.nextLong(10)
+            val size = Random.nextLong(10)
+
+            val result = electionService.getElectionsWithPage(page, size)
+
+            assertEquals(size, result.count().toLong())
+            assertEquals(page, pageSlot.captured)
+            assertEquals(size, sizeSlot.captured)
+        }
+
+        @Test
+        @DisplayName("[실패 케이스] 페이지가 0미만일 경우 실패")
+        fun pagingErrorPageIsIllegal() = runTest {
+            val exception: ApiException = assertThrows { electionService.getElectionsWithPage(-1, 10) }
+
+            assertEquals(ErrorCode.PAGING_ERROR, exception.errorCode)
+        }
+
+        @Test
+        @DisplayName("[실패 케이스] 사이즈가 0미만일 경우 실패")
+        fun pagingErrorSizeIsIllegal() = runTest {
+            val exception: ApiException = assertThrows { electionService.getElectionsWithPage(11, 0) }
+
+            assertEquals(ErrorCode.PAGING_ERROR, exception.errorCode)
+        }
+    }
+
+    @Nested
+    @DisplayName("선거 수 조회")
+    inner class GetNumberOfElectionsTest {
+
+        @Test
+        @DisplayName("[성공 케이스] 선거 수를 성공적으로 조회")
+        fun getNumberOfElectionsTest() = runTest {
+            coEvery { electionRepositoryMock.getNumberOfElections() } returns 3
+
+            val result = electionService.getNumberOfElections()
+
+            coVerify(exactly = 1) { electionRepositoryMock.getNumberOfElections() }
+
+            assertEquals(3, result)
+        }
+    }
+
+    @Nested
+    @DisplayName("상태에 따른 선거 수 조회")
+    inner class GetCountsByStateTest{
+
+        @Test
+        @DisplayName("[성공 케이스] dto에 담아서 반환됨")
+        fun getCountsByStateTest() = runTest {
+            val numberOfOpened = Random.nextLong(1, 10)
+            val numberOfClosed = Random.nextLong(1, 10)
+
+            coEvery { electionRepositoryMock.countByIsOpen() } returns flowOf(
+                IsOpenAndCountPairDto(true, numberOfOpened),
+                IsOpenAndCountPairDto(false, numberOfClosed),
+            )
+
+            val result = electionService.getCountsByState()
+
+            coVerify(exactly = 1) { electionRepositoryMock.countByIsOpen() }
+
+            assertEquals(numberOfOpened, result.opened)
+            assertEquals(numberOfClosed, result.closed)
+            assertEquals(numberOfOpened + numberOfClosed, result.total)
+        }
+
+        @Test
+        @DisplayName("[성공 케이스] 어떤 상태의 데이터가 없을 경우 dto에 0이 담겨 반환됨")
+        fun getCountsByStateFromElectionsHavingOnlyOneStateTest() = runTest {
+            val numberOfElections = Random.nextLong(1, 10)
+
+            coEvery { electionRepositoryMock.countByIsOpen() } returns flowOf(
+                IsOpenAndCountPairDto(true, numberOfElections),
+            )
+
+            val result = electionService.getCountsByState()
+
+            coVerify(exactly = 1) { electionRepositoryMock.countByIsOpen() }
+
+            assertEquals(numberOfElections, result.opened)
+            assertEquals(0, result.closed)
+            assertEquals(numberOfElections, result.total)
         }
     }
 

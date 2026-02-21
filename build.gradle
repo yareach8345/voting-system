@@ -79,6 +79,9 @@ test {
 }
 
 asciidoctor {
+//    delete outputDir
+//    delete "src/main/resources/static/docs"
+
     inputs.dir snippetsDir
     configurations 'asciidoctorExt'
     dependsOn test

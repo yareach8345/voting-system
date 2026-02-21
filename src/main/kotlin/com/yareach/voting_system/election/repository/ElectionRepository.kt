@@ -1,5 +1,6 @@
 package com.yareach.voting_system.election.repository
 
+import com.yareach.voting_system.election.dto.IsOpenAndCountPairDto
 import com.yareach.voting_system.election.model.Election
 import com.yareach.voting_system.election.entity.ElectionR2dbcEntity
 import kotlinx.coroutines.flow.Flow
@@ -10,11 +11,17 @@ import java.time.LocalDateTime
 interface ElectionRepository {
     suspend fun findAll(): Flow<Election>
 
+    suspend fun findWithPaging(page: Long, size: Long): Flow<Election>
+
     suspend fun findById(id: String): Election?
 
     suspend fun isExists(id: String): Boolean
 
     suspend fun getIsOpen(id: String): Boolean?
+
+    suspend fun getNumberOfElections(): Long
+
+    suspend fun countByIsOpen(): Flow<IsOpenAndCountPairDto>
 
     suspend fun insert(election: Election): String
 
@@ -23,6 +30,8 @@ interface ElectionRepository {
     suspend fun deleteById(id: String)
 
     suspend fun deleteElectionsBeforeCutoff(cutoff: LocalDateTime): Long
+
+    suspend fun deleteAll()
 }
 
 @Repository
@@ -31,6 +40,10 @@ class ElectionRepositoryR2dbcImpl(
 ) : ElectionRepository {
     override suspend fun findAll(): Flow<Election> {
         return electionR2DbcRepository.findAll().map { it.toModel() }
+    }
+
+    override suspend fun findWithPaging(page: Long, size: Long): Flow<Election> {
+        return electionR2DbcRepository.findWithPaging(page, size).map { it.toModel() }
     }
 
     override suspend fun findById(id: String): Election? {
@@ -43,6 +56,14 @@ class ElectionRepositoryR2dbcImpl(
 
     override suspend fun getIsOpen(id: String): Boolean? {
         return electionR2DbcRepository.getIsOpenBy(id)
+    }
+
+    override suspend fun getNumberOfElections(): Long {
+        return electionR2DbcRepository.count()
+    }
+
+    override suspend fun countByIsOpen(): Flow<IsOpenAndCountPairDto> {
+        return electionR2DbcRepository.countByIsOpen()
     }
 
     override suspend fun insert(election: Election): String {
@@ -62,5 +83,9 @@ class ElectionRepositoryR2dbcImpl(
 
     override suspend fun deleteElectionsBeforeCutoff(cutoff: LocalDateTime): Long {
         return electionR2DbcRepository.deleteByLastModifiedBefore(cutoff)
+    }
+
+    override suspend fun deleteAll() {
+        electionR2DbcRepository.deleteAll()
     }
 }

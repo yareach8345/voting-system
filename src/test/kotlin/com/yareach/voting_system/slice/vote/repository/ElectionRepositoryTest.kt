@@ -5,6 +5,7 @@ import com.yareach.voting_system.election.repository.ElectionR2dbcRepository
 import com.yareach.voting_system.election.repository.ElectionRepository
 import com.yareach.voting_system.election.repository.ElectionRepositoryR2dbcImpl
 import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Nested
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.r2dbc.test.autoconfigure.DataR2dbcTest
 import java.util.UUID
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -25,12 +27,13 @@ class ElectionRepositoryTest {
     private lateinit var electionRepository: ElectionRepository
 
     @BeforeEach
-    fun initRepository() {
+    suspend fun initRepository() {
         electionRepository = ElectionRepositoryR2dbcImpl(electionR2dbcRepository)
+        electionRepository.deleteAll()
     }
 
     @Nested
-    @DisplayName("모즌 데이터 조회 테스트")
+    @DisplayName("모든 데이터 조회 테스트")
     inner class FindAllTest {
         @Test
         @DisplayName("[성공 케이스] 모든 데이터 조회(findAll)")
@@ -40,7 +43,78 @@ class ElectionRepositoryTest {
 
             val result = electionRepository.findAll()
 
-            assert(result.count() >= 2)
+            assertEquals(2, result.count())
+        }
+    }
+
+    @Nested
+    @DisplayName("페이징 테스트")
+    inner class FindWithPagingTest {
+
+        @BeforeEach
+        suspend fun prepareDates() {
+            List(12) { electionRepository.insert(Election.new()) }
+        }
+
+        @Test
+        @DisplayName("[성공 케이스] 특정 페이지의 선거 정보를 얻어옴")
+        fun findByPagingTest() = runTest {
+            val firstPageWithSize5 = electionRepository.findWithPaging(0, 5)
+            val secondPageWithSize5 = electionRepository.findWithPaging(1, 5)
+            val thirdPageWithSize5 = electionRepository.findWithPaging(2, 5)
+
+            assertEquals(5, firstPageWithSize5.count())
+            assertEquals(5, secondPageWithSize5.count())
+            assertEquals(2, thirdPageWithSize5.count())
+        }
+
+        @Test
+        @DisplayName("[예외 케이스] 페이지가 오버될 경우 빈 배열을 받아오지만 에러가 발생하지는 않음")
+        fun pageOverflowTest() = runTest {
+            val thirdPageWithSize5 = electionRepository.findWithPaging(2, 5)
+            val fourthPageWithSize5 = electionRepository.findWithPaging(3, 5)
+
+            assertEquals(2, thirdPageWithSize5.count())
+            assertEquals(0, fourthPageWithSize5.count())
+        }
+    }
+
+    @Nested
+    @DisplayName("상태에 따른 갯수 출력")
+    inner class GetNumberByIsOpenTest {
+
+        @Test
+        @DisplayName("[성공 케이스] isOpen에 따라 데이터의 개수를 불러옴")
+        fun getNumberOfElectionsByIsOpen() = runTest {
+            val numberOfOpenedElections = Random.nextInt(1, 5)
+            List(numberOfOpenedElections) { electionRepository.insert(Election.new().apply { open() }) }
+
+            val numberOfClosedElections = Random.nextInt(1, 5)
+            List(numberOfClosedElections) { electionRepository.insert(Election.new()) }
+
+            val result = electionRepository.countByIsOpen().toList()
+            val map = result.map { it.isOpen to it.count }.toMap()
+
+            assertEquals(2, result.size)
+            assertNotNull(map[true])
+            assertEquals(numberOfOpenedElections.toLong(), map[true])
+            assertNotNull(map[false])
+            assertEquals(numberOfClosedElections.toLong(), map[false])
+        }
+
+        @Test
+        @DisplayName("[성공 케이스] isOpen의 상태 (true, false)중 하나가 존재하지 않을 경우")
+        fun getNumberOfElectionsByIsOpenWithElectionsHavingOnlyOneState() = runTest {
+            val numberOfOpenedElections = Random.nextInt(1, 10)
+            List(numberOfOpenedElections) { electionRepository.insert(Election.new().apply { open() }) }
+
+            val result = electionRepository.countByIsOpen().toList()
+            val map = result.map { it.isOpen to it.count }.toMap()
+
+            assertEquals(1, result.size)
+            assertNotNull(map[true])
+            assertEquals(numberOfOpenedElections.toLong(), map[true])
+            assertNull(map[false])
         }
     }
 
@@ -198,6 +272,18 @@ class ElectionRepositoryTest {
             val findVoteResultAfter = electionRepository.findById(electionId)
 
             assertNull(findVoteResultAfter)
+        }
+
+        @Test
+        @DisplayName("모든 데이터 삭제")
+        fun deleteAllTest() = runTest {
+            repeat(Random.nextInt(10)) { electionRepository.insert(Election.new()) }
+
+            electionRepository.deleteAll()
+
+            val countAfterDelete = electionRepository.getNumberOfElections()
+
+            assertEquals(0, countAfterDelete)
         }
     }
 }

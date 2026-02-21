@@ -12,7 +12,7 @@ interface VoteRepository {
 
     suspend fun findByElectionIdAndUserId(electionId: String, userId: String): Vote?
 
-    suspend fun deleteAllByElectionId(electionId: String): Long
+    suspend fun deleteByElectionId(electionId: String): Long
 
     suspend fun deleteByElectionIdAndUserId(electionId: String, userId: String): Long
 
@@ -37,7 +37,7 @@ class VoteRepositoryR2dbcImpl(
         return voteR2DbcRepository.findByElectionIdAndUserId(electionId, userId)?.toModel()
     }
 
-    override suspend fun deleteAllByElectionId(electionId: String): Long {
+    override suspend fun deleteByElectionId(electionId: String): Long {
         return voteR2DbcRepository.deleteAllByElectionId(electionId)
     }
 
