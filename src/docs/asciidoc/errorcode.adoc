@@ -1,0 +1,68 @@
+= Vote System API仕様書 - ErrorCodes
+yareach <mine8345@naver.com>
+v1.0, 2024-02-21
+:toc: left
+:toclevels: 2
+:sectnums:
+:icons: font
+:source-highlighter: highlightjs
+:sectlinks:
+
+== 概要
+本システムで使われるエラー
+
+== Errors
+
+|===
+|ErrorCode|HttpStatus|Message|detail
+
+|`+ELECTION_001+`
+|`+404 NOT FOUND+`
+|Election Not Found.
+|指定した情報での選挙検索が失敗した。
+
+|`+ELECTION_002+`
+|`+400 BAD REQUEST+`
+|Invalid Election State.
+|有効ではない状態の設定しようとした。
+
+|`+VOTE_01+`
+|`+409 CONFLICT+`
+|Election Is Not Open.
+|選挙が進行中ではないため、投票の変更はできない。
+
+|`+VOTE_02+`
+|`+404 NOT FOUND+`
+|Vote Not Found.
+|指定した情報での投票検索が失敗した。
+
+|`+VOTE_03+`
+|`+400 BAD REQUEST+`
+|Invalid Item
+|有効なアイテムではない。
+
+|`+VOTE_04+`
+|`+404 BAD REQUEST+`
+|Invalid UserId
+|有効なユーザーのＩＤではない。
+
+|`+VALID_ERROR+`
+|`+400 BAD REQUEST+`
+|Validation Failed
+|リクエストで含まれていたデータが有効ではない。
+
+|`+SERVER_ERROR+`
+|`+500 INTERNAL SERVER ERROR+`
+|An Unexpected Error Occurred.
+|サーバー側のコードでエラーが発生した。
+
+|`+CONFIG_ERROR+`
+|`+500 INTERNAL SERVER ERROR+`
+|Server Configuration Error
+|サーバーの設定に誤りがあるため、正常に処理できない。
+
+|`+PAING_ERROR+`
+|`+404 BAD REQUEST+`
+|Invalid Paging Parameters.
+|ページングのための入力に誤りがあるため、正常に処理できない。
+|===

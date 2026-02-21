@@ -30,7 +30,7 @@ fun interface Validator {
             }
 
             return fromRegexString(
-                properties.regexString ?: throw ApiException(ErrorCode.INVALID_PROP, "useValidator은 true이나 regexString이 설정되어있지 않습니다.")
+                properties.regexString ?: throw ApiException(ErrorCode.CONFIG_ERROR, "useValidator은 true이나 regexString이 설정되어있지 않습니다.")
             )
         }
 

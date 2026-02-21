@@ -104,7 +104,7 @@ class ValidatorTest {
         fun invalidPropsTest() {
             val error: ApiException = assertThrows { Validator.fromProperties( ValidatorProperties.from(true) ) }
 
-            assertEquals(ErrorCode.INVALID_PROP, error.errorCode)
+            assertEquals(ErrorCode.CONFIG_ERROR, error.errorCode)
         }
     }
 }

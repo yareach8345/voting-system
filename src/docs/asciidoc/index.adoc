@@ -26,3 +26,7 @@ v1.0, 2024-02-21
 リンクを通して各機能の文書に移動 +
 * link:/docs/election.html[Election] +
 * link:/docs/vote.html[Vote]
+
+== エラー
+発生したエラーの確認はこちら。 +
+link:/docs/errorcode.html[エラーの文書へ]
