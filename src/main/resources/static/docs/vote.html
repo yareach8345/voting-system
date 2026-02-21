@@ -504,7 +504,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_request"><a class="link" href="#_request">2.1. Request</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /elections/697a3f05-fe27-473f-a499-3682703c0634/votes HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /elections/e4807a16-06d3-4fc5-947f-3b089b957b8a/votes HTTP/1.1
 Content-Type: application/json
 Content-Length: 46
 Host: localhost:8080
@@ -533,7 +533,7 @@ Host: localhost:8080
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 </tbody>
 </table>
@@ -557,12 +557,12 @@ Host: localhost:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표를 하는 유저의 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">投票をするユーザーのＩＤ</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>item</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저가 투표하는 아이템(항목)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ユーザーが投票したアイテム</p></td>
 </tr>
 </tbody>
 </table>
@@ -574,15 +574,15 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Location: /elections/697a3f05-fe27-473f-a499-3682703c0634/votes/user-01
+Location: /elections/e4807a16-06d3-4fc5-947f-3b089b957b8a/votes/user-01
 Content-Type: application/json
 Content-Length: 150
 
 {
-  "electionId" : "697a3f05-fe27-473f-a499-3682703c0634",
+  "electionId" : "e4807a16-06d3-4fc5-947f-3b089b957b8a",
   "userId" : "user-01",
   "item" : "12-34",
-  "votedAt" : "2026-02-22T02:59:09.315565652"
+  "votedAt" : "2026-02-22T03:32:01.668607275"
 }</code></pre>
 </div>
 </div>
@@ -606,22 +606,22 @@ Content-Length: 150
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표한 유저 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">投票をするユーザーのＩＤ</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>item</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표된 아이템(항목)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ユーザーが投票したアイテム</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>votedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저가 투표를 진행한 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">投票時間</p></td>
 </tr>
 </tbody>
 </table>
@@ -687,7 +687,7 @@ Content-Length: 140
 <h3 id="_request_2"><a class="link" href="#_request_2">3.1. Request</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /elections/6c348adf-2a74-4b2d-9535-83afcf323337/votes/user-01 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /elections/148726c0-405d-4d40-8625-c514776ff511/votes/user-01 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -709,11 +709,11 @@ Host: localhost:8080</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ユーザーのＩＤ</p></td>
 </tr>
 </tbody>
 </table>
@@ -729,10 +729,10 @@ Content-Type: application/json
 Content-Length: 140
 
 {
-  "electionId" : "6c348adf-2a74-4b2d-9535-83afcf323337",
+  "electionId" : "148726c0-405d-4d40-8625-c514776ff511",
   "userId" : "user-01",
   "item" : "12-34",
-  "votedAt" : "2026-02-22T02:59:09"
+  "votedAt" : "2026-02-22T03:32:02"
 }</code></pre>
 </div>
 </div>
@@ -756,22 +756,22 @@ Content-Length: 140
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표한 유저 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">投票をするユーザーのＩＤ</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>item</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표된 아이템(항목)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ユーザーが投票したアイテム</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>votedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저가 투표를 진행한 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">投票時間</p></td>
 </tr>
 </tbody>
 </table>
@@ -788,7 +788,7 @@ Content-Length: 163
   "state" : "404 NOT_FOUND",
   "message" : "Vote Not Found.",
   "errorCode" : "VOTE_002",
-  "detail" : "voteId 2bbeff24-78db-420d-9b5c-38d9455db9b9 not found."
+  "detail" : "voteId 2ebf4c3b-fcf4-48cb-9413-9e328493441c not found."
 }</code></pre>
 </div>
 </div>
@@ -805,7 +805,7 @@ Content-Length: 163
   "state" : "404 NOT_FOUND",
   "message" : "Vote Not Found.",
   "errorCode" : "VOTE_002",
-  "detail" : "voteId f7e5ce48-63e8-450e-8858-1dda4783515b not found."
+  "detail" : "voteId 18fe8863-6a54-4444-99da-06af38b079a3 not found."
 }</code></pre>
 </div>
 </div>
@@ -820,7 +820,7 @@ Content-Length: 163
 <h3 id="_request_3"><a class="link" href="#_request_3">4.1. Request</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /elections/c0529d22-f37f-416c-bb24-7a53350c8e7f/votes/statistic HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /elections/285679b7-bf96-4e2f-8498-91c54ef91d6e/votes/statistic HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -842,7 +842,7 @@ Host: localhost:8080</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 </tbody>
 </table>
@@ -855,35 +855,35 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 467
+Content-Length: 466
 
 {
   "voteCounts" : [ {
     "item" : "01-00",
     "voteCount" : 4
   }, {
+    "item" : "00-00",
+    "voteCount" : 3
+  }, {
     "item" : "00-01",
     "voteCount" : 3
   }, {
-    "item" : "01-01",
-    "voteCount" : 3
-  }, {
-    "item" : "02-02",
-    "voteCount" : 3
-  }, {
-    "item" : "00-00",
-    "voteCount" : 2
-  }, {
     "item" : "01-02",
-    "voteCount" : 2
+    "voteCount" : 3
   }, {
-    "item" : "02-00",
-    "voteCount" : 2
+    "item" : "02-01",
+    "voteCount" : 3
   }, {
     "item" : "00-02",
+    "voteCount" : 2
+  }, {
+    "item" : "01-01",
+    "voteCount" : 1
+  }, {
+    "item" : "02-02",
     "voteCount" : 1
   } ],
-  "aggregatedAt" : "2026-02-22T02:59:09.216907575"
+  "aggregatedAt" : "2026-02-22T03:32:01.39776916"
 }</code></pre>
 </div>
 </div>
@@ -907,17 +907,17 @@ Content-Length: 467
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>aggregatedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 현황을 조회한 시간, 이 데이터가 만들어진 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選択時間</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>voteCounts.[].item</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표된 아이템(항목)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">投票をもらったアイテム</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>voteCounts.[].voteCount</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">해당 아이템의 투표된 횟수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">アイテムの投票をもらった数</p></td>
 </tr>
 </tbody>
 </table>
@@ -934,7 +934,7 @@ Content-Length: 171
   "state" : "404 NOT_FOUND",
   "message" : "Election Not Found.",
   "errorCode" : "ELECTION_001",
-  "detail" : "voteId 5e488dff-f6d7-4638-affb-6e7613587ae4 not found."
+  "detail" : "voteId f4ba3e64-1b1d-4793-8575-2d040abd46ca not found."
 }</code></pre>
 </div>
 </div>
@@ -949,7 +949,7 @@ Content-Length: 171
 <h3 id="_request_4"><a class="link" href="#_request_4">5.1. Request</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /elections/812c09f8-a3ed-4849-b091-1b0a1328210a/votes/user-01 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /elections/49c06edf-c5d5-42ed-8fcb-3ea5222a116a/votes/user-01 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -971,11 +971,11 @@ Host: localhost:8080</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ユーザーのＩＤ</p></td>
 </tr>
 </tbody>
 </table>
@@ -1002,7 +1002,7 @@ Content-Length: 188
   "state" : "404 NOT_FOUND",
   "message" : "Vote Not Found.",
   "errorCode" : "VOTE_002",
-  "detail" : "electionId: 83ed9a66-cdb5-4795-a551-5cfe2aa3ea62, userId: user-01 is not found."
+  "detail" : "electionId: 243c1c5a-2e39-4b4f-a6dd-cddab724a092, userId: user-01 is not found."
 }</code></pre>
 </div>
 </div>
@@ -1019,7 +1019,7 @@ Content-Length: 170
   "state" : "409 CONFLICT",
   "message" : "Election Is Not Open.",
   "errorCode" : "VOTE_001",
-  "detail" : "voteId 52c544df-4231-40b5-bb6f-b95ed0d304b0 is not open."
+  "detail" : "voteId 857e5430-fd52-41ac-8faa-e3cdf16da9b0 is not open."
 }</code></pre>
 </div>
 </div>
@@ -1051,11 +1051,11 @@ Content-Length: 170
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">投票識別子</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ユーザーのＩＤ</p></td>
 </tr>
 </tbody>
 </table>
@@ -1064,7 +1064,7 @@ Content-Length: 170
 <h3 id="_request_5"><a class="link" href="#_request_5">6.2. Request</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /elections/d1574a49-0433-472b-b2bc-8cac098460ee/votes/user-01 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /elections/4454c8c7-8a35-4e51-9f49-46af1f60a996/votes/user-01 HTTP/1.1
 Content-Type: application/json
 Content-Length: 22
 Host: localhost:8080
@@ -1094,7 +1094,7 @@ Host: localhost:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>item</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 아이템(항목)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">変更するアイテム</p></td>
 </tr>
 </tbody>
 </table>
@@ -1110,10 +1110,10 @@ Content-Type: application/json
 Content-Length: 150
 
 {
-  "electionId" : "d1574a49-0433-472b-b2bc-8cac098460ee",
+  "electionId" : "4454c8c7-8a35-4e51-9f49-46af1f60a996",
   "userId" : "user-01",
   "item" : "99-99",
-  "votedAt" : "2026-02-22T02:59:09.064169783"
+  "votedAt" : "2026-02-22T03:32:00.954077833"
 }</code></pre>
 </div>
 </div>
@@ -1137,22 +1137,22 @@ Content-Length: 150
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표한 유저 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">投票をするユーザーのＩＤ</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>item</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표된 아이템(항목)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ユーザーが投票したアイテム</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>votedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저가 투표를 진행한 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">投票時間</p></td>
 </tr>
 </tbody>
 </table>
@@ -1169,7 +1169,7 @@ Content-Length: 170
   "state" : "409 CONFLICT",
   "message" : "Election Is Not Open.",
   "errorCode" : "VOTE_001",
-  "detail" : "voteId a11d13ae-94bc-48d2-8344-e2d94d39e92f is not open."
+  "detail" : "voteId 775cfff0-2b80-455d-ae39-3ace650bdd92 is not open."
 }</code></pre>
 </div>
 </div>
@@ -1186,7 +1186,7 @@ Content-Length: 171
   "state" : "404 NOT_FOUND",
   "message" : "Election Not Found.",
   "errorCode" : "ELECTION_001",
-  "detail" : "voteId b1de494c-e73a-4f94-a093-01b5df90dd1b not found."
+  "detail" : "voteId 1def854d-7526-44d1-aec9-257bf012b3db not found."
 }</code></pre>
 </div>
 </div>

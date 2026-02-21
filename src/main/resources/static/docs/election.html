@@ -526,12 +526,12 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Location: /elections/78571488-1174-47f3-9c96-89ac04cccd30
+Location: /elections/662aa84b-e04c-45fc-b1cb-90f9947e4812
 Content-Type: application/json
 Content-Length: 62
 
 {
-  "newElectionId" : "78571488-1174-47f3-9c96-89ac04cccd30"
+  "newElectionId" : "662aa84b-e04c-45fc-b1cb-90f9947e4812"
 }</code></pre>
 </div>
 </div>
@@ -555,7 +555,7 @@ Content-Length: 62
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>newElectionId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">생성된 투표의 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">生成された選挙のＩＤ</p></td>
 </tr>
 </tbody>
 </table>
@@ -587,44 +587,44 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 1048
+Content-Length: 1016
 
 [ {
-  "id" : "b680da3d-de1d-464d-b3fa-afe2617f0d3b",
-  "state" : "close",
-  "startedAt" : "2026-02-22T02:59:08",
-  "endedAt" : "2026-02-22T02:59:08",
-  "createdAt" : "2026-02-22T02:59:08"
-}, {
-  "id" : "b452d667-187e-43fc-b6be-82fd326a7ce3",
-  "state" : "open",
-  "startedAt" : "2026-02-22T02:59:08",
-  "endedAt" : null,
-  "createdAt" : "2026-02-22T02:59:08"
-}, {
-  "id" : "14b08514-680d-4d5a-be9e-7ec72f509e03",
-  "state" : "close",
-  "startedAt" : "2026-02-22T02:59:08",
-  "endedAt" : "2026-02-22T02:59:08",
-  "createdAt" : "2026-02-22T02:59:08"
-}, {
-  "id" : "2ef1d7bf-6df2-4376-bb95-30f816d22254",
+  "id" : "910a2af5-ef78-4eb6-b0b4-6b99e8834fdd",
   "state" : "close",
   "startedAt" : null,
   "endedAt" : null,
-  "createdAt" : "2026-02-22T02:59:08"
+  "createdAt" : "2026-02-22T03:31:59"
 }, {
-  "id" : "80170946-513e-41e7-a73d-a3ca39f51a9a",
-  "state" : "open",
-  "startedAt" : "2026-02-22T02:59:08",
+  "id" : "fd8d6cf0-bd5e-4fa6-a35c-57e73dfa9af9",
+  "state" : "close",
+  "startedAt" : null,
   "endedAt" : null,
-  "createdAt" : "2026-02-22T02:59:08"
+  "createdAt" : "2026-02-22T03:31:59"
 }, {
-  "id" : "b7ae7941-efb5-4192-a0b3-2fe833014733",
+  "id" : "58eecb63-fb2a-4681-8ab8-07c1c77e3485",
+  "state" : "close",
+  "startedAt" : "2026-02-22T03:31:59",
+  "endedAt" : "2026-02-22T03:31:59",
+  "createdAt" : "2026-02-22T03:31:59"
+}, {
+  "id" : "5efb15e4-271a-4e05-99f3-f91da2abb8f9",
+  "state" : "close",
+  "startedAt" : "2026-02-22T03:31:59",
+  "endedAt" : "2026-02-22T03:31:59",
+  "createdAt" : "2026-02-22T03:31:59"
+}, {
+  "id" : "96787f6f-483e-47bf-bb0c-8813051db393",
   "state" : "open",
-  "startedAt" : "2026-02-22T02:59:08",
+  "startedAt" : "2026-02-22T03:31:59",
   "endedAt" : null,
-  "createdAt" : "2026-02-22T02:59:08"
+  "createdAt" : "2026-02-22T03:31:59"
+}, {
+  "id" : "940bbfff-3cf3-4a78-90b8-44cfd933d384",
+  "state" : "close",
+  "startedAt" : null,
+  "endedAt" : null,
+  "createdAt" : "2026-02-22T03:31:59"
 } ]</code></pre>
 </div>
 </div>
@@ -648,27 +648,27 @@ Content-Length: 1048
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].state</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표의 진행 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">進行の有無</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].startedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 시작 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">開始時間</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].endedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 종료 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">終了時間</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].createdAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 생성 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">生成時間</p></td>
 </tr>
 </tbody>
 </table>
@@ -707,11 +707,11 @@ Host: localhost:8080</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ページ</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">한 페이지에 포함될 데이터 수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一つのページに含めるデータの数</p></td>
 </tr>
 </tbody>
 </table>
@@ -724,26 +724,26 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 535
+Content-Length: 483
 
 [ {
-  "id" : "41a27a88-45a2-4215-89ee-1cbee557e554",
-  "state" : "close",
-  "startedAt" : "2026-02-22T02:59:08",
-  "endedAt" : "2026-02-22T02:59:08",
-  "createdAt" : "2026-02-22T02:59:08"
-}, {
-  "id" : "39215e26-a1dc-42ee-aabb-83f1f4dfb291",
-  "state" : "close",
-  "startedAt" : "2026-02-22T02:59:08",
-  "endedAt" : "2026-02-22T02:59:08",
-  "createdAt" : "2026-02-22T02:59:08"
-}, {
-  "id" : "8808bf89-2b15-4816-968b-5c0892571bca",
+  "id" : "0d1bebd3-5498-4966-b114-45a5e35dad65",
   "state" : "close",
   "startedAt" : null,
   "endedAt" : null,
-  "createdAt" : "2026-02-22T02:59:08"
+  "createdAt" : "2026-02-22T03:31:58"
+}, {
+  "id" : "10ebea36-a7ab-42c8-8330-3fa1e9d8bbaf",
+  "state" : "close",
+  "startedAt" : null,
+  "endedAt" : null,
+  "createdAt" : "2026-02-22T03:31:58"
+}, {
+  "id" : "08819e03-c72e-45cf-8894-a729e61bc5b2",
+  "state" : "open",
+  "startedAt" : "2026-02-22T03:31:58",
+  "endedAt" : null,
+  "createdAt" : "2026-02-22T03:31:58"
 } ]</code></pre>
 </div>
 </div>
@@ -767,27 +767,27 @@ Content-Length: 535
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙の識別子</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].state</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표의 진행 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">進行の有無</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].startedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 시작 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">開始時間</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].endedAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 종료 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">終了時間</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].createdAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 생성 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">生成時間</p></td>
 </tr>
 </tbody>
 </table>
@@ -836,7 +836,7 @@ Content-Length: 160
 <h3 id="_request_4"><a class="link" href="#_request_4">5.1. Request</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /elections/90351dfe-862a-4fbb-abfa-7af27932f8f3 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /elections/603af692-51d2-44a8-ad1d-18e8eafb26b1 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -858,7 +858,7 @@ Host: localhost:8080</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 </tbody>
 </table>
@@ -874,11 +874,11 @@ Content-Type: application/json
 Content-Length: 153
 
 {
-  "id" : "90351dfe-862a-4fbb-abfa-7af27932f8f3",
+  "id" : "603af692-51d2-44a8-ad1d-18e8eafb26b1",
   "state" : "close",
   "startedAt" : null,
   "endedAt" : null,
-  "createdAt" : "2026-02-22T02:59:08"
+  "createdAt" : "2026-02-22T03:32:00"
 }</code></pre>
 </div>
 </div>
@@ -902,27 +902,27 @@ Content-Length: 153
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙の識別子</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>state</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표의 진행 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">進行の有無</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>startedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 시작 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">開始時間</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>endedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 종료 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">終了時間</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 생성 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">生成時間</p></td>
 </tr>
 </tbody>
 </table>
@@ -954,7 +954,7 @@ Content-Length: 144
 <h3 id="_request_5"><a class="link" href="#_request_5">6.1. Request</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /elections/b94ff382-8a88-4ba8-ac5a-eb0cdd84bda3 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /elections/a929be05-539c-42e8-b36a-fa589dbecded HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -976,7 +976,7 @@ Host: localhost:8080</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">投票識別子</p></td>
 </tr>
 </tbody>
 </table>
@@ -1003,7 +1003,7 @@ Content-Length: 165
   "state" : "404 NOT_FOUND",
   "message" : "Election Not Found.",
   "errorCode" : "ELECTION_001",
-  "detail" : "electionId: e9283e33-d4e1-40a8-ac71-fd43297a6225"
+  "detail" : "electionId: 993b9e80-dbb6-43dd-a83b-71c8112a7648"
 }</code></pre>
 </div>
 </div>
@@ -1018,7 +1018,7 @@ Content-Length: 165
 <h3 id="_request_選挙を開始openする"><a class="link" href="#_request_選挙を開始openする">7.1. Request [選挙を開始(open)する]</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /elections/29b5e6a7-f212-4da6-8271-27c899e82008/state HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /elections/6581d986-922a-4140-99de-4740e7a11e58/state HTTP/1.1
 Content-Type: application/json
 Content-Length: 25
 Host: localhost:8080
@@ -1046,7 +1046,7 @@ Host: localhost:8080
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 </tbody>
 </table>
@@ -1070,7 +1070,7 @@ Host: localhost:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>newState</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 상태</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">変更する状態</p></td>
 </tr>
 </tbody>
 </table>
@@ -1083,12 +1083,12 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 133
+Content-Length: 132
 
 {
-  "electionId" : "29b5e6a7-f212-4da6-8271-27c899e82008",
+  "electionId" : "6581d986-922a-4140-99de-4740e7a11e58",
   "newState" : "open",
-  "updatedTime" : "2026-02-22T02:59:07.444374899"
+  "updatedTime" : "2026-02-22T03:31:57.55361621"
 }</code></pre>
 </div>
 </div>
@@ -1105,7 +1105,7 @@ Content-Length: 165
   "state" : "404 NOT_FOUND",
   "message" : "Election Not Found.",
   "errorCode" : "ELECTION_001",
-  "detail" : "electionId: 45fc4ed3-60f2-4141-923c-418927041754"
+  "detail" : "electionId: c6253e20-b696-487c-b543-f2df26c8f1f5"
 }</code></pre>
 </div>
 </div>
@@ -1122,7 +1122,7 @@ Content-Length: 1026
   "state" : "400 BAD_REQUEST",
   "message" : "Validation Failed",
   "errorCode" : "VALID_ERROR",
-  "detail" : "Validation failed for argument [1] in public java.lang.Object com.yareach.voting_system.election.controller.ElectionController.changeElectionState(java.lang.String,com.yareach.voting_system.election.dto.ChangeElectionStateRequestDto,kotlin.coroutines.Continuation&lt;? super org.springframework.http.ResponseEntity&lt;com.yareach.voting_system.election.dto.ChangeElectionStateResponseDto&gt;&gt;): [Field error in object 'changeElectionStateRequestDto' on field 'newState': rejected value [wrong state]; codes [Pattern.changeElectionStateRequestDto.newState,Pattern.newState,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [changeElectionStateRequestDto.newState,newState]; arguments []; default message [newState],[Ljakarta.validation.constraints.Pattern$Flag;@157002b7,open|close]; default message [state는 open과 close 둘만 가능합니다.]] "
+  "detail" : "Validation failed for argument [1] in public java.lang.Object com.yareach.voting_system.election.controller.ElectionController.changeElectionState(java.lang.String,com.yareach.voting_system.election.dto.ChangeElectionStateRequestDto,kotlin.coroutines.Continuation&lt;? super org.springframework.http.ResponseEntity&lt;com.yareach.voting_system.election.dto.ChangeElectionStateResponseDto&gt;&gt;): [Field error in object 'changeElectionStateRequestDto' on field 'newState': rejected value [wrong state]; codes [Pattern.changeElectionStateRequestDto.newState,Pattern.newState,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [changeElectionStateRequestDto.newState,newState]; arguments []; default message [newState],[Ljakarta.validation.constraints.Pattern$Flag;@3e9c59ed,open|close]; default message [state는 open과 close 둘만 가능합니다.]] "
 }</code></pre>
 </div>
 </div>
@@ -1137,7 +1137,7 @@ Content-Length: 1026
 <h3 id="_request_6"><a class="link" href="#_request_6">8.1. Request</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /elections/047eb0d7-8b26-4bd3-8195-7c0c30c2b274/state HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /elections/51835490-7981-4843-8b71-3d81967cbc98/state HTTP/1.1
 Content-Type: application/json
 Content-Length: 26
 Host: localhost:8080
@@ -1165,7 +1165,7 @@ Host: localhost:8080
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>electionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">투표 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">選挙識別子</p></td>
 </tr>
 </tbody>
 </table>
@@ -1189,7 +1189,7 @@ Host: localhost:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>newState</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 상태</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">変更する状態</p></td>
 </tr>
 </tbody>
 </table>
@@ -1205,9 +1205,9 @@ Content-Type: application/json
 Content-Length: 134
 
 {
-  "electionId" : "047eb0d7-8b26-4bd3-8195-7c0c30c2b274",
+  "electionId" : "51835490-7981-4843-8b71-3d81967cbc98",
   "newState" : "close",
-  "updatedTime" : "2026-02-22T02:59:07.536957257"
+  "updatedTime" : "2026-02-22T03:31:57.691162767"
 }</code></pre>
 </div>
 </div>
@@ -1224,7 +1224,7 @@ Content-Length: 165
   "state" : "404 NOT_FOUND",
   "message" : "Election Not Found.",
   "errorCode" : "ELECTION_001",
-  "detail" : "electionId: 45fc4ed3-60f2-4141-923c-418927041754"
+  "detail" : "electionId: c6253e20-b696-487c-b543-f2df26c8f1f5"
 }</code></pre>
 </div>
 </div>
@@ -1241,7 +1241,7 @@ Content-Length: 1026
   "state" : "400 BAD_REQUEST",
   "message" : "Validation Failed",
   "errorCode" : "VALID_ERROR",
-  "detail" : "Validation failed for argument [1] in public java.lang.Object com.yareach.voting_system.election.controller.ElectionController.changeElectionState(java.lang.String,com.yareach.voting_system.election.dto.ChangeElectionStateRequestDto,kotlin.coroutines.Continuation&lt;? super org.springframework.http.ResponseEntity&lt;com.yareach.voting_system.election.dto.ChangeElectionStateResponseDto&gt;&gt;): [Field error in object 'changeElectionStateRequestDto' on field 'newState': rejected value [wrong state]; codes [Pattern.changeElectionStateRequestDto.newState,Pattern.newState,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [changeElectionStateRequestDto.newState,newState]; arguments []; default message [newState],[Ljakarta.validation.constraints.Pattern$Flag;@157002b7,open|close]; default message [state는 open과 close 둘만 가능합니다.]] "
+  "detail" : "Validation failed for argument [1] in public java.lang.Object com.yareach.voting_system.election.controller.ElectionController.changeElectionState(java.lang.String,com.yareach.voting_system.election.dto.ChangeElectionStateRequestDto,kotlin.coroutines.Continuation&lt;? super org.springframework.http.ResponseEntity&lt;com.yareach.voting_system.election.dto.ChangeElectionStateResponseDto&gt;&gt;): [Field error in object 'changeElectionStateRequestDto' on field 'newState': rejected value [wrong state]; codes [Pattern.changeElectionStateRequestDto.newState,Pattern.newState,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [changeElectionStateRequestDto.newState,newState]; arguments []; default message [newState],[Ljakarta.validation.constraints.Pattern$Flag;@3e9c59ed,open|close]; default message [state는 open과 close 둘만 가능합니다.]] "
 }</code></pre>
 </div>
 </div>

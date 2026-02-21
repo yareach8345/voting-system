@@ -56,13 +56,20 @@ class VoteTest(@Autowired private val voteService: VoteService) {
     @Autowired
     private lateinit var electionService: ElectionService
 
-    private val pathParametersSnippet: PathParametersSnippet = pathParameters(parameterWithName("electionId").description("투표 식별자"))
+    private val pathParametersSnippet: PathParametersSnippet = pathParameters(parameterWithName("electionId").description("選挙識別子"))
 
     private val errorResponseFieldsSnippet: ResponseFieldsSnippet = responseFields(
         fieldWithPath("state").description("http state"),
         fieldWithPath("errorCode").description("errorCode"),
-        fieldWithPath("message").description("에러 메시지"),
-        fieldWithPath("detail").description("상세 설명"),
+        fieldWithPath("message").description("エラーメッセージ"),
+        fieldWithPath("detail").description("詳細情報"),
+    )
+
+    private val voteResponseFieldsSnippet: ResponseFieldsSnippet = responseFields(
+        fieldWithPath("electionId").description("選挙識別子"),
+        fieldWithPath("userId").description("投票をするユーザーのＩＤ"),
+        fieldWithPath("item").description("ユーザーが投票したアイテム"),
+        fieldWithPath("votedAt").description("投票時間")
     )
 
     private val identifierBase = "votes"
@@ -97,8 +104,8 @@ class VoteTest(@Autowired private val voteService: VoteService) {
         private val genIdentifier = this@VoteTest.genIdentifier("record")
 
         private val requestFieldsSnippet: RequestFieldsSnippet = requestFields(
-            fieldWithPath("userId").description("투표를 하는 유저의 id"),
-            fieldWithPath("item").description("유저가 투표하는 아이템(항목)")
+            fieldWithPath("userId").description("投票をするユーザーのＩＤ"),
+            fieldWithPath("item").description("ユーザーが投票したアイテム")
         )
 
         @Test
@@ -129,15 +136,8 @@ class VoteTest(@Autowired private val voteService: VoteService) {
                     genIdentifier("success"),
                     pathParametersSnippet,
                     requestFieldsSnippet,
-                    responseFields(
-                        fieldWithPath("electionId").description("투표 id"),
-                        fieldWithPath("userId").description("투표한 유저 id"),
-                        fieldWithPath("item").description("투표된 아이템(항목)"),
-                        fieldWithPath("votedAt").description("유저가 투표를 진행한 시간")
-                    ),
-                    responseHeaders(
-                        headerWithName("Location").description("투표 기록을 조회하기 위한 uri"),
-                    )
+                    voteResponseFieldsSnippet,
+                    responseHeaders(headerWithName("Location").description("生成された投票のuri"))
                 ))
         }
 
@@ -225,14 +225,7 @@ class VoteTest(@Autowired private val voteService: VoteService) {
         val genIdentifier = this@VoteTest.genIdentifier("find-a-vote")
 
         val  pathParametersSnippet: PathParametersSnippet = this@VoteTest.pathParametersSnippet.and(
-            parameterWithName("userId").description("유저 id")
-        )
-
-        val responseFieldsSnippet: ResponseFieldsSnippet = responseFields(
-            fieldWithPath("electionId").description("투표 id"),
-            fieldWithPath("userId").description("투표한 유저 id"),
-            fieldWithPath("item").description("투표된 아이템(항목)"),
-            fieldWithPath("votedAt").description("유저가 투표를 진행한 시간")
+            parameterWithName("userId").description("ユーザーのＩＤ")
         )
 
         @Test
@@ -261,7 +254,7 @@ class VoteTest(@Autowired private val voteService: VoteService) {
                 .consumeWith(document(
                     genIdentifier("success"),
                     pathParametersSnippet,
-                    responseFieldsSnippet
+                    voteResponseFieldsSnippet
                 ))
         }
 
@@ -293,7 +286,7 @@ class VoteTest(@Autowired private val voteService: VoteService) {
                 .consumeWith(document(
                     genIdentifier("success-after-election-close"),
                     pathParametersSnippet,
-                    responseFieldsSnippet
+                    voteResponseFieldsSnippet
                 ))
         }
 
@@ -345,8 +338,6 @@ class VoteTest(@Autowired private val voteService: VoteService) {
 
         private val genIdentifier = this@VoteTest.genIdentifier("get-statistics")
 
-        private val pathParametersSnippet: PathParametersSnippet = pathParameters(parameterWithName("electionId").description("투표 식별자"))
-
         @Test
         @DisplayName("[성공 케이스] Election의 현재 투표 현황을 불러옴")
         fun getStatistics() = runTest {
@@ -381,9 +372,9 @@ class VoteTest(@Autowired private val voteService: VoteService) {
                         genIdentifier("success"),
                         pathParametersSnippet,
                         responseFields(
-                            fieldWithPath("aggregatedAt").description("투표 현황을 조회한 시간, 이 데이터가 만들어진 시간"),
-                            fieldWithPath("voteCounts.[].item").description("투표된 아이템(항목)"),
-                            fieldWithPath("voteCounts.[].voteCount").description("해당 아이템의 투표된 횟수")
+                            fieldWithPath("aggregatedAt").description("選択時間"),
+                            fieldWithPath("voteCounts.[].item").description("投票をもらったアイテム"),
+                            fieldWithPath("voteCounts.[].voteCount").description("アイテムの投票をもらった数")
                         )
                     )
                 )
@@ -468,7 +459,7 @@ class VoteTest(@Autowired private val voteService: VoteService) {
         private val genIdentifier = this@VoteTest.genIdentifier("cancel")
 
         val  pathParametersSnippet: PathParametersSnippet = this@VoteTest.pathParametersSnippet.and(
-            parameterWithName("userId").description("유저 id")
+            parameterWithName("userId").description("ユーザーのＩＤ")
         )
 
         @Test
@@ -556,12 +547,12 @@ class VoteTest(@Autowired private val voteService: VoteService) {
         val genIdentifier = this@VoteTest.genIdentifier("change-item")
 
         val pathParametersSnippet: PathParametersSnippet = pathParameters(
-            parameterWithName("electionId").description("투표 식별자"),
-            parameterWithName("userId").description("유저 id")
+            parameterWithName("electionId").description("投票識別子"),
+            parameterWithName("userId").description("ユーザーのＩＤ")
         )
 
         private val requestFieldsSnippet: RequestFieldsSnippet = requestFields(
-            fieldWithPath("item").description("변경할 아이템(항목)")
+            fieldWithPath("item").description("変更するアイテム")
         )
 
         @Test
@@ -598,12 +589,7 @@ class VoteTest(@Autowired private val voteService: VoteService) {
                         genIdentifier("success"),
                         pathParametersSnippet,
                         requestFieldsSnippet,
-                        responseFields(
-                            fieldWithPath("electionId").description("투표 id"),
-                            fieldWithPath("userId").description("투표한 유저 id"),
-                            fieldWithPath("item").description("투표된 아이템(항목)"),
-                            fieldWithPath("votedAt").description("유저가 투표를 진행한 시간")
-                        ),
+                        voteResponseFieldsSnippet
                     )
                 )
         }

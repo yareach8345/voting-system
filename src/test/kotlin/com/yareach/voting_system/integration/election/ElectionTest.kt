@@ -88,8 +88,8 @@ class ElectionTest {
     private val errorResponseFieldsSnippet: ResponseFieldsSnippet = responseFields(
         fieldWithPath("state").description("http state"),
         fieldWithPath("errorCode").description("errorCode"),
-        fieldWithPath("message").description("에러 메시지"),
-        fieldWithPath("detail").description("상세 설명"),
+        fieldWithPath("message").description("エラーメッセージ"),
+        fieldWithPath("detail").description("詳細情報"),
     )
 
     @BeforeEach
@@ -132,10 +132,10 @@ class ElectionTest {
                 .consumeWith(document(
                     genIdentifier("success"),
                     responseFields(
-                        fieldWithPath("newElectionId").description("생성된 투표의 id").attributes(key("format").value("uuid"))
+                        fieldWithPath("newElectionId").description("生成された選挙のＩＤ").attributes(key("format").value("uuid"))
                     ),
                     responseHeaders(
-                        headerWithName("Location").description("새로 생성된 투표 uri"),
+                        headerWithName("Location").description("生成された選挙のuri"),
                     )
             ))
         }
@@ -176,11 +176,11 @@ class ElectionTest {
                     document(
                         genIdentifier("success"),
                         responseFields(
-                            fieldWithPath("[].id").description("투표 식별자"),
-                            fieldWithPath("[].state").description("투표의 진행 여부"),
-                            fieldWithPath("[].startedAt").description("투표 시작 시간").optional(),
-                            fieldWithPath("[].endedAt").description("투표 종료 시간").optional(),
-                            fieldWithPath("[].createdAt").description("투표 생성 시간").type("String"),
+                            fieldWithPath("[].id").description("選挙識別子"),
+                            fieldWithPath("[].state").description("進行の有無"),
+                            fieldWithPath("[].startedAt").description("開始時間").optional(),
+                            fieldWithPath("[].endedAt").description("終了時間").optional(),
+                            fieldWithPath("[].createdAt").description("生成時間").type("String"),
                         )
                     )
                 )
@@ -212,8 +212,8 @@ class ElectionTest {
                 }.consumeWith(document(
                     genIdentifier("success"),
                     responseFields(
-                        fieldWithPath("count").description("투표의 개수"),
-                        fieldWithPath("aggregatedAt").description("개수를 얻어온 시간")
+                        fieldWithPath("count").description("投票の数"),
+                        fieldWithPath("aggregatedAt").description("取得した時刻")
                     )
                 ))
         }
@@ -226,8 +226,8 @@ class ElectionTest {
         private val genIdentifier = this@ElectionTest.genIdentifier("find-with-paging")
 
         private val querySnippet: QueryParametersSnippet = queryParameters(
-            parameterWithName("page").description("현재 페이지"),
-            parameterWithName("size").description("한 페이지에 포함될 데이터 수")
+            parameterWithName("page").description("ページ"),
+            parameterWithName("size").description("一つのページに含めるデータの数")
         )
 
         private lateinit var electionIds: List<String>
@@ -265,11 +265,11 @@ class ElectionTest {
                         genIdentifier("success"),
                         querySnippet,
                         responseFields(
-                            fieldWithPath("[].id").description("투표 식별자"),
-                            fieldWithPath("[].state").description("투표의 진행 여부"),
-                            fieldWithPath("[].startedAt").description("투표 시작 시간").optional(),
-                            fieldWithPath("[].endedAt").description("투표 종료 시간").optional(),
-                            fieldWithPath("[].createdAt").description("투표 생성 시간").type("String"),
+                            fieldWithPath("[].id").description("選挙の識別子"),
+                            fieldWithPath("[].state").description("進行の有無"),
+                            fieldWithPath("[].startedAt").description("開始時間").optional(),
+                            fieldWithPath("[].endedAt").description("終了時間").optional(),
+                            fieldWithPath("[].createdAt").description("生成時間").type("String"),
                         )
                     )
                 )
@@ -291,9 +291,6 @@ class ElectionTest {
                     document(
                         genIdentifier("success-page-overflow"),
                         querySnippet,
-                        responseFields(
-                            fieldWithPath("[]").description("빈 배열")
-                        )
                     )
                 )
         }
@@ -356,13 +353,13 @@ class ElectionTest {
                     assertEquals(electionId, it.id)
                 }.consumeWith(document(
                     genIdentifier("success"),
-                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
+                    pathParameters(parameterWithName("electionId").description("選挙識別子")),
                     responseFields(
-                        fieldWithPath("id").description("투표 식별자"),
-                        fieldWithPath("state").description("투표의 진행 여부"),
-                        fieldWithPath("startedAt").description("투표 시작 시간").optional(),
-                        fieldWithPath("endedAt").description("투표 종료 시간").optional(),
-                        fieldWithPath("createdAt").description("투표 생성 시간"),
+                        fieldWithPath("id").description("選挙の識別子"),
+                        fieldWithPath("state").description("進行の有無"),
+                        fieldWithPath("startedAt").description("開始時間").optional(),
+                        fieldWithPath("endedAt").description("終了時間").optional(),
+                        fieldWithPath("createdAt").description("生成時間"),
                     )
                 ))
         }
@@ -380,7 +377,7 @@ class ElectionTest {
                 .consumeWith(
                     document(
                         genIdentifier("election-is-not-found"),
-                        pathParameters(parameterWithName("electionId").description("투표 식별자")),
+                        pathParameters(parameterWithName("electionId").description("投票識別子")),
                         errorResponseFieldsSnippet
                 ))
         }
@@ -404,7 +401,7 @@ class ElectionTest {
                 .expectBody()
                 .consumeWith(document(
                     genIdentifier("success"),
-                    pathParameters(parameterWithName("electionId").description("투표 식별자"))
+                    pathParameters(parameterWithName("electionId").description("投票識別子"))
                 ))
 
             val election = electionRepository.findById(electionId)
@@ -424,7 +421,7 @@ class ElectionTest {
                 .value { assertErrorResponse(ErrorCode.ELECTION_NOT_FOUND, it) }
                 .consumeWith(document(
                     genIdentifier("election-not-found"),
-                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
+                    pathParameters(parameterWithName("electionId").description("選挙識別子")),
                     errorResponseFieldsSnippet
                 ))
         }
@@ -457,12 +454,12 @@ class ElectionTest {
                     assert(it.updatedTime.isBefore(LocalDateTime.now()))
                 }.consumeWith(document(
                     genIdentifier("success-open"),
-                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
-                    requestFields(fieldWithPath("newState").description("변경할 상태")),
+                    pathParameters(parameterWithName("electionId").description("選挙識別子")),
+                    requestFields(fieldWithPath("newState").description("変更する状態")),
                     responseFields(
-                        fieldWithPath("electionId").description("변경된 투표의 식별자"),
-                        fieldWithPath("newState").description("변경된 새로운 상태"),
-                        fieldWithPath("updatedTime").description("상태가 변경된 시각"),
+                        fieldWithPath("electionId").description("選挙の識別子"),
+                        fieldWithPath("newState").description("変更された状態"),
+                        fieldWithPath("updatedTime").description("変更された時間"),
                     ),
                 ))
         }
@@ -488,12 +485,12 @@ class ElectionTest {
                     assert(it.updatedTime.isBefore(LocalDateTime.now()))
                 }.consumeWith(document(
                     genIdentifier("success-close"),
-                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
-                    requestFields(fieldWithPath("newState").description("변경할 상태")),
+                    pathParameters(parameterWithName("electionId").description("選挙識別子")),
+                    requestFields(fieldWithPath("newState").description("投票進行の有無")),
                     responseFields(
-                        fieldWithPath("electionId").description("변경된 투표의 식별자"),
-                        fieldWithPath("newState").description("변경된 새로운 상태"),
-                        fieldWithPath("updatedTime").description("상태가 변경된 시각"),
+                        fieldWithPath("electionId").description("選挙の識別子"),
+                        fieldWithPath("newState").description("変更された状態"),
+                        fieldWithPath("updatedTime").description("変更された時間"),
                     ),
                 ))
         }
@@ -512,7 +509,7 @@ class ElectionTest {
                 .value { assertErrorResponse(ErrorCode.VALIDATION_FAILED, it) }
                 .consumeWith(document(
                     genIdentifier("invalid-election-state"),
-                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
+                    pathParameters(parameterWithName("electionId").description("選挙識別子")),
                     errorResponseFieldsSnippet
                 ))
         }
@@ -531,7 +528,7 @@ class ElectionTest {
                 .value { assertErrorResponse(ErrorCode.ELECTION_NOT_FOUND, it) }
                 .consumeWith(document(
                     genIdentifier("election-not-exists"),
-                    pathParameters(parameterWithName("electionId").description("투표 식별자")),
+                    pathParameters(parameterWithName("electionId").description("選挙識別子")),
                     errorResponseFieldsSnippet
                 ))
         }
