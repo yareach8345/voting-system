@@ -24,9 +24,9 @@ v1.0, 2024-02-21
 
 == API 一覧
 リンクを通して各機能の文書に移動 +
-* link:/docs/election.html[Election] +
-* link:/docs/vote.html[Vote]
+* link:./election.html[Election] +
+* link:./vote.html[Vote]
 
 == エラー
 発生したエラーの確認はこちら。 +
-link:/docs/errorcode.html[エラーの文書へ]
+link:./errorcode.html[エラーの文書へ]
