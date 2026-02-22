@@ -3,8 +3,8 @@ use voting_system;
 # 초기화가 목적일 경우 아래의 주석을 해제하시오.
 # If you want to reset the tables, remove the comments.
 # テーブルを初期化する場合は、下のコメントを外してください。
-drop table if exists vote;
-drop table if exists election;
+-- drop table if exists vote;
+-- drop table if exists election;
 
 create table if not exists election (
     id varchar(36) primary key default (uuid()),

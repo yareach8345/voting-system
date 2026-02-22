@@ -4,6 +4,7 @@ logging:
 vote:
   expire:
     use-expire: true
+    ttl-seconds: 600
   validation:
     item:
       use-validator: true
