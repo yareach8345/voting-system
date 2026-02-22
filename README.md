@@ -65,9 +65,9 @@ vote:
 いくつかの中で一つを選ぶんだと思う可能性が有る「候補」という用語を使わず、「アイテム」という用語を使いました。
 
 ### API文書 
-* [indexページ](src/main/resources/static/docs/index.html)
-* [Electionのページ](src/main/resources/static/docs/election.html)
-* [Voteのページ](src/main/resources/static/docs/vote.html)
-* [ErrorCodeのページ](src/main/resources/static/docs/errorcode.html)
+* [indexページ](https://yareach8345.github.io/voting-system/)
+* [Electionのページ](https://yareach8345.github.io/voting-system/election.html)
+* [Voteのページ](https://yareach8345.github.io/voting-system/vote.html)
+* [ErrorCodeのページ](https://yareach8345.github.io/voting-system/errorcode.html)
 
 プログラムを実行したあと/docs/index.htmlのページにアクセス確認することもできます。
