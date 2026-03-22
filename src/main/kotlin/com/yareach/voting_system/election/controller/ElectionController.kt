@@ -78,7 +78,7 @@ class ElectionController(
         @PathVariable electionId: String,
         @RequestBody @Valid changeStateRequest: ChangeElectionStateRequestDto
     ): ResponseEntity<ChangeElectionStateResponseDto> {
-        val result = electionService.changeElectionState(electionId, changeStateRequest.newState)
+        val result = electionService.changeElectionState(electionId, changeStateRequest.state)
 
         return ResponseEntity.ok(ChangeElectionStateResponseDto.fromNewElectionModel(result))
     }

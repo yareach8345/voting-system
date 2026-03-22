@@ -41,7 +41,6 @@ import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
 import java.time.LocalDateTime
 import java.util.UUID
@@ -127,12 +126,12 @@ class ElectionTest {
                 .expectBody<GenerateElectionResponseDto>()
                 .value {
                     assertNotNull(it)
-                    assertDoesNotThrow{ UUID.fromString(it.newElectionId) }
+                    assertDoesNotThrow{ UUID.fromString(it.electionId) }
                 }
                 .consumeWith(document(
                     genIdentifier("success"),
                     responseFields(
-                        fieldWithPath("newElectionId").description("生成された選挙のＩＤ").attributes(key("format").value("uuid"))
+                        fieldWithPath("electionId").description("生成された選挙のＩＤ").attributes(key("format").value("uuid"))
                     ),
                     responseHeaders(
                         headerWithName("Location").description("生成された選挙のuri"),
@@ -449,17 +448,17 @@ class ElectionTest {
                 .value {
                     assertNotNull(it)
                     assertEquals(electionId, it.electionId)
-                    assertEquals("open", it.newState)
-                    assert(it.updatedTime.isAfter(timeBeforeSendRequest))
-                    assert(it.updatedTime.isBefore(LocalDateTime.now()))
+                    assertEquals("open", it.state)
+                    assert(it.updatedAt.isAfter(timeBeforeSendRequest))
+                    assert(it.updatedAt.isBefore(LocalDateTime.now()))
                 }.consumeWith(document(
                     genIdentifier("success-open"),
                     pathParameters(parameterWithName("electionId").description("選挙識別子")),
-                    requestFields(fieldWithPath("newState").description("変更する状態")),
+                    requestFields(fieldWithPath("state").description("変更する状態")),
                     responseFields(
                         fieldWithPath("electionId").description("選挙の識別子"),
-                        fieldWithPath("newState").description("変更された状態"),
-                        fieldWithPath("updatedTime").description("変更された時間"),
+                        fieldWithPath("state").description("変更された状態"),
+                        fieldWithPath("updatedAt").description("変更された時間"),
                     ),
                 ))
         }
@@ -480,17 +479,17 @@ class ElectionTest {
                 .value {
                     assertNotNull(it)
                     assertEquals(electionId, it.electionId)
-                    assertEquals("close", it.newState)
-                    assert(it.updatedTime.isAfter(timeBeforeSendRequest))
-                    assert(it.updatedTime.isBefore(LocalDateTime.now()))
+                    assertEquals("close", it.state)
+                    assert(it.updatedAt.isAfter(timeBeforeSendRequest))
+                    assert(it.updatedAt.isBefore(LocalDateTime.now()))
                 }.consumeWith(document(
                     genIdentifier("success-close"),
                     pathParameters(parameterWithName("electionId").description("選挙識別子")),
-                    requestFields(fieldWithPath("newState").description("投票進行の有無")),
+                    requestFields(fieldWithPath("state").description("投票進行の有無")),
                     responseFields(
                         fieldWithPath("electionId").description("選挙の識別子"),
-                        fieldWithPath("newState").description("変更された状態"),
-                        fieldWithPath("updatedTime").description("変更された時間"),
+                        fieldWithPath("state").description("変更された状態"),
+                        fieldWithPath("updatedAt").description("変更された時間"),
                     ),
                 ))
         }
